@@ -7,7 +7,7 @@
 
 {{-- ─── HERO ────────────────────────────────────────────────────────────────── --}}
 <section class="hero-section"
-         style="background-image: url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1600&q=80');"
+         style="background-image: url('/images/hero.jpg');"
          aria-label="African students learning">
     <div class="container hero-content py-5">
         <div class="row align-items-center min-vh-50">

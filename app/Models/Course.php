@@ -111,7 +111,7 @@ class Course extends Model
     public function thumbnailUrl(): string
     {
         if ($this->thumbnail) {
-            return asset('storage/thumbnails/' . $this->thumbnail);
+            if (str_starts_with($this->thumbnail, 'http')) { return $this->thumbnail; } return asset('storage/thumbnails/' . $this->thumbnail);
         }
         return asset('images/course-placeholder.jpg');
     }
