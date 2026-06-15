@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Home')
-@section('meta_description', 'ACADEXA — Empowering World Innovators and Leaders for Global Impact. Learn from top instructors at ZTF University Institute, Bertoua, Cameroon.')
+@section('meta_description', 'ACADEXXA — Empowering World Innovators and Leaders for Global Impact. Learn from top instructors at ZTF University Institute, Bertoua, Cameroon.')
 
 @section('content')
 
@@ -115,11 +115,11 @@
 </section>
 @endif
 
-{{-- ─── WHY ACADEXA ─────────────────────────────────────────────────────────── --}}
+{{-- ─── WHY ACADEXXA ─────────────────────────────────────────────────────────── --}}
 <section class="py-5 bg-light-gray">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="section-title">Why Choose <span>ACADEXA</span>?</h2>
+            <h2 class="section-title">Why Choose <span>ACADEXXA</span>?</h2>
             <div class="section-divider"></div>
         </div>
         <div class="row g-4">
@@ -169,7 +169,7 @@
 <section class="py-5"
          style="background:linear-gradient(135deg,var(--primary) 0%,#0d3a7a 100%);">
     <div class="container text-center text-white py-3">
-        <h2 style="color:#fff;font-size:2rem;">Become an ACADEXA Instructor</h2>
+        <h2 style="color:#fff;font-size:2rem;">Become an ACADEXXA Instructor</h2>
         <p style="color:rgba(255,255,255,.85);font-size:1.1rem;max-width:600px;margin:.75rem auto 1.5rem;">
             Share your expertise with thousands of learners across Africa and the world.
             Join our growing community of educators.

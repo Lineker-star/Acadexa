@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Login') — ACADEXA</title>
+    <title>@yield('title', 'Login') — ACADEXXA</title>
    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -37,7 +37,7 @@
                 @yield('content')
                 <div class="text-center mt-4">
                     <a href="{{ route('home') }}" class="text-muted small">
-                        <i class="bi bi-arrow-left"></i> Back to ACADEXA
+                        <i class="bi bi-arrow-left"></i> Back to ACADEXXA
                     </a>
                 </div>
             </div>

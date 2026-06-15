@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Login — ACADEXA</title>
+    <title>Admin Login — ACADEXXA</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     @vite(['resources/css/app.css'])
@@ -29,7 +29,7 @@
                     <div class="mb-3">
                         <label class="form-label small fw-bold">Email</label>
                         <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                               value="{{ old('email') }}" required autofocus placeholder="admin@acadexa.com">
+                               value="{{ old('email') }}" required autofocus placeholder="admin@acadexxa.com">
                         @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
                     <div class="mb-4">
@@ -46,7 +46,7 @@
                     </button>
                 </form>
                 <p class="text-center mt-3 mb-0">
-                    <a href="{{ route('home') }}" class="small text-muted">← Back to ACADEXA</a>
+                    <a href="{{ route('home') }}" class="small text-muted">← Back to ACADEXXA</a>
                 </p>
             </div>
         </div>

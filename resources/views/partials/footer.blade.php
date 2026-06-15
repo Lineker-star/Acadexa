@@ -1,4 +1,4 @@
-<footer class="acadexa-footer">
+<footer class="acadexxa-footer">
     <div class="container">
         <div class="row g-4">
             <!-- Brand -->
@@ -36,7 +36,7 @@
                     <li><a href="{{ route('cms.page', 'faq') }}">FAQ</a></li>
                     <li><a href="{{ route('cms.page', 'terms') }}">Terms of Service</a></li>
                     <li><a href="{{ route('cms.page', 'privacy') }}">Privacy Policy</a></li>
-                    <li><a href="{{ route('certificate.verify', 'ACADEXA-XXXX-XXXX-' . date('Y')) }}">Verify Certificate</a></li>
+                    <li><a href="{{ route('certificate.verify', 'ACADEXXA-XXXX-XXXX-' . date('Y')) }}">Verify Certificate</a></li>
                     <li><a href="{{ route('sitemap') }}">Sitemap</a></li>
                 </ul>
             </div>
@@ -47,7 +47,7 @@
                 <ul class="list-unstyled" style="font-size:.9rem;">
                     <li class="mb-2"><i class="bi bi-geo-alt me-2" style="color:var(--secondary);"></i>ZTF University Institute, Bertoua, East Region, Cameroon</li>
                     <li class="mb-2"><i class="bi bi-envelope me-2" style="color:var(--secondary);"></i>
-                        <a href="mailto:{{ $siteSettings['contact_email'] ?? 'info@acadexa.com' }}">{{ $siteSettings['contact_email'] ?? 'info@acadexa.com' }}</a>
+                        <a href="mailto:{{ $siteSettings['contact_email'] ?? 'info@acadexxa.com' }}">{{ $siteSettings['contact_email'] ?? 'info@acadexxa.com' }}</a>
                     </li>
                     <li class="mb-2"><i class="bi bi-telephone me-2" style="color:var(--secondary);"></i>{{ $siteSettings['contact_phone'] ?? '+237 000 000 000' }}</li>
                     <li><i class="bi bi-globe me-2" style="color:var(--secondary);"></i>
@@ -60,8 +60,8 @@
         <hr class="footer-divider">
 
         <div class="footer-bottom">
-            &copy; {{ date('Y') }} ACADEXA — ZTF University Institute. All rights reserved. &nbsp;|&nbsp;
-            Powered by ACADEXA LMS
+            &copy; {{ date('Y') }} ACADEXXA — ZTF University Institute. All rights reserved. &nbsp;|&nbsp;
+            Powered by ACADEXXA LMS
         </div>
     </div>
 </footer>

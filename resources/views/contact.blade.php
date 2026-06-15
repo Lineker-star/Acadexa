@@ -18,7 +18,7 @@
                     </li>
                     <li class="d-flex gap-3 mb-3">
                         <div style="width:40px;height:40px;background:#EEF3FF;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="bi bi-envelope text-primary"></i></div>
-                        <div><strong>Email</strong><br><a href="mailto:{{ $siteSettings['contact_email'] ?? 'info@acadexa.com' }}" class="text-muted small">{{ $siteSettings['contact_email'] ?? 'info@acadexa.com' }}</a></div>
+                        <div><strong>Email</strong><br><a href="mailto:{{ $siteSettings['contact_email'] ?? 'info@acadexxa.com' }}" class="text-muted small">{{ $siteSettings['contact_email'] ?? 'info@acadexxa.com' }}</a></div>
                     </li>
                     <li class="d-flex gap-3 mb-3">
                         <div style="width:40px;height:40px;background:#EEF3FF;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="bi bi-telephone text-primary"></i></div>

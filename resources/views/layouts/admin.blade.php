@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Admin') — ACADEXA Control Panel</title>
+    <title>@yield('title', 'Admin') — ACADEXXA Control Panel</title>
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -18,7 +18,7 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="mainSidebar">
         <div class="sidebar-brand">
-            <span>ACADEXA<em>.</em></span>
+            <span>ACADEXXA<em>.</em></span>
             <div style="font-size:.75rem;color:rgba(255,255,255,.5);margin-top:.2rem;">Control Panel</div>
         </div>
         <nav class="sidebar-nav mt-2">

@@ -5,7 +5,7 @@
 <div class="card border-0 shadow-brand rounded-xl">
     <div class="card-body p-4">
         <h4 class="fw-bold mb-1" style="font-family:'Poppins',sans-serif;color:var(--primary);">{{ __('auth.create_account') }}</h4>
-        <p class="text-muted small mb-4">{{ __('auth.join_acadexa') }}</p>
+        <p class="text-muted small mb-4">{{ __('auth.join_acadexxa') }}</p>
 
         <form method="POST" action="{{ route('register') }}" novalidate>
             @csrf

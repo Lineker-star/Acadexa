@@ -10,7 +10,7 @@
                  width="100" height="100" alt="{{ $instructor->name }}">
             <div class="text-white">
                 <h2 class="fw-bold mb-1">{{ $instructor->name }}</h2>
-                <p class="mb-1 opacity-75">Verified Instructor at ACADEXA</p>
+                <p class="mb-1 opacity-75">Verified Instructor at ACADEXXA</p>
                 <div class="d-flex gap-3 text-white-50 small">
                     <span><i class="bi bi-collection-play me-1"></i>{{ $courses->total() }} courses</span>
                     <span><i class="bi bi-people me-1"></i>{{ $totalStudents }} students</span>

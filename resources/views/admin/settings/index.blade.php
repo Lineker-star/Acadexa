@@ -15,7 +15,7 @@
                     <div class="col-md-6">
                         <label class="form-label small fw-bold">Site Name</label>
                         <input type="text" name="site_name" class="form-control"
-                               value="{{ $settings['site_name'] ?? 'ACADEXA' }}">
+                               value="{{ $settings['site_name'] ?? 'ACADEXXA' }}">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small fw-bold">Trial Days (Default: 30)</label>

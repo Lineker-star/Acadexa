@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'ACADEXA') — {{ $siteSettings['site_name'] ?? 'ACADEXA' }}</title>
-    <meta name="description" content="@yield('meta_description', 'ACADEXA — Empowering World Innovators and Leaders for Global Impact. Online learning platform by ZTF University Institute, Bertoua, Cameroon.')">
+    <title>@yield('title', 'ACADEXXA') — {{ $siteSettings['site_name'] ?? 'ACADEXXA' }}</title>
+    <meta name="description" content="@yield('meta_description', 'ACADEXXA — Empowering World Innovators and Leaders for Global Impact. Online learning platform by ZTF University Institute, Bertoua, Cameroon.')">
     <meta name="robots" content="@yield('robots', 'index, follow')">
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <!-- Bootstrap 5 -->

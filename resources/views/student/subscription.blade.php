@@ -24,7 +24,7 @@
                 <a href="{{ route('contact') }}" class="btn btn-primary">
                     <i class="bi bi-envelope me-2"></i>Contact Us
                 </a>
-                <a href="mailto:{{ $siteSettings['contact_email'] ?? 'info@acadexa.com' }}" class="btn btn-outline-primary">
+                <a href="mailto:{{ $siteSettings['contact_email'] ?? 'info@acadexxa.com' }}" class="btn btn-outline-primary">
                     <i class="bi bi-envelope-open me-2"></i>Email Directly
                 </a>
             </div>
