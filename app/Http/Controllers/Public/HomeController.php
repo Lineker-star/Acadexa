@@ -50,7 +50,7 @@ class HomeController extends Controller
         $courses    = Course::published()->with('translations')->get();
         $categories = Category::active()->get();
 
-        return response()->view('sitemap', compact('courses', 'categories'))
+        return response()->view('sitemap', compact('courses', 'categories', 'pages'))
             ->header('Content-Type', 'application/xml');
     }
 

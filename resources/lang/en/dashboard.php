@@ -1,6 +1,6 @@
 <?php
 return [
-    'welcome' => 'Welcome back, :name!',
+    'welcome' => 'Welcome back',
     'total_courses' => 'Total Courses',
     'instructors' => 'Instructors',
     'my_courses' => 'My Courses',
