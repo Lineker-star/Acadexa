@@ -114,7 +114,7 @@ img { max-width: 100%; height: auto; }
 }
 
 /* ─── Navbar ────────────────────────────────────────────────────────────────── */
-.acadexa-navbar {
+.acadexxa-navbar {
     background: var(--primary) !important;
     padding: .75rem 0;
     box-shadow: 0 2px 8px rgba(10,42,94,.3);
@@ -122,14 +122,14 @@ img { max-width: 100%; height: auto; }
     top: 0;
     z-index: 1030;
 }
-.acadexa-navbar .navbar-brand img {
+.acadexxa-navbar .navbar-brand img {
     height: 40px;
     width: auto;
     max-width: 160px;
     object-fit: contain;
     display: block;
 }
-.acadexa-navbar .navbar-brand {
+.acadexxa-navbar .navbar-brand {
     font-family: 'Poppins', sans-serif;
     font-size: 1.5rem;
     font-weight: 800;
@@ -137,8 +137,8 @@ img { max-width: 100%; height: auto; }
     letter-spacing: .5px;
     padding: 0;
 }
-.acadexa-navbar .navbar-brand span { color: var(--secondary); }
-.acadexa-navbar .navbar-brand img {
+.acadexxa-navbar .navbar-brand span { color: var(--secondary); }
+.acadexxa-navbar .navbar-brand img {
     height: 42px;
     width: auto;
     max-height: 42px;
@@ -146,7 +146,7 @@ img { max-width: 100%; height: auto; }
     display: block;
 }
 
-.acadexa-navbar .nav-link {
+.acadexxa-navbar .nav-link {
     color: rgba(255,255,255,.85) !important;
     font-weight: 500;
     padding: .4rem .8rem !important;
@@ -154,21 +154,21 @@ img { max-width: 100%; height: auto; }
     font-family: 'Poppins', sans-serif;
     font-size: .9rem;
 }
-.acadexa-navbar .nav-link:hover,
-.acadexa-navbar .nav-link.active { color: var(--white) !important; }
+.acadexxa-navbar .nav-link:hover,
+.acadexxa-navbar .nav-link.active { color: var(--white) !important; }
 
-.acadexa-navbar .navbar-toggler { border-color: rgba(255,255,255,.5); }
-.acadexa-navbar .navbar-toggler-icon {
+.acadexxa-navbar .navbar-toggler { border-color: rgba(255,255,255,.5); }
+.acadexxa-navbar .navbar-toggler-icon {
     filter: invert(1);
 }
 
-.acadexa-navbar .dropdown-menu {
+.acadexxa-navbar .dropdown-menu {
     border: none;
     box-shadow: var(--shadow-lg);
     border-radius: var(--radius);
     min-width: 200px;
 }
-.acadexa-navbar .dropdown-item:hover { background: var(--light); color: var(--primary); }
+.acadexxa-navbar .dropdown-item:hover { background: var(--light); color: var(--primary); }
 
 /* ─── Hero Sections ─────────────────────────────────────────────────────────── */
 .hero-section {
