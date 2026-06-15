@@ -162,6 +162,27 @@ body { overflow: hidden; }
 
 @push('scripts')
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const btn = document.getElementById("markCompleteBtn");
+    if (btn && !btn.disabled) {
+        btn.addEventListener("click", function() {
+            const lessonId = this.dataset.lessonId;
+            const token = document.querySelector("meta[name=csrf-token]").getAttribute("content");
+            fetch("/lessons/" + lessonId + "/complete", {
+                method: "POST",
+                headers: {"Content-Type": "application/json", "X-CSRF-TOKEN": token, "Accept": "application/json"},
+                body: JSON.stringify({})
+            }).then(r => r.json()).then(data => {
+                btn.textContent = "✓ Completed";
+                btn.classList.remove("btn-primary");
+                btn.classList.add("btn-success");
+                btn.disabled = true;
+                if (data.completed) { window.location.href = "/my-certificates"; }
+            }).catch(e => console.error(e));
+        });
+    }
+});
+
 function loadLesson(lessonId, el) {
     // Update URL without reload (SPA-like behavior)
     const url = new URL(window.location);
