@@ -28,7 +28,7 @@
                     <td style="font-size:.8rem;">{{ $page->updated_at->format('M d, Y') }}</td>
                     <td>
                         <div class="d-flex gap-1">
-                            <a href="{{ route('cms.page', $page->slug)) }}" target="_blank" class="btn btn-outline-secondary btn-sm">
+                            <a href="{{ route('cms.page', $page->slug) }}" target="_blank" class="btn btn-outline-secondary btn-sm">
                                 <i class="bi bi-eye"></i>
                             </a>
                             <a href="{{ route('admin.cms-pages.edit', $page) }}" class="btn btn-primary btn-sm">
