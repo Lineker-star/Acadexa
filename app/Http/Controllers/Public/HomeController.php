@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\User;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -50,6 +51,7 @@ class HomeController extends Controller
         $courses    = Course::published()->with('translations')->get();
         $categories = Category::active()->get();
 
+        $pages = DB::table('cms_pages')->where('is_active', 1)->get();
         return response()->view('sitemap', compact('courses', 'categories', 'pages'))
             ->header('Content-Type', 'application/xml');
     }

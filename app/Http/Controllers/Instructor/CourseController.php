@@ -143,7 +143,7 @@ class CourseController extends Controller
     public function submit(Course $course)
     {
         $this->authorizeInstructor($course);
-        abort_if($course->status !== 'draft', 403);
+        abort_if(! in_array($course->status, ['draft', 'rejected']), 403);
         $course->update(['status' => 'pending']);
         return back()->with('success', __('messages.course_submitted'));
     }

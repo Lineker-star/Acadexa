@@ -25,8 +25,8 @@
     @endforeach
     @foreach($pages as $page)
     <url>
-        <loc>{{ route('page', $page->slug) }}</loc>
-        <lastmod>{{ $page->updated_at->toAtomString() }}</lastmod>
+        <loc>{{ route('cms.page', $page->slug) }}</loc>
+        <lastmod>{{ \Carbon\Carbon::parse($page->updated_at)->toAtomString() }}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.4</priority>
     </url>

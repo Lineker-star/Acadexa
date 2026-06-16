@@ -511,3 +511,13 @@ img { max-width: 100%; height: auto; }
     .hero-section { min-height: 380px; }
     .stats-bar .stat-num { font-size: 2rem; }
 }
+
+/* ACADEXXA logo size fix */
+.acadexxa-navbar .navbar-brand img {
+    height: 40px !important;
+    width: auto !important;
+    max-height: 40px !important;
+    max-width: 160px !important;
+    object-fit: contain !important;
+    display: block !important;
+}
