@@ -285,6 +285,32 @@ Aucun emoji : toutes les icônes sont des **SVG** (jeu Bootstrap Icons) regroup�
 
 ---
 
+## Déploiement sur Railway
+
+1. **New Project → Deploy from GitHub repo** (ce dépôt), puis **+ New → Database → MySQL**.
+2. Variables du service web :
+   ```
+   APP_ENV=production
+   APP_DEBUG=false
+   APP_KEY=base64:...            (php artisan key:generate --show)
+   APP_URL=https://${{RAILWAY_PUBLIC_DOMAIN}}
+   DB_CONNECTION=mysql
+   DB_URL=${{MySQL.MYSQL_URL}}
+   SESSION_SECURE_COOKIE=true
+   LOG_CHANNEL=stderr
+   PHP_INI_SCAN_DIR=:/app/deploy/php
+   MAIL_...                       (SMTP)
+   ```
+   `PHP_INI_SCAN_DIR` charge `deploy/php/acadexa.ini` (taille des fichiers envoyés).
+3. **Volume** monté sur `/app/storage/app` (vidéos, livres, ressources, certificats — sinon perdus à chaque déploiement).
+4. **Pre-deploy command** : `php artisan migrate --force && php artisan storage:link && php artisan optimize`
+5. 2ᵉ service (même dépôt, mêmes variables, sans domaine) avec la commande de démarrage `php artisan schedule:work` : e-mails, rappels, nettoyage.
+6. **Generate Domain**, puis une seule fois : `railway run php artisan db:seed --force` et changement des mots de passe de démonstration.
+
+Vidéos : **20 Mo maximum** par leçon (`LMS_VIDEO_MAX_MB`), envoyées par morceaux de 1 Mo.
+
+---
+
 ## Common Problems & Solutions
 
 **Problem:** Page shows "No application encryption key has been specified"

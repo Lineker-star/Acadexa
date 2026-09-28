@@ -13,6 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Hosting platforms (Railway…) terminate HTTPS at a proxy: trust its X-Forwarded-* headers
+        // so that generated URLs stay https (required by the service worker / offline mode).
+        $middleware->trustProxies(at: '*');
+
         $middleware->web(append: [
             \App\Http\Middleware\LocaleMiddleware::class,
             \App\Http\Middleware\PlatformStateMiddleware::class,

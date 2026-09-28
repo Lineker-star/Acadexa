@@ -8,8 +8,8 @@ return [
     | and an interrupted upload resumes where it stopped.
     */
     'video' => [
-        'max_size_mb'   => (int) env('LMS_VIDEO_MAX_MB', 4096),
-        'chunk_size_mb' => (int) env('LMS_VIDEO_CHUNK_MB', 8),
+        'max_size_mb'   => (int) env('LMS_VIDEO_MAX_MB', 20),
+        'chunk_size_mb' => (int) env('LMS_VIDEO_CHUNK_MB', 1),
         'mimes'         => ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime', 'video/x-m4v'],
         'extensions'    => ['mp4', 'webm', 'ogv', 'mov', 'm4v'],
     ],
