@@ -37,6 +37,9 @@
             "Tests\\": "tests/"
         }
     },
+    "scripts-descriptions": {
+        "deploy": "Production deployment (Railway pre-deploy): migrations, seeders on an empty database, storage link, caches."
+    },
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
@@ -47,6 +50,12 @@
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "deploy": [
+            "@php artisan migrate --force",
+            "@php artisan db:seed --force",
+            "@php artisan storage:link",
+            "@php artisan optimize"
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi",

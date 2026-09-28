@@ -303,9 +303,9 @@ Aucun emoji : toutes les icônes sont des **SVG** (jeu Bootstrap Icons) regroup�
    ```
    `PHP_INI_SCAN_DIR` charge `deploy/php/acadexa.ini` (taille des fichiers envoyés).
 3. **Volume** monté sur `/app/storage/app` (vidéos, livres, ressources, certificats — sinon perdus à chaque déploiement).
-4. **Pre-deploy command** : `php artisan migrate --force && php artisan storage:link && php artisan optimize`
+4. **Pre-deploy command** : `composer deploy` (migrations, seeders si la base est vide, lien de stockage, caches — voir `composer.json`)
 5. 2ᵉ service (même dépôt, mêmes variables, sans domaine) avec la commande de démarrage `php artisan schedule:work` : e-mails, rappels, nettoyage.
-6. **Generate Domain**, puis une seule fois : `railway run php artisan db:seed --force` et changement des mots de passe de démonstration.
+6. **Generate Domain**. Au premier déploiement, les comptes et données de démonstration sont créés automatiquement : changer aussitôt les mots de passe de démonstration.
 
 Vidéos : **20 Mo maximum** par leçon (`LMS_VIDEO_MAX_MB`), envoyées par morceaux de 1 Mo.
 
