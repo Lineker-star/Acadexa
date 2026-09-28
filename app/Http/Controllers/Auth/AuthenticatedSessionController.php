@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Services\LoginFlow;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,27 +17,16 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login');
     }
 
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request, LoginFlow $flow): RedirectResponse
     {
+        // Checks the password (with throttling and account state); the session is only opened
+        // by the login flow, after the e-mail confirmation / two-factor step when there is one.
         $request->authenticate();
+        $user = Auth::user();
+        Auth::guard('web')->logout();
         $request->session()->regenerate();
 
-        $user = Auth::user();
-
-        if (! $user->is_active) {
-            Auth::logout();
-            return back()->withErrors(['email' => __('messages.account_deactivated')]);
-        }
-
-        // Route by role
-        if ($user->isAdmin()) {
-            return redirect()->route('admin.dashboard');
-        }
-        if ($user->isInstructor()) {
-            return redirect()->route('instructor.dashboard');
-        }
-
-        return redirect()->route('dashboard');
+        return $flow->start($request, $user, $request->boolean('remember'));
     }
 
     public function destroy(Request $request): RedirectResponse

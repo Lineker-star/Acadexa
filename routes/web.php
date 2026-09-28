@@ -107,6 +107,16 @@ Route::get('/page/{slug}', [CmsPageController::class, 'show'])->name('cms.page')
 
 require __DIR__.'/auth.php';
 
+// Sign in with Google, and the second step (e-mail confirmation code / two-factor code)
+Route::middleware('guest')->group(function () {
+    Route::get('/auth/google', [\App\Http\Controllers\Auth\GoogleController::class, 'redirect'])->name('auth.google');
+    Route::get('/auth/google/callback', [\App\Http\Controllers\Auth\GoogleController::class, 'callback'])->name('auth.google.callback');
+    Route::get('/two-factor', [\App\Http\Controllers\Auth\TwoFactorChallengeController::class, 'show'])->name('two-factor.challenge');
+    Route::post('/two-factor', [\App\Http\Controllers\Auth\TwoFactorChallengeController::class, 'verify'])->middleware('throttle:10,1')->name('two-factor.verify');
+    Route::post('/two-factor/resend', [\App\Http\Controllers\Auth\TwoFactorChallengeController::class, 'resend'])->middleware('throttle:5,1')->name('two-factor.resend');
+    Route::post('/two-factor/cancel', [\App\Http\Controllers\Auth\TwoFactorChallengeController::class, 'cancel'])->name('two-factor.cancel');
+});
+
 // ─── Student Routes ───────────────────────────────────────────────────────────
 
 Route::middleware(['auth', 'verified', 'role:student,instructor,admin,super_admin'])->group(function () {
@@ -162,6 +172,12 @@ Route::middleware(['auth', 'verified', 'role:student,instructor,admin,super_admi
 
     Route::get('/profile', [StudentProfile::class, 'edit'])->name('student.profile.edit');
     Route::post('/profile', [StudentProfile::class, 'update'])->name('student.profile.update');
+    Route::post('/profile/password', [StudentProfile::class, 'password'])->name('profile.password');
+    Route::post('/profile/two-factor/app', [StudentProfile::class, 'enableApp'])->name('profile.2fa.app');
+    Route::post('/profile/two-factor/email/code', [StudentProfile::class, 'sendEmailCode'])->middleware('throttle:5,1')->name('profile.2fa.email-code');
+    Route::post('/profile/two-factor/email', [StudentProfile::class, 'enableEmail'])->name('profile.2fa.email');
+    Route::post('/profile/two-factor/disable', [StudentProfile::class, 'disableTwoFactor'])->name('profile.2fa.disable');
+    Route::delete('/profile/google', [StudentProfile::class, 'unlinkGoogle'])->name('profile.google.unlink');
 
     Route::get('/wishlist', [StudentWishlist::class, 'index'])->name('student.wishlist.index');
     Route::post('/wishlist/{course}', [StudentWishlist::class, 'toggle'])->name('student.wishlist.toggle');

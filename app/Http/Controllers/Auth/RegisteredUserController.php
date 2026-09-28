@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\LoginFlow;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class RegisteredUserController extends Controller
         return view('auth.register');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, LoginFlow $flow): RedirectResponse
     {
         $request->validate([
             'name'     => ['required', 'string', 'max:255'],
@@ -37,6 +38,12 @@ class RegisteredUserController extends Controller
             'trial_started_at'  => now(),
             'preferred_language'=> app()->getLocale(),
         ]);
+
+        // Registration step: a 6-digit code is e-mailed to confirm the address before the account opens
+        // (it replaces the verification link, so the "Registered" event is not fired in that case).
+        if ($flow->needsEmailConfirmation($user)) {
+            return $flow->start($request, $user);
+        }
 
         event(new Registered($user));
         $user->notify(new \App\Notifications\WelcomeNotification());

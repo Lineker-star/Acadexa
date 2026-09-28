@@ -524,3 +524,7 @@ img { max-width: 100%; height: auto; }
     display: block !important;
 }
 
+
+/* "Continue with Google" (Google sign-in branding: white button, grey border, coloured logo) */
+.btn-google { background: #fff; color: #1F1F1F; border: 1px solid #DADCE0; font-weight: 500; }
+.btn-google:hover, .btn-google:focus { background: #F8F9FA; color: #1F1F1F; border-color: #C6C9CE; }

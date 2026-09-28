@@ -89,6 +89,7 @@
                 <div class="mb-4">
                     @foreach([
                         'allow_registration'         => ['label' => __('security.allow_registration'), 'default' => '1'],
+                        'registration_code'          => ['label' => __('learn.setting_registration_code'), 'default' => '1'],
                         'require_email_verification' => ['label' => __('security.require_email_verification'), 'default' => '0'],
                         'maintenance_mode'           => ['label' => __('security.maintenance_mode'), 'default' => '0'],
                     ] as $key => $opt)

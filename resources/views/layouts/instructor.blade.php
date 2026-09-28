@@ -47,6 +47,9 @@
                 <x-icon name="cash-stack" /> {{ __('Earnings') }}
             </a>
             <div class="nav-section" style="margin-top:1rem;"></div>
+            <a href="{{ route('student.profile.edit') }}" class="{{ request()->routeIs('student.profile.*') ? 'active' : '' }}">
+                <x-icon name="person-gear" /> {{ __('navigation.profile') }}
+            </a>
             <a href="{{ route('dashboard') }}">
                 <x-icon name="person-circle" /> {{ __('Student View') }}
             </a>

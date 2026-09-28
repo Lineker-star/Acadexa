@@ -35,6 +35,7 @@ class SettingController extends Controller
             'maintenance_mode'           => ['nullable', 'in:0,1'],
             'allow_registration'         => ['nullable', 'in:0,1'],
             'require_email_verification' => ['nullable', 'in:0,1'],
+            'registration_code'          => ['nullable', 'in:0,1'],
             'hero_image'        => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
             'remove_hero_image' => ['nullable', 'boolean'],
         ]);

@@ -1051,3 +1051,7 @@ module.exports = {
         },
     },
 };
+
+// Sign in with Google, confirmation codes, two-factor authentication and profile.
+const auth = require('./learn-auth.cjs');
+for (const locale of Object.keys(module.exports)) Object.assign(module.exports[locale], auth[locale]);

@@ -40,9 +40,10 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         'preferred_language', 'instructor_status', 'trial_started_at',
         'is_active', 'admin_permissions', 'banned_at', 'ban_reason',
         'two_factor_secret', 'two_factor_confirmed_at', 'email_notifications',
+        'google_id', 'has_password', 'two_factor_method',
     ];
 
-    protected $hidden = ['password', 'remember_token', 'two_factor_secret'];
+    protected $hidden = ['password', 'remember_token', 'two_factor_secret', 'google_id'];
 
     /** Granular back-office areas a regular admin can be restricted to. */
     public const ADMIN_PERMISSIONS = [
@@ -60,6 +61,7 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
             'password'                => 'hashed',
             'is_active'               => 'boolean',
             'email_notifications'     => 'boolean',
+            'has_password'            => 'boolean',
             'admin_permissions'       => 'array',
             'two_factor_secret'       => 'encrypted',
         ];
@@ -137,9 +139,23 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         return $this->is_active && ! $this->isBanned();
     }
 
+    /**
+     * Second step at login: a code from an authenticator app (TOTP) or a code sent by e-mail.
+     * Accounts without a method stored but with a confirmed TOTP secret (admins) use the app.
+     */
     public function hasTwoFactorEnabled(): bool
     {
-        return $this->two_factor_secret && $this->two_factor_confirmed_at;
+        return $this->two_factor_method === 'email' || $this->usesAuthenticatorApp();
+    }
+
+    public function usesAuthenticatorApp(): bool
+    {
+        return $this->two_factor_method !== 'email' && $this->two_factor_secret && $this->two_factor_confirmed_at;
+    }
+
+    public function twoFactorMethod(): ?string
+    {
+        return $this->hasTwoFactorEnabled() ? ($this->usesAuthenticatorApp() ? 'app' : 'email') : null;
     }
 
     /** Super admins, and admins without a restriction list, have full access. */
@@ -223,7 +239,8 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     public function avatarUrl(): string
     {
         if ($this->avatar) {
-            return asset('storage/avatars/' . $this->avatar);
+            // Google profile pictures are stored as full URLs.
+            return str_starts_with($this->avatar, 'http') ? $this->avatar : asset('storage/avatars/' . $this->avatar);
         }
         $initials = urlencode(substr($this->name, 0, 1));
         return "https://ui-avatars.com/api/?name={$initials}&background=0A2A5E&color=fff&size=128";

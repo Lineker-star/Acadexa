@@ -57,6 +57,8 @@
             <button type="submit" class="btn btn-primary w-100">{{ __('auth.register') }}</button>
         </form>
 
+        @include('partials.google-button')
+
         <p class="text-center mt-3 mb-0 small">
             {{ __('auth.have_account') }}
             <a href="{{ route('login') }}" class="fw-bold">{{ __('auth.login') }}</a>

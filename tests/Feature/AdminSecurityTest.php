@@ -79,9 +79,11 @@ class AdminSecurityTest extends LmsTestCase
         $this->post(route('admin.2fa.verify'), ['code' => $totp->code($secret)])->assertRedirect(route('admin.dashboard'));
         $this->assertAuthenticatedAs($admin);
 
-        // The student login does not bypass the second factor.
+        // The student login does not bypass the second factor: it asks for the same code.
         auth()->logout();
-        $this->post('/login', ['email' => $admin->email, 'password' => 'Password123!'])->assertSessionHasErrors('email');
+        $this->post('/login', ['email' => $admin->email, 'password' => 'Password123!'])->assertRedirect(route('two-factor.challenge'));
+        $this->assertGuest();
+        $this->post(route('two-factor.verify'), ['code' => '000000'])->assertSessionHasErrors('code');
         $this->assertGuest();
     }
 

@@ -30,7 +30,7 @@ abstract class LmsTestCase extends TestCase
 
     protected function makeUser(string $role = 'student', array $attrs = []): User
     {
-        return User::create(array_merge([
+        $user = User::create(array_merge([
             'name'               => ucfirst($role) . ' ' . Str::random(4),
             'email'              => Str::random(8) . '@example.test',
             'password'           => 'Password123!',
@@ -41,6 +41,10 @@ abstract class LmsTestCase extends TestCase
             'email_verified_at'  => now(),
             'preferred_language' => 'fr',
         ], $attrs));
+        // Not mass assignable: verified accounts unless the test says otherwise.
+        $user->forceFill(['email_verified_at' => array_key_exists('email_verified_at', $attrs) ? $attrs['email_verified_at'] : now()])->save();
+
+        return $user;
     }
 
     protected function makeCategory(): Category

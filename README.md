@@ -309,6 +309,13 @@ Aucun emoji : toutes les icônes sont des **SVG** (jeu Bootstrap Icons) regroup�
 
 Vidéos : **20 Mo maximum** par leçon (`LMS_VIDEO_MAX_MB`), envoyées par morceaux de 1 Mo.
 
+### Connexion avec Google et vérification en deux étapes
+
+- **Inscription** : un code à 6 chiffres est envoyé par e-mail pour confirmer l'adresse avant l'ouverture du compte (réglable dans Admin → Paramètres). **Un envoi d'e-mails fonctionnel (`MAIL_*`) est donc indispensable en production.**
+- **Connexion** : chaque utilisateur peut activer la vérification en deux étapes dans *Mon profil → Sécurité* — application d'authentification (Google Authenticator, Microsoft Authenticator, Authy) ou code par e-mail. Elle s'applique aussi après « Continuer avec Google ». Les administrateurs utilisent l'application (page *Sécurité* de l'administration).
+- **Google** : créer un identifiant OAuth « Application Web » dans Google Cloud Console (API et services → Identifiants), URI de redirection autorisée `https://<domaine>/auth/google/callback`, puis renseigner `GOOGLE_CLIENT_ID` et `GOOGLE_CLIENT_SECRET`. Le bouton n'apparaît qu'une fois ces variables définies. Un compte existant avec la même adresse est associé automatiquement ; sinon un compte étudiant est créé (mot de passe à choisir plus tard dans le profil).
+- **Profil** (lien dans le menu et le tableau de bord) : nom, photo, pays, langue, biographie, notifications, mot de passe, 2FA, compte Google associé.
+
 ---
 
 ## Common Problems & Solutions

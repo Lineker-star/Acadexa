@@ -16,8 +16,18 @@ class CommunicationTest extends LmsTestCase
         Notification::fake();
         $this->post('/register', [
             'name' => 'Awa', 'email' => 'awa@example.test', 'password' => 'Password123!', 'password_confirmation' => 'Password123!',
-        ])->assertRedirect();
-        Notification::assertSentTo(\App\Models\User::where('email', 'awa@example.test')->first(), WelcomeNotification::class);
+        ])->assertRedirect(route('two-factor.challenge'));
+        $user = \App\Models\User::where('email', 'awa@example.test')->first();
+
+        // The welcome message follows the confirmation of the e-mail address (6-digit code).
+        $code = null;
+        Notification::assertSentTo($user, \App\Notifications\VerificationCode::class, function ($n) use (&$code) {
+            $code = $n->code;
+            return true;
+        });
+        Notification::assertNotSentTo($user, WelcomeNotification::class);
+        $this->post(route('two-factor.verify'), ['code' => $code]);
+        Notification::assertSentTo($user, WelcomeNotification::class);
     }
 
     public function test_questions_and_replies_notify_the_right_people(): void

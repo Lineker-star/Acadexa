@@ -45,11 +45,7 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        // Admins with 2FA must use the back-office login, which asks for the code.
-        if ($user->hasTwoFactorEnabled()) {
-            Auth::logout();
-            throw ValidationException::withMessages(['email' => __('security.use_admin_login')]);
-        }
+        // Two-factor accounts are handled next by the login flow (code from the app or by e-mail).
 
         RateLimiter::clear($this->throttleKey());
     }
