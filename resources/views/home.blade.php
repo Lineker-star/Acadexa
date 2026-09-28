@@ -7,11 +7,8 @@
 
 {{-- ─── HERO ────────────────────────────────────────────────────────────────── --}}
 <section class="hero-section"
-         style="background-image: url('{{ \App\Support\Branding::heroUrl() }}');"
+         style="background-image: url('{{ \App\Support\Branding::heroUrl() }}'); background-position: 70% center;"
          aria-label="{{ __('African students learning') }}">
-    @if($heroCredit = \App\Support\Branding::heroCredit())
-        <a href="{{ config('lms.hero.credit_url') }}" class="hero-credit" target="_blank" rel="noopener">{{ $heroCredit }}</a>
-    @endif
     <div class="container hero-content py-5">
         <div class="row align-items-center min-vh-50">
             <div class="col-lg-8">

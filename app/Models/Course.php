@@ -150,7 +150,8 @@ class Course extends Model
             }
             return asset('storage/thumbnails/' . $this->thumbnail);
         }
-        return asset('images/course-placeholder.jpg');
+        // No uploaded picture: a cover generated from the title and the category.
+        return route('courses.cover', ['course' => $this->id, 'v' => $this->updated_at?->timestamp]);
     }
 
     /** Video/reading time computed from lesson durations. */

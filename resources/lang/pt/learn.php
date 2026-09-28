@@ -154,6 +154,9 @@ Quais são números pares?
     'hero_image' => 'Foto da página inicial',
     'hero_image_help' => 'JPG, PNG ou WebP, na horizontal (ex. 1920×1080), máx. 5 MB. Aparece atrás do título da página inicial.',
     'hero_image_reset' => 'Voltar à foto predefinida',
+    'cert_awarded_to' => 'Este certificado é atribuído a',
+    'cert_hours' => 'Duração do curso: :hours',
+    'cert_final_score' => 'Avaliação final: :score %',
     'js' => [
         'now_take_quiz' => 'Vídeo terminado: faça o questionário para validar a aula.',
         'knowledge_evolution' => 'Evolução dos conhecimentos',

@@ -154,6 +154,9 @@ Lesquels sont des nombres pairs ?
     'hero_image' => 'Photo de la page d’accueil',
     'hero_image_help' => 'JPG, PNG ou WebP, au format paysage (ex. 1920×1080), 5 Mo max. Affichée derrière le titre de la page d’accueil.',
     'hero_image_reset' => 'Revenir à la photo par défaut',
+    'cert_awarded_to' => 'Ce certificat est décerné à',
+    'cert_hours' => 'Durée du cours : :hours',
+    'cert_final_score' => 'Évaluation finale : :score %',
     'js' => [
         'now_take_quiz' => 'Vidéo terminée : passez le quiz pour valider la leçon.',
         'knowledge_evolution' => 'Évolution des connaissances',

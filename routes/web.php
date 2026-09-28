@@ -85,6 +85,7 @@ Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/search/suggestions', [SearchController::class, 'suggestions'])->name('search.suggestions');
 
 Route::get('/courses', [PublicCourseController::class, 'index'])->name('courses.index');
+Route::get('/course-covers/{course}.svg', [\App\Http\Controllers\Public\CourseCoverController::class, 'show'])->whereNumber('course')->name('courses.cover');
 Route::get('/courses/{course:slug}', [PublicCourseController::class, 'show'])->name('courses.show');
 Route::get('/courses/{course:slug}/preview/{lesson}', [PublicCourseController::class, 'preview'])->name('courses.preview');
 // Numeric only: otherwise it would swallow /instructor/submissions, /instructor/earnings…

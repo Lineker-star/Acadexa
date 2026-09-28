@@ -150,6 +150,9 @@ module.exports = {
         hero_image: 'Home page photo',
         hero_image_help: 'JPG, PNG or WebP, landscape (e.g. 1920×1080), max. 5 MB. Shown behind the title of the home page.',
         hero_image_reset: 'Go back to the default photo',
+        cert_awarded_to: 'This certificate is proudly awarded to',
+        cert_hours: 'Course duration: :hours',
+        cert_final_score: 'Final evaluation: :score %',
         js: {
             now_take_quiz: 'Video finished: take the quiz to validate the lesson.',
             knowledge_evolution: 'Knowledge evolution',
@@ -321,6 +324,9 @@ module.exports = {
         hero_image: 'Photo de la page d’accueil',
         hero_image_help: 'JPG, PNG ou WebP, au format paysage (ex. 1920×1080), 5 Mo max. Affichée derrière le titre de la page d’accueil.',
         hero_image_reset: 'Revenir à la photo par défaut',
+        cert_awarded_to: 'Ce certificat est décerné à',
+        cert_hours: 'Durée du cours : :hours',
+        cert_final_score: 'Évaluation finale : :score %',
         js: {
             now_take_quiz: 'Vidéo terminée : passez le quiz pour valider la leçon.',
             knowledge_evolution: 'Évolution des connaissances',
@@ -492,6 +498,9 @@ module.exports = {
         hero_image: 'Foto de la página de inicio',
         hero_image_help: 'JPG, PNG o WebP, horizontal (p. ej. 1920×1080), máx. 5 MB. Se muestra detrás del título de la página de inicio.',
         hero_image_reset: 'Volver a la foto predeterminada',
+        cert_awarded_to: 'Este certificado se otorga a',
+        cert_hours: 'Duración del curso: :hours',
+        cert_final_score: 'Evaluación final: :score %',
         js: {
             now_take_quiz: 'Vídeo terminado: haz el cuestionario para validar la lección.',
             knowledge_evolution: 'Evolución de los conocimientos',
@@ -663,6 +672,9 @@ module.exports = {
         hero_image: 'Foto da página inicial',
         hero_image_help: 'JPG, PNG ou WebP, na horizontal (ex. 1920×1080), máx. 5 MB. Aparece atrás do título da página inicial.',
         hero_image_reset: 'Voltar à foto predefinida',
+        cert_awarded_to: 'Este certificado é atribuído a',
+        cert_hours: 'Duração do curso: :hours',
+        cert_final_score: 'Avaliação final: :score %',
         js: {
             now_take_quiz: 'Vídeo terminado: faça o questionário para validar a aula.',
             knowledge_evolution: 'Evolução dos conhecimentos',
@@ -834,6 +846,9 @@ module.exports = {
         hero_image: '首页图片',
         hero_image_help: 'JPG、PNG 或 WebP，横向（例如 1920×1080），最大 5 MB。显示在首页标题的背后。',
         hero_image_reset: '恢复默认图片',
+        cert_awarded_to: '兹授予此证书给',
+        cert_hours: '课程时长：:hours',
+        cert_final_score: '期末评估：:score %',
         js: {
             now_take_quiz: '视频已看完：请参加测验以通过本课时。',
             knowledge_evolution: '知识变化',
@@ -1005,6 +1020,9 @@ module.exports = {
         hero_image: 'صورة الصفحة الرئيسية',
         hero_image_help: 'JPG أو PNG أو WebP بالوضع الأفقي (مثل 1920×1080)، بحد أقصى 5 ميغابايت. تظهر خلف عنوان الصفحة الرئيسية.',
         hero_image_reset: 'العودة إلى الصورة الافتراضية',
+        cert_awarded_to: 'تُمنح هذه الشهادة إلى',
+        cert_hours: 'مدة الدورة: :hours',
+        cert_final_score: 'التقييم النهائي: :score %',
         js: {
             now_take_quiz: 'انتهى الفيديو: أجرِ الاختبار لإتمام الدرس.',
             knowledge_evolution: 'تطوّر المعارف',

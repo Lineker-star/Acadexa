@@ -7,7 +7,7 @@
 <div class="breadcrumb-bar"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('Home') }}</a></li><li class="breadcrumb-item active">{{ $trans?->title ?? ucfirst($page->slug) }}</li></ol></div></div>
 
 @if($page->hero_image)
-<section class="hero-section" style="min-height:280px;background-image:url('{{ $page->hero_image }}');">
+<section class="hero-section" style="min-height:280px;background-image:url('{{ str_starts_with($page->hero_image, 'http') ? $page->hero_image : \Illuminate\Support\Facades\Storage::disk('public')->url($page->hero_image) }}');">
     <div class="container hero-content py-4">
         <h1>{{ $trans?->title }}</h1>
     </div>

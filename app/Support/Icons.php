@@ -25,6 +25,18 @@ class Icons
         return self::$url;
     }
 
+    /**
+     * Inner markup of one icon (paths of a 16×16 viewBox), to embed it in a standalone SVG
+     * such as a generated course cover — an <img> SVG cannot reference the external sprite.
+     */
+    public static function symbol(?string $name): ?string
+    {
+        static $sprite = null;
+        $sprite ??= is_file(self::path()) ? file_get_contents(self::path()) : '';
+        $id = preg_quote(self::normalize($name), '/');
+        return preg_match('/<symbol[^>]*id="' . $id . '"[^>]*>(.*?)<\/symbol>/s', $sprite, $m) ? $m[1] : null;
+    }
+
     /** Accepts "play-circle" or the legacy "bi-play-circle" form stored in data. */
     public static function normalize(?string $name): string
     {

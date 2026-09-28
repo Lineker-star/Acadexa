@@ -154,6 +154,9 @@ Which of these are even numbers?
     'hero_image' => 'Home page photo',
     'hero_image_help' => 'JPG, PNG or WebP, landscape (e.g. 1920×1080), max. 5 MB. Shown behind the title of the home page.',
     'hero_image_reset' => 'Go back to the default photo',
+    'cert_awarded_to' => 'This certificate is proudly awarded to',
+    'cert_hours' => 'Course duration: :hours',
+    'cert_final_score' => 'Final evaluation: :score %',
     'js' => [
         'now_take_quiz' => 'Video finished: take the quiz to validate the lesson.',
         'knowledge_evolution' => 'Knowledge evolution',

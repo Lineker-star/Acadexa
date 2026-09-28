@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <!-- ACADEXA home page illustration: students learning online. Original artwork, no third-party content. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A2A5E"/>
+      <stop offset="0.55" stop-color="#16407F"/>
+      <stop offset="1" stop-color="#1F5AA6"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F5B041" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#C1440E" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E8F1FF"/>
+      <stop offset="1" stop-color="#B9D3FA"/>
+    </linearGradient>
+    <!-- Kente-inspired woven band -->
+    <pattern id="kente" width="120" height="60" patternUnits="userSpaceOnUse">
+      <rect width="120" height="60" fill="#C1440E"/>
+      <rect width="40" height="60" fill="#F5B041"/>
+      <rect x="40" width="20" height="60" fill="#1E8449"/>
+      <rect x="60" width="20" height="60" fill="#0A2A5E"/>
+      <rect x="4" y="8" width="32" height="6" fill="#0A2A5E"/>
+      <rect x="4" y="26" width="32" height="6" fill="#1E8449"/>
+      <rect x="4" y="44" width="32" height="6" fill="#0A2A5E"/>
+      <path d="M86 10 l14 10 l14 -10 v8 l-14 10 l-14 -10z M86 34 l14 10 l14 -10 v8 l-14 10 l-14 -10z" fill="#F5B041"/>
+    </pattern>
+    <pattern id="dots" width="36" height="36" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="2" fill="#FFFFFF" fill-opacity=".08"/>
+    </pattern>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <rect width="1920" height="1080" fill="url(#dots)"/>
+  <circle cx="1480" cy="330" r="360" fill="url(#glow)"/>
+  <circle cx="1480" cy="330" r="250" fill="none" stroke="#FFFFFF" stroke-opacity=".08" stroke-width="2"/>
+  <circle cx="1480" cy="330" r="420" fill="none" stroke="#FFFFFF" stroke-opacity=".05" stroke-width="2"/>
+
+  <!-- floating learning symbols -->
+  <g fill="none" stroke="#FFFFFF" stroke-opacity=".35" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- mortarboard -->
+    <path d="M1150 180 l90 -40 l90 40 l-90 40z"/>
+    <path d="M1190 198 v42 c30 22 70 22 100 0 v-42"/>
+    <path d="M1330 180 v55"/>
+    <!-- light bulb -->
+    <g transform="translate(-290 -470)">
+    <path d="M1790 560 a45 45 0 1 1 60 0 c-10 10 -12 20 -12 32 h-36 c0 -12 -2 -22 -12 -32z"/>
+    <path d="M1806 610 h28 M1810 628 h20"/>
+    </g>
+    <!-- globe -->
+    <circle cx="1760" cy="170" r="52"/>
+    <path d="M1708 170 h104 M1760 118 c-30 30 -30 74 0 104 c30 -30 30 -74 0 -104"/>
+    <!-- open book -->
+    <path transform="translate(-150 -190)" d="M1060 520 c30 -16 60 -16 90 0 v80 c-30 -16 -60 -16 -90 0z M1150 520 c30 -16 60 -16 90 0 v80 c-30 -16 -60 -16 -90 0z"/>
+  </g>
+
+  <!-- ground and woven band -->
+  <rect x="0" y="930" width="1920" height="150" fill="#08214A"/>
+  <rect x="0" y="900" width="1920" height="36" fill="url(#kente)"/>
+
+  <!-- desk -->
+  <rect x="1060" y="760" width="560" height="26" rx="8" fill="#7A4A26"/>
+  <rect x="1090" y="786" width="22" height="120" fill="#5E381C"/>
+  <rect x="1568" y="786" width="22" height="120" fill="#5E381C"/>
+
+  <!-- student 1: seated with a laptop -->
+  <g>
+    <!-- body -->
+    <path d="M1150 610 c0 -50 40 -80 85 -80 s85 30 85 80 v150 h-170z" fill="#C1440E"/>
+    <path d="M1180 560 l55 60 l55 -60" fill="none" stroke="#F5B041" stroke-width="8"/>
+    <!-- head -->
+    <rect x="1220" y="500" width="30" height="40" fill="#7B4A2A"/>
+    <circle cx="1235" cy="455" r="58" fill="#8D5524"/>
+    <path d="M1177 450 c0 -50 30 -70 58 -70 s60 18 60 66 c-12 -22 -40 -30 -60 -30 s-44 12 -58 34z" fill="#1B1B1B"/>
+    <circle cx="1255" cy="460" r="5" fill="#1B1B1B"/>
+    <path d="M1250 486 q12 8 22 0" stroke="#4A2A14" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <!-- arm to keyboard -->
+    <path d="M1290 640 c40 30 70 70 110 100" stroke="#C1440E" stroke-width="40" stroke-linecap="round" fill="none"/>
+    <circle cx="1402" cy="742" r="18" fill="#8D5524"/>
+  </g>
+
+  <!-- laptop -->
+  <g>
+    <path d="M1380 760 h230 l-18 -8 h-194z" fill="#9AA5B1"/>
+    <rect x="1400" y="600" width="190" height="150" rx="10" fill="#2B3440"/>
+    <rect x="1412" y="612" width="166" height="126" rx="4" fill="url(#screen)"/>
+    <rect x="1426" y="628" width="80" height="10" rx="5" fill="#0A2A5E"/>
+    <rect x="1426" y="648" width="136" height="8" rx="4" fill="#6C8FC7"/>
+    <rect x="1426" y="664" width="110" height="8" rx="4" fill="#6C8FC7"/>
+    <circle cx="1460" cy="702" r="18" fill="#C1440E"/>
+    <path d="M1454 694 l14 8 l-14 8z" fill="#FFFFFF"/>
+    <rect x="1490" y="690" width="72" height="8" rx="4" fill="#1E8449"/>
+    <rect x="1490" y="706" width="52" height="8" rx="4" fill="#F5B041"/>
+  </g>
+
+  <!-- student 2: standing with a book, head wrap -->
+  <g>
+    <path d="M1700 900 l-20 -270 c0 -50 36 -80 80 -80 s80 30 80 80 l-20 270z" fill="#1E8449"/>
+    <path d="M1690 700 h140 M1686 760 h148 M1690 820 h142" stroke="#F5B041" stroke-width="10" stroke-dasharray="18 14"/>
+    <rect x="1745" y="520" width="30" height="40" fill="#6E3F1F"/>
+    <circle cx="1760" cy="478" r="55" fill="#7B4526"/>
+    <path d="M1700 470 c-10 -70 40 -110 70 -110 c45 0 78 40 62 92 c-20 -30 -60 -40 -90 -30 c-20 8 -34 26 -42 48z" fill="#F5B041"/>
+    <path d="M1712 420 c30 -20 80 -24 112 4" stroke="#C1440E" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <circle cx="1780" cy="484" r="5" fill="#1B1B1B"/>
+    <path d="M1776 508 q10 7 20 0" stroke="#3E1F0C" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <!-- book held -->
+    <path d="M1650 640 l70 -20 l10 90 l-70 20z" fill="#FFFFFF"/>
+    <path d="M1650 640 l-8 4 l10 90 l8 -4z" fill="#0A2A5E"/>
+    <path d="M1662 660 l50 -14 M1666 684 l50 -14 M1670 708 l40 -11" stroke="#9AA5B1" stroke-width="5"/>
+    <path d="M1700 620 c-10 40 -20 60 -40 80" stroke="#1E8449" stroke-width="34" stroke-linecap="round" fill="none"/>
+    <circle cx="1662" cy="700" r="16" fill="#7B4526"/>
+  </g>
+</svg>

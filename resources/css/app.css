@@ -524,6 +524,3 @@ img { max-width: 100%; height: auto; }
     display: block !important;
 }
 
-/* Credit of the home page photo (required by its licence) */
-.hero-credit { position: absolute; bottom: .5rem; inset-inline-end: .75rem; z-index: 3; font-size: .7rem; color: rgba(255,255,255,.65); text-decoration: none; }
-.hero-credit:hover { color: #fff; text-decoration: underline; }
