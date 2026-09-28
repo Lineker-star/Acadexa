@@ -72,4 +72,11 @@ return [
     'no_courses_found' => 'Aucun cours trouvé.',
     'student_reviews' => 'Avis des Étudiants',
     'try_different_filters' => 'Essayez d\'ajuster vos filtres ou termes de recherche.',
+    'no_video' => 'Aucune vidéo disponible pour cette leçon.',
+    'quiz_passed' => 'Quiz réussi ! Score : :score %',
+    'quiz_failed' => 'Quiz non réussi. Score : :score %. Réessayez.',
+    'question' => 'Question',
+    'your_score' => 'Votre score précédent',
+    'attempt_again' => 'Réessayer',
+    'download_attachment' => 'Télécharger la pièce jointe',
 ];

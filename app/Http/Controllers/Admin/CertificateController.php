@@ -25,7 +25,7 @@ class CertificateController extends Controller
     public function destroy(Certificate $certificate)
     {
         $certificate->delete();
-        return back()->with('success', 'Certificate revoked.');
+        return back()->with('success', __('Certificate revoked.'));
     }
 
     public function template()
@@ -48,6 +48,6 @@ class CertificateController extends Controller
             Setting::set('cert_logo', $path);
         }
 
-        return back()->with('success', 'Certificate template updated.');
+        return back()->with('success', __('Certificate template updated.'));
     }
 }

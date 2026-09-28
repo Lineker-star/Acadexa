@@ -26,12 +26,21 @@ class AdminAuthController extends Controller
 
             if (! $user->isAdmin()) {
                 Auth::logout();
-                return back()->withErrors(['email' => 'Access denied. Admin only.']);
+                return back()->withErrors(['email' => __('Access denied. Admin only.')]);
             }
 
-            if (! $user->is_active) {
+            if (! $user->canAccess()) {
                 Auth::logout();
-                return back()->withErrors(['email' => 'Account deactivated.']);
+                return back()->withErrors(['email' => __('messages.account_deactivated')]);
+            }
+
+            // Second factor: log out again until the authenticator code is checked.
+            if ($user->hasTwoFactorEnabled()) {
+                Auth::logout();
+                $request->session()->regenerate();
+                $request->session()->put('2fa_login_id', $user->id);
+                $request->session()->put('2fa_remember', $request->boolean('remember'));
+                return redirect()->route('admin.2fa.challenge');
             }
 
             $request->session()->regenerate();

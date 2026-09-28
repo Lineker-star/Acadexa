@@ -15,7 +15,8 @@ class ReviewController extends Controller
 
         // Must be enrolled and course completed
         $enrollment = $user->enrollments()->where('course_id', $course->id)->first();
-        abort_if(! $enrollment, 403, 'You must be enrolled to review.');
+        abort_if(! $enrollment, 403, __('You must be enrolled to review.'));
+        abort_if($enrollment->progress_percent < 100, 403, __('lms.review_requires_completion'));
 
         $request->validate([
             'rating'  => ['required', 'integer', 'min:1', 'max:5'],

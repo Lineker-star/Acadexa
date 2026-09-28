@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 <head>
 <meta charset="UTF-8">
 <style>
@@ -90,11 +90,11 @@
 <div class="certificate">
     <div class="student-name">{{ $certificate->user->name }}</div>
     <div class="course-title">{{ $certificate->course->title() }}</div>
-    <div class="cert-id">Certificate ID: {{ $certificate->certificate_code }}</div>
-    <div class="cert-date-issued">Date of Completion: {{ $certificate->issued_at->format('F d, Y') }}</div>
-    <div class="learner-id">Matricule Number (Learner ID): {{ str_pad($certificate->user->id, 8, '0', STR_PAD_LEFT) }}</div>
-    <div class="date-issue">Date of Issue: {{ $certificate->issued_at->format('F d, Y') }}</div>
-    <div class="verify-url">Verify at: {{ config('app.url') }}/verify-certificate/{{ $certificate->certificate_code }}</div>
+    <div class="cert-id">{{ __('Certificate ID: :code', ['code' => $certificate->certificate_code]) }}</div>
+    <div class="cert-date-issued">{{ __('Date of completion: :date', ['date' => $certificate->issued_at->isoFormat('LL')]) }}</div>
+    <div class="learner-id">{{ __('Registration number (learner ID): :id', ['id' => str_pad($certificate->user->id, 8, '0', STR_PAD_LEFT)]) }}</div>
+    <div class="date-issue">{{ __('Date of issue: :date', ['date' => $certificate->issued_at->isoFormat('LL')]) }}</div>
+    <div class="verify-url">{{ __('Verify at: :url', ['url' => route('certificate.verify', $certificate->certificate_code)]) }}</div>
 </div>
 </body>
 </html>

@@ -1,12 +1,12 @@
 @extends('layouts.admin')
-@section('title', 'Announcements')
-@section('breadcrumb') <li class="breadcrumb-item active">Announcements</li> @endsection
+@section('title', __('Announcements'))
+@section('breadcrumb') <li class="breadcrumb-item active">{{ __('Announcements') }}</li> @endsection
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h4 class="fw-bold mb-0">Announcements</h4>
+    <h4 class="fw-bold mb-0">{{ __('Announcements') }}</h4>
     <a href="{{ route('admin.announcements.create') }}" class="btn btn-primary">
-        <i class="bi bi-plus-lg me-1"></i>New Announcement
+        <x-icon name="plus-lg" class="me-1" />{{ __('New Announcement') }}
     </a>
 </div>
 
@@ -14,7 +14,7 @@
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
-                <tr><th>Title</th><th>Audience</th><th>Created By</th><th>Date</th><th>Actions</th></tr>
+                <tr><th>{{ __('Title') }}</th><th>{{ __('Audience') }}</th><th>{{ __('Created By') }}</th><th>{{ __('Date') }}</th><th>{{ __('Actions') }}</th></tr>
             </thead>
             <tbody>
                 @forelse($announcements as $ann)
@@ -25,28 +25,28 @@
                     </td>
                     <td>
                         <span class="badge {{ match($ann->audience) {'all'=>'bg-primary','students'=>'bg-info text-dark',default=>'bg-warning text-dark'} }}">
-                            {{ ucfirst($ann->audience) }}
+                            {{ __('lms.audience_' . $ann->audience) }}
                         </span>
                     </td>
                     <td style="font-size:.82rem;">{{ $ann->creator?->name }}</td>
-                    <td style="font-size:.8rem;">{{ $ann->created_at->format('M d, Y') }}</td>
+                    <td style="font-size:.8rem;">{{ $ann->created_at->isoFormat('ll') }}</td>
                     <td>
                         <div class="d-flex gap-1">
                             <a href="{{ route('admin.announcements.edit', $ann) }}" class="btn btn-primary btn-sm">
-                                <i class="bi bi-pencil"></i>
+                                <x-icon name="pencil" />
                             </a>
                             <form method="POST" action="{{ route('admin.announcements.destroy', $ann) }}">
                                 @csrf @method('DELETE')
                                 <button class="btn btn-outline-danger btn-sm"
-                                        onclick="return confirm('Delete this announcement?')">
-                                    <i class="bi bi-trash"></i>
+                                        data-confirm="{{ __('Delete this announcement?') }}">
+                                    <x-icon name="trash" />
                                 </button>
                             </form>
                         </div>
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="5" class="text-center py-4 text-muted">No announcements yet.</td></tr>
+                <tr><td colspan="5" class="text-center py-4 text-muted">{{ __('No announcements yet.') }}</td></tr>
                 @endforelse
             </tbody>
         </table>

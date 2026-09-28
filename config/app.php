@@ -26,14 +26,6 @@ return [
         'zh' => '中文',
         'ar' => 'العربية',
     ],
-    'locale_flags' => [
-        'en' => '🇬🇧',
-        'fr' => '🇫🇷',
-        'es' => '🇪🇸',
-        'pt' => '🇵🇹',
-        'zh' => '🇨🇳',
-        'ar' => '🇸🇦',
-    ],
     'providers' => Illuminate\Support\ServiceProvider::defaultProviders()->merge([
         App\Providers\AppServiceProvider::class,
     ])->toArray(),

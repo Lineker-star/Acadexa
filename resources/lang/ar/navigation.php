@@ -1,4 +1,6 @@
 <?php
+
+// Generated from the translation sources — keep keys identical to resources/lang/en/navigation.php.
 return [
     'home' => 'الرئيسية',
     'courses' => 'الدورات',
@@ -6,19 +8,19 @@ return [
     'my_courses' => 'دوراتي',
     'dashboard' => 'لوحة التحكم',
     'profile' => 'الملف الشخصي',
-    'wishlist' => 'قائمة الأمنيات',
+    'wishlist' => 'المفضلة',
     'certificates' => 'الشهادات',
     'subscription' => 'الاشتراك',
     'logout' => 'تسجيل الخروج',
     'login' => 'تسجيل الدخول',
-    'register' => 'التسجيل',
-    'become_instructor' => 'كن مدرّبًا',
+    'register' => 'إنشاء حساب',
+    'become_instructor' => 'كن مدربًا',
     'contact' => 'اتصل بنا',
     'about' => 'من نحن',
     'privacy' => 'سياسة الخصوصية',
     'terms' => 'شروط الخدمة',
     'admin_panel' => 'لوحة الإدارة',
-    'instructor_portal' => 'بوابة المدرّب',
+    'instructor_portal' => 'مساحة المدرب',
     'search' => 'بحث',
     'quick_links' => 'روابط سريعة',
     'support' => 'الدعم',

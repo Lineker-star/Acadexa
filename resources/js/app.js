@@ -1,6 +1,9 @@
 // ACADEXA — Main JavaScript
 
 import './bootstrap';
+import './pwa';
+import './media-viewer';
+import { icon } from './icons';
 
 document.addEventListener('DOMContentLoaded', () => {
     // ─── Flash Message Auto-Dismiss ───────────────────────────────────────────
@@ -59,10 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
                 const data = await res.json();
-                const icon = btn.querySelector('.wishlist-icon');
-                if (icon) {
-                    icon.textContent = data.added ? '❤️' : '🤍';
+                const holder = btn.querySelector('.wishlist-icon');
+                if (holder) {
+                    holder.innerHTML = data.added ? icon('heart-fill', 'text-danger') : icon('heart');
                 }
+                btn.setAttribute('aria-pressed', data.added ? 'true' : 'false');
                 showToast(data.message, data.added ? 'success' : 'info');
             } catch (e) { console.error(e); }
         });
@@ -112,40 +116,16 @@ document.addEventListener('DOMContentLoaded', () => {
             stars.forEach((s, j) => s.classList.toggle('filled', j < val));
         });
     });
-
-    // ─── Lesson Player: Mark as Complete ─────────────────────────────────────
-    const completeBtn = document.getElementById('markCompleteBtn');
-    if (completeBtn) {
-        completeBtn.addEventListener('click', async () => {
-            const lessonId = completeBtn.dataset.lessonId;
-            try {
-                const res  = await fetch(`/lessons/${lessonId}/complete`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Accept': 'application/json',
-                    }
-                });
-                const data = await res.json();
-                const bar = document.getElementById('progressBar');
-                if (bar) bar.style.width = data.progress + '%';
-                const pct = document.getElementById('progressPct');
-                if (pct) pct.textContent = data.progress + '%';
-
-                completeBtn.textContent = '✓ Completed';
-                completeBtn.disabled = true;
-                completeBtn.classList.replace('btn-primary', 'btn-success');
-
-                if (data.completed && data.message) {
-                    showToast('🎉 ' + data.message, 'success');
-                    setTimeout(() => location.reload(), 2000);
-                } else {
-                    showToast('Lesson marked as complete!', 'success');
-                }
-            } catch (e) { console.error(e); }
-        });
-    }
 });
+
+// ─── Confirmation for destructive forms: <form data-confirm="…"> ────────────
+document.addEventListener('submit', event => {
+    const form = event.target;
+    if (form instanceof HTMLFormElement && form.dataset.confirm && !window.confirm(form.dataset.confirm)) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+    }
+}, true);
 
 // ─── Toast Utility ────────────────────────────────────────────────────────────
 function showToast(message, type = 'info') {

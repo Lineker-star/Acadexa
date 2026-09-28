@@ -1,0 +1,46 @@
+<?php
+
+// Sécurité, administration, rapports.
+return [
+    '2fa_title' => 'Double authentification (2FA)',
+    '2fa_intro' => 'Protégez votre compte administrateur : en plus du mot de passe, un code à 6 chiffres généré par votre téléphone sera demandé.',
+    '2fa_step1' => 'Installez une application d’authentification (Google Authenticator, Microsoft Authenticator, Authy…).',
+    '2fa_step2' => 'Scannez le QR code ci-dessous (ou saisissez la clé manuellement).',
+    '2fa_step3' => 'Entrez le code affiché par l’application pour confirmer.',
+    '2fa_active_since' => 'Double authentification active depuis le :date.',
+    '2fa_disable_help' => 'Pour désactiver, confirmez avec votre mot de passe et un code de l’application.',
+    '2fa_challenge_help' => 'Entrez le code à 6 chiffres affiché par votre application d’authentification.',
+    'manual_key' => 'Clé à saisir manuellement', 'enable' => 'Activer', 'disable' => 'Désactiver', 'verify' => 'Vérifier', 'password' => 'Mot de passe',
+    'enabled' => 'Double authentification activée.', 'disabled' => 'Double authentification désactivée.',
+    'invalid_code' => 'Code invalide ou expiré.', 'invalid_credentials' => 'Mot de passe ou code incorrect.',
+    'reset_2fa' => 'Réinitialiser la 2FA', 'confirm_reset_2fa' => 'Réinitialiser la double authentification de ce compte ?',
+    'reset_done' => 'Double authentification réinitialisée.',
+    'use_admin_login' => 'Ce compte utilise la double authentification : connectez-vous depuis l’espace d’administration.',
+    'my_security' => 'Sécurité du compte',
+
+    'banned' => 'Ce compte a été suspendu. Contactez le support si vous pensez qu’il s’agit d’une erreur.',
+    'banned_badge' => 'Banni', 'banned_since' => 'Banni depuis le :date', 'ban_reason' => 'Motif (facultatif)',
+    'confirm_ban' => 'Bannir cet utilisateur ? Il sera déconnecté immédiatement.', 'unban' => 'Lever le bannissement',
+    'user_banned' => 'Utilisateur banni et déconnecté.', 'user_unbanned' => 'Bannissement levé.',
+    'cannot_edit_self' => 'Vous ne pouvez pas effectuer cette action sur votre propre compte.',
+    'no_permission' => 'Vous n’avez pas accès à cette section de l’administration.',
+    'role_permissions' => 'Rôle et permissions', 'save_permissions' => 'Enregistrer',
+    'permissions_help' => 'Pour un administrateur : sections autorisées. Aucune case cochée = accès complet.',
+    'permissions_saved' => 'Rôle et permissions enregistrés.',
+    'perm_users' => 'Utilisateurs', 'perm_courses' => 'Cours', 'perm_categories' => 'Catégories', 'perm_applications' => 'Candidatures',
+    'perm_announcements' => 'Annonces', 'perm_cms' => 'Pages', 'perm_reviews' => 'Avis', 'perm_certificates' => 'Certificats',
+    'perm_contacts' => 'Messages de contact', 'perm_translations' => 'Traductions', 'perm_settings' => 'Paramètres',
+    'perm_logs' => 'Journal d’activité', 'perm_reports' => 'Rapports',
+
+    'platform' => 'Plateforme', 'allow_registration' => 'Inscriptions ouvertes',
+    'require_email_verification' => 'Exiger la vérification de l’adresse e-mail',
+    'maintenance_mode' => 'Mode maintenance (seuls les administrateurs accèdent au site)',
+    'email_verification_help' => 'N’activez la vérification d’e-mail qu’après avoir configuré l’envoi d’e-mails (SMTP) dans le fichier .env.',
+    'registration_closed' => 'Les inscriptions sont momentanément fermées.',
+
+    'reports' => 'Rapports', 'total_students' => 'Étudiants', 'active_30d' => 'Actifs (30 jours)', 'total_enrollments' => 'Inscriptions aux cours',
+    'completion_rate' => 'Taux d’achèvement', 'last_12_months' => '12 derniers mois', 'month' => 'Mois',
+    'registrations' => 'Nouveaux étudiants', 'enrollments' => 'Inscriptions', 'completions' => 'Cours terminés', 'certificates' => 'Certificats',
+    'top_courses' => 'Cours les plus suivis',
+    'export_users' => 'Utilisateurs (CSV)', 'export_enrollments' => 'Inscriptions (CSV)', 'export_certificates' => 'Certificats (CSV)',
+];

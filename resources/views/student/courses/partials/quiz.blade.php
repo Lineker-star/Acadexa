@@ -1,79 +1,79 @@
-<div id="quizContainer" class="mt-3 p-4 border rounded-xl bg-light">
-    <h5 class="mb-4">📝 Quiz: {{ $quiz->questions->count() }} Questions</h5>
-    @php $attempt = $quiz->userAttempt(auth()->id()); @endphp
+@php
+    $mode ??= 'standard';
+    $standard = $mode === 'standard';
+    $questions = $quiz->shuffle_questions ? $quiz->questions->shuffle() : $quiz->questions;
+    $noAttemptsLeft = $standard && $state['attempts_left'] === 0;
+    $passScore = $quiz->effectivePassingScore();
+@endphp
+<div id="quizContainer" class="border rounded-xl p-3 p-md-4 bg-light"
+     data-quiz-id="{{ $quiz->id }}"
+     data-mode="{{ $mode }}"
+     data-scope="{{ $quiz->scope }}"
+     data-attempt-url="{{ route('student.quiz.attempt', $quiz) }}"
+     data-start-url="{{ route('student.quiz.start', $quiz) }}"
+     data-time-limit="{{ $quiz->time_limit_minutes ?? '' }}">
 
-    @if($attempt)
-    <div class="alert {{ $attempt->passed ? 'alert-success' : 'alert-warning' }}">
-        <strong>Your last score: {{ $attempt->score }}%</strong>
-        {{ $attempt->passed ? ' — Passed! 🎉' : ' — Keep trying! (Passing: '.$quiz->passing_score.'%)' }}
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <h5 class="mb-0"><x-icon :name="$quiz->icon()" class="me-1" />{{ trans_choice('lms.questions_count', $questions->count(), ['count' => $questions->count()]) }}</h5>
+        <div class="small text-muted d-flex flex-wrap gap-3">
+            @if($standard)<span><x-icon name="bullseye" class="me-1" />{{ __('lms.pass_at', ['score' => $passScore]) }}</span>@endif
+            @if($quiz->time_limit_minutes)<span><x-icon name="stopwatch" class="me-1" />{{ __('lms.minutes_short', ['count' => $quiz->time_limit_minutes]) }}</span>@endif
+            @if($standard)
+            <span><x-icon name="arrow-repeat" class="me-1" />
+                @if($state['attempts_left'] === null) {{ __('lms.attempts_unlimited') }}
+                @else {{ trans_choice('lms.attempts_left', $state['attempts_left'], ['count' => $state['attempts_left']]) }} @endif
+            </span>
+            @endif
+        </div>
     </div>
+
+    @if($standard && $state['last'])
+        <div class="alert {{ $state['passed'] ? 'alert-success' : 'alert-warning' }} py-2 small">
+            @if($state['passed'])
+                <x-icon name="check-circle" class="me-1" />{{ __('lms.quiz_passed_best', ['score' => (float) $state['best']]) }}
+            @else
+                <x-icon name="info-circle" class="me-1" />{{ __('lms.quiz_last_score', ['score' => (float) $state['last']->score, 'pass' => $passScore]) }}
+            @endif
+        </div>
     @endif
 
-    <div id="quizForm">
-        @foreach($quiz->questions as $q)
-        <div class="mb-4 quiz-question" data-question="{{ $q->id }}">
-            <p class="fw-bold" style="font-size:.95rem;">{{ $loop->iteration }}. {{ $q->question }}</p>
-            <div class="quiz-options">
-                @foreach($q->options as $opt)
-                <div class="quiz-option" data-option="{{ $opt->id }}" onclick="selectOption(this, {{ $q->id }}, {{ $opt->id }}, '{{ $q->type }}')">
-                    {{ $opt->option_text }}
-                </div>
-                @endforeach
+    @if($noAttemptsLeft)
+        <div class="alert alert-secondary mb-0">{{ __('lms.quiz_no_attempts_left') }}</div>
+    @else
+        @if($quiz->time_limit_minutes)
+            <div id="quizIntro" class="text-center py-3">
+                <p class="mb-3">{{ __('lms.timed_quiz_intro', ['minutes' => $quiz->time_limit_minutes]) }}</p>
+                <button type="button" class="btn btn-primary" id="startQuizBtn"><x-icon name="play-fill" class="me-1" />{{ __('lms.start_quiz') }}</button>
             </div>
-        </div>
-        @endforeach
+        @endif
 
-        <div class="d-flex justify-content-between align-items-center mt-4">
-            <button id="submitQuizBtn" class="btn btn-primary" onclick="submitQuiz({{ $quiz->id }})">
-                Submit Quiz
-            </button>
-            <div id="quizResult" class="fw-bold" style="display:none;"></div>
-        </div>
-    </div>
+        <form id="quizForm" @if($quiz->time_limit_minutes) hidden @endif novalidate>
+            @if($quiz->time_limit_minutes)
+                <div class="sticky-top bg-light py-2 mb-2 text-end" style="top:0">
+                    <span class="quiz-timer" id="quizTimer" aria-live="polite">--:--</span>
+                </div>
+            @endif
+            @foreach($questions as $question)
+                <fieldset class="mb-4 quiz-question" data-question="{{ $question->id }}">
+                    <legend class="fs-6 fw-semibold mb-2">{{ $loop->iteration }}. {{ $question->question }}
+                        @if($question->type === 'multiple')<span class="badge bg-secondary-subtle text-secondary-emphasis fw-normal ms-1">{{ __('lms.several_answers') }}</span>@endif
+                    </legend>
+                    @foreach($question->options as $option)
+                        <label class="quiz-option d-flex align-items-center gap-2 mb-2" data-option="{{ $option->id }}">
+                            <input class="form-check-input mt-0" type="{{ $question->type === 'multiple' ? 'checkbox' : 'radio' }}"
+                                   name="q{{ $question->id }}" value="{{ $option->id }}">
+                            <span>{{ $option->option_text }}</span>
+                        </label>
+                    @endforeach
+                    <div class="small mt-1 review-note" hidden></div>
+                </fieldset>
+            @endforeach
+
+            <div class="d-flex flex-wrap align-items-center gap-3">
+                <button type="submit" class="btn btn-primary" id="submitQuizBtn"><x-icon name="send" class="me-1" />{{ __('lms.submit_answers') }}</button>
+                <div id="quizResult" class="fw-semibold" aria-live="polite"></div>
+            </div>
+            <div id="knowledgeResult" class="mt-3" hidden></div>
+        </form>
+    @endif
 </div>
-
-@push('scripts')
-<script>
-const quizAnswers = {};
-
-function selectOption(el, questionId, optionId, type) {
-    const container = el.closest('.quiz-options');
-    if (type === 'single') {
-        container.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
-        quizAnswers[questionId] = [optionId];
-    } else {
-        if (!quizAnswers[questionId]) quizAnswers[questionId] = [];
-        if (el.classList.contains('selected')) {
-            el.classList.remove('selected');
-            quizAnswers[questionId] = quizAnswers[questionId].filter(id => id !== optionId);
-        } else {
-            quizAnswers[questionId].push(optionId);
-        }
-    }
-    el.classList.toggle('selected', type === 'single' || quizAnswers[questionId].includes(optionId));
-}
-
-async function submitQuiz(quizId) {
-    const btn = document.getElementById('submitQuizBtn');
-    btn.disabled = true;
-    btn.textContent = 'Submitting...';
-    try {
-        const res = await fetch(`/quiz/${quizId}/attempt`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ answers: quizAnswers }),
-        });
-        const data = await res.json();
-        const result = document.getElementById('quizResult');
-        result.style.display = 'block';
-        result.style.color = data.passed ? '#065F46' : '#991B1B';
-        result.innerHTML = `Score: ${data.score}% — ${data.message} (${data.correct}/${data.total} correct)`;
-        showToast(data.message, data.passed ? 'success' : 'warning');
-    } catch(e) { console.error(e); btn.disabled = false; btn.textContent = 'Submit Quiz'; }
-}
-</script>
-@endpush

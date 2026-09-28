@@ -1,19 +1,19 @@
 @extends('layouts.app')
-@section('title', 'Search: ' . $query)
+@section('title', __('Search: :query', ['query' => $query]))
 
 @section('content')
 <div class="container py-5">
-    <h2 class="fw-bold mb-1">Search Results</h2>
+    <h2 class="fw-bold mb-1">{{ __('Search Results') }}</h2>
     <p class="text-muted mb-4">
-        {{ $results->total() }} results for "<strong>{{ $query }}</strong>"
+        {!! trans_choice(':count result for :query|:count results for :query', $results->total(), ['count' => $results->total(), 'query' => '<strong>' . e($query) . '</strong>']) !!}
     </p>
 
     <!-- Search Bar -->
     <form method="GET" action="{{ route('search') }}" class="mb-4">
         <div class="input-group input-group-lg" style="max-width:600px;">
-            <input type="text" name="q" class="form-control" value="{{ $query }}" placeholder="Search courses...">
+            <input type="text" name="q" class="form-control" value="{{ $query }}" placeholder="{{ __('Search courses...') }}">
             <button class="btn btn-primary" type="submit">
-                <i class="bi bi-search"></i>
+                <x-icon name="search" />
             </button>
         </div>
     </form>
@@ -31,27 +31,27 @@
                 </a>
             </h5>
             <div class="text-muted small mb-2">
-                {{ $course->instructor?->name }} • {{ ucfirst($course->level) }}
-                • {{ $course->category?->name }}
+                {{ $course->instructor?->name }} • {{ __('messages.' . $course->level) }}
+                • {{ $course->category?->name() }}
             </div>
             <p class="text-muted small mb-2">{{ Str::limit($course->description(), 120) }}</p>
             <div class="d-flex align-items-center gap-3">
                 <div class="d-flex align-items-center gap-1 text-warning small">
-                    <i class="bi bi-star-fill"></i>
+                    <x-icon name="star-fill" />
                     <span>{{ number_format($course->avgRating(),1) }}</span>
                 </div>
                 <div class="text-muted small">
-                    <i class="bi bi-people me-1"></i>{{ $course->enrollments->count() }} students
+                    <x-icon name="people" class="me-1" />{{ trans_choice(':count student|:count students', $course->enrollments->count(), ['count' => $course->enrollments->count()]) }}
                 </div>
             </div>
         </div>
     </div>
     @empty
     <div class="text-center py-5">
-        <i class="bi bi-search" style="font-size:3rem;opacity:.2;"></i>
-        <h4 class="mt-3 text-muted">No courses found for "{{ $query }}"</h4>
-        <p class="text-muted">Try different keywords or browse our categories.</p>
-        <a href="{{ route('courses.index') }}" class="btn btn-primary">Browse All Courses</a>
+        <x-icon name="search" style="font-size:3rem;opacity:.2;" />
+        <h4 class="mt-3 text-muted">{{ __('No courses found for ":query"', ['query' => $query]) }}</h4>
+        <p class="text-muted">{{ __('Try different keywords or browse our categories.') }}</p>
+        <a href="{{ route('courses.index') }}" class="btn btn-primary">{{ __('Browse All Courses') }}</a>
     </div>
     @endforelse
 

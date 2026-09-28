@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\InstructorApplication;
+use App\Notifications\InstructorApplicationReviewed;
 use Illuminate\Http\Request;
 
 class InstructorApplicationController extends Controller
@@ -30,7 +31,8 @@ class InstructorApplicationController extends Controller
         $application->update(['status' => 'approved']);
         $application->user->update(['instructor_status' => 'confirmed', 'role' => 'instructor']);
         ActivityLog::record('instructor_approve', "Approved instructor #{$application->user_id}");
-        return back()->with('success', 'Instructor application approved.');
+        $application->user->notify(new InstructorApplicationReviewed(true));
+        return back()->with('success', __('Instructor application approved.'));
     }
 
     public function reject(Request $request, InstructorApplication $application)
@@ -39,6 +41,7 @@ class InstructorApplicationController extends Controller
         $application->update(['status' => 'rejected', 'admin_notes' => $request->admin_notes]);
         $application->user->update(['instructor_status' => 'rejected']);
         ActivityLog::record('instructor_reject', "Rejected instructor #{$application->user_id}");
-        return back()->with('success', 'Application rejected.');
+        $application->user->notify(new InstructorApplicationReviewed(false, $request->admin_notes));
+        return back()->with('success', __('Application rejected.'));
     }
 }

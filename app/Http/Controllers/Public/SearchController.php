@@ -23,7 +23,7 @@ class SearchController extends Controller
             ->paginate(12)
             ->withQueryString();
 
-        return view('search', compact('courses', 'query'));
+        return view('search', ['results' => $courses, 'query' => $query]);
     }
 
     public function suggestions(Request $request)

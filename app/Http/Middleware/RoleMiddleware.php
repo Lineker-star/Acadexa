@@ -15,10 +15,10 @@ class RoleMiddleware
         }
 
         if (! in_array($request->user()->role, $roles)) {
-            abort(403, 'Unauthorized access.');
+            abort(403, __('Unauthorized access.'));
         }
 
-        if (! $request->user()->is_active) {
+        if (! $request->user()->canAccess()) {
             auth()->logout();
             return redirect()->route('login')->with('error', __('messages.account_deactivated'));
         }

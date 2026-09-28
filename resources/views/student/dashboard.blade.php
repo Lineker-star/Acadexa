@@ -1,24 +1,24 @@
 @extends('layouts.app')
-@section('title', 'My Dashboard')
+@section('title', __('My Dashboard'))
 
 @section('content')
 <div class="py-5 bg-light-gray" style="min-height:calc(100vh - 64px);">
     <div class="container">
         <!-- Welcome Header -->
         <div class="d-flex align-items-center gap-4 mb-5">
-            <img src="{{ $user->avatarUrl() }}" class="rounded-circle" width="72" height="72" alt="avatar">
+            <img src="{{ $user->avatarUrl() }}" class="rounded-circle" width="72" height="72" alt="{{ __('avatar') }}">
             <div>
-                <h2 class="mb-1">{{ __('dashboard.welcome') }}, {{ Str::words($user->name, 1, '') }}! 👋</h2>
+                <h2 class="mb-1">{{ __('Welcome back, :name!', ['name' => Str::words($user->name, 1, '')]) }}</h2>
                 <p class="text-muted mb-0">
                     @if($user->isTrialActive())
                         <span class="badge" style="background:#D1FAE5;color:#065F46;">
-                            ✅ Trial Active — {{ $user->trialDaysLeft() }} days left
+                            <x-icon name="check-circle-fill" class="me-1" />{{ trans_choice('Trial active — :count day left|Trial active — :count days left', $user->trialDaysLeft(), ['count' => $user->trialDaysLeft()]) }}
                         </span>
                     @else
                         <span class="badge" style="background:#FEE2E2;color:#991B1B;">
-                            ⚠️ Trial Expired
+                            <x-icon name="exclamation-triangle-fill" class="me-1" />{{ __('Trial expired') }}
                         </span>
-                        <a href="{{ route('student.subscription') }}" class="btn btn-sm btn-secondary ms-2">Subscribe Now</a>
+                        <a href="{{ route('student.subscription') }}" class="btn btn-sm btn-secondary ms-2">{{ __('Subscribe Now') }}</a>
                     @endif
                 </p>
             </div>
@@ -28,37 +28,37 @@
         <div class="row g-4 mb-5">
             <div class="col-6 col-md-3">
                 <div class="stat-card">
-                    <div class="stat-icon" style="background:#EEF3FF;"><span style="font-size:1.5rem;">📚</span></div>
+                    <div class="stat-icon" style="background:#EEF3FF;"><span style="font-size:1.5rem;"><x-icon name="book" /></span></div>
                     <div>
                         <div class="stat-number">{{ $enrollments->count() }}</div>
-                        <div class="stat-label">Enrolled Courses</div>
+                        <div class="stat-label">{{ __('Enrolled Courses') }}</div>
                     </div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="stat-card">
-                    <div class="stat-icon" style="background:#D1FAE5;"><span style="font-size:1.5rem;">✅</span></div>
+                    <div class="stat-icon" style="background:#D1FAE5;"><span style="font-size:1.5rem;"><x-icon name="check-circle-fill" /></span></div>
                     <div>
                         <div class="stat-number">{{ $completedCourses }}</div>
-                        <div class="stat-label">Completed</div>
+                        <div class="stat-label">{{ __('Completed') }}</div>
                     </div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="stat-card">
-                    <div class="stat-icon" style="background:#FEF3C7;"><span style="font-size:1.5rem;">🏆</span></div>
+                    <div class="stat-icon" style="background:#FEF3C7;"><span style="font-size:1.5rem;"><x-icon name="trophy" /></span></div>
                     <div>
                         <div class="stat-number">{{ $certificates->count() }}</div>
-                        <div class="stat-label">Certificates</div>
+                        <div class="stat-label">{{ __('Certificates') }}</div>
                     </div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="stat-card">
-                    <div class="stat-icon" style="background:#FEE2E2;"><span style="font-size:1.5rem;">❤️</span></div>
+                    <div class="stat-icon" style="background:#FEE2E2;"><span style="font-size:1.5rem;"><x-icon name="heart-fill" /></span></div>
                     <div>
                         <div class="stat-number">{{ $user->wishlist()->count() }}</div>
-                        <div class="stat-label">Wishlist</div>
+                        <div class="stat-label">{{ __('Wishlist') }}</div>
                     </div>
                 </div>
             </div>
@@ -69,8 +69,8 @@
             <div class="col-lg-8">
                 <div class="bg-white rounded-xl shadow-brand p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="mb-0">Continue Learning</h5>
-                        <a href="{{ route('student.courses.index') }}" class="btn btn-outline-primary btn-sm">All Courses</a>
+                        <h5 class="mb-0">{{ __('Continue Learning') }}</h5>
+                        <a href="{{ route('student.courses.index') }}" class="btn btn-outline-primary btn-sm">{{ __('All Courses') }}</a>
                     </div>
 
                     @forelse($enrollments as $enrollment)
@@ -84,7 +84,7 @@
                             </div>
                             @if($enrollment->lastLesson)
                             <div class="text-muted" style="font-size:.8rem;">
-                                Last: {{ $enrollment->lastLesson->title() }}
+                                {{ __('Last lesson: :title', ['title' => $enrollment->lastLesson->title()]) }}
                             </div>
                             @endif
                             <div class="d-flex align-items-center gap-2 mt-1">
@@ -96,14 +96,14 @@
                         </div>
                         <a href="{{ route('student.courses.player', $enrollment) }}"
                            class="btn btn-primary btn-sm">
-                            <i class="bi bi-play-fill"></i>
+                            <x-icon name="play-fill" />
                         </a>
                     </div>
                     @empty
                     <div class="text-center py-4">
-                        <div style="font-size:3rem;">📭</div>
-                        <p class="text-muted mt-2">You're not enrolled in any courses yet.</p>
-                        <a href="{{ route('courses.index') }}" class="btn btn-primary">Browse Courses</a>
+                        <div style="font-size:3rem;"><x-icon name="inbox" /></div>
+                        <p class="text-muted mt-2">{{ __('You\'re not enrolled in any courses yet.') }}</p>
+                        <a href="{{ route('courses.index') }}" class="btn btn-primary">{{ __('Browse Courses') }}</a>
                     </div>
                     @endforelse
                 </div>
@@ -111,7 +111,7 @@
                 <!-- Announcements -->
                 @if($announcements->count())
                 <div class="bg-white rounded-xl shadow-brand p-4 mt-4">
-                    <h5 class="mb-4">📢 Announcements</h5>
+                    <h5 class="mb-4"><x-icon name="megaphone" class="me-1" />{{ __('Announcements') }}</h5>
                     @foreach($announcements as $ann)
                     <div class="mb-3 pb-3 border-bottom">
                         <div class="fw-bold" style="color:var(--primary);">{{ $ann->titleFor() }}</div>
@@ -128,42 +128,42 @@
                 <!-- Certificates -->
                 <div class="bg-white rounded-xl shadow-brand p-4 mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="mb-0">🏆 Certificates</h6>
-                        <a href="{{ route('student.certificates.index') }}" class="btn btn-outline-primary btn-sm">View All</a>
+                        <h6 class="mb-0"><x-icon name="trophy" class="me-1" />{{ __('Certificates') }}</h6>
+                        <a href="{{ route('student.certificates.index') }}" class="btn btn-outline-primary btn-sm">{{ __('View All') }}</a>
                     </div>
                     @forelse($certificates as $cert)
                     <div class="d-flex align-items-center gap-3 mb-2 pb-2 border-bottom">
-                        <div style="font-size:1.5rem;">🎓</div>
+                        <div style="font-size:1.5rem;"><x-icon name="mortarboard" /></div>
                         <div class="flex-grow-1">
                             <div style="font-size:.85rem;font-weight:600;">{{ $cert->course->title() }}</div>
-                            <div style="font-size:.75rem;color:var(--text-muted);">{{ $cert->issued_at->format('M d, Y') }}</div>
+                            <div style="font-size:.75rem;color:var(--text-muted);">{{ $cert->issued_at->isoFormat('ll') }}</div>
                         </div>
                         <a href="{{ route('student.certificates.download', $cert) }}"
-                           class="btn btn-outline-primary btn-sm" title="Download">
-                            <i class="bi bi-download"></i>
+                           class="btn btn-outline-primary btn-sm" title="{{ __('Download') }}">
+                            <x-icon name="download" />
                         </a>
                     </div>
                     @empty
-                    <p class="text-muted small">Complete a course to earn certificates.</p>
+                    <p class="text-muted small">{{ __('Complete a course to earn certificates.') }}</p>
                     @endforelse
                 </div>
 
                 <!-- Quick Links -->
                 <div class="bg-white rounded-xl shadow-brand p-4">
-                    <h6 class="mb-3">Quick Links</h6>
+                    <h6 class="mb-3">{{ __('Quick Links') }}</h6>
                     <div class="list-group list-group-flush">
                         <a href="{{ route('student.profile.edit') }}" class="list-group-item list-group-item-action d-flex align-items-center gap-2 border-0 py-2 px-0">
-                            <i class="bi bi-person text-primary"></i> Edit Profile
+                            <x-icon name="person" class="text-primary" /> {{ __('Edit Profile') }}
                         </a>
                         <a href="{{ route('student.wishlist.index') }}" class="list-group-item list-group-item-action d-flex align-items-center gap-2 border-0 py-2 px-0">
-                            <i class="bi bi-heart text-primary"></i> My Wishlist
+                            <x-icon name="heart" class="text-primary" /> {{ __('My Wishlist') }}
                         </a>
                         <a href="{{ route('courses.index') }}" class="list-group-item list-group-item-action d-flex align-items-center gap-2 border-0 py-2 px-0">
-                            <i class="bi bi-search text-primary"></i> Explore Courses
+                            <x-icon name="search" class="text-primary" /> {{ __('Explore Courses') }}
                         </a>
                         @if(!auth()->user()->isPendingInstructor() && !auth()->user()->isInstructor())
                         <a href="{{ route('become-instructor') }}" class="list-group-item list-group-item-action d-flex align-items-center gap-2 border-0 py-2 px-0">
-                            <i class="bi bi-mortarboard text-primary"></i> Become Instructor
+                            <x-icon name="mortarboard" class="text-primary" /> {{ __('Become Instructor') }}
                         </a>
                         @endif
                     </div>

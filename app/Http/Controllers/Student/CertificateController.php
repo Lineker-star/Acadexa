@@ -33,7 +33,7 @@ class CertificateController extends Controller
 
         return Storage::disk('public')->download(
             'certificates/' . $certificate->pdf_path,
-            'ACADEXXA_Certificate_' . $certificate->certificate_code . '.pdf'
+            'ACADEXA_Certificate_' . $certificate->certificate_code . '.pdf'
         );
     }
 }

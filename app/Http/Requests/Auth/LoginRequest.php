@@ -35,6 +35,22 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        $user = Auth::user();
+
+        // Deactivated or banned accounts cannot sign in.
+        if (! $user->canAccess()) {
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'email' => $user->isBanned() ? __('security.banned') : __('messages.account_deactivated'),
+            ]);
+        }
+
+        // Admins with 2FA must use the back-office login, which asks for the code.
+        if ($user->hasTwoFactorEnabled()) {
+            Auth::logout();
+            throw ValidationException::withMessages(['email' => __('security.use_admin_login')]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

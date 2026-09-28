@@ -13,7 +13,7 @@ class LocaleMiddleware
     {
         $supported = config('app.supported_locales', ['en', 'fr', 'es', 'pt', 'zh', 'ar']);
 
-        // Priority: session → auth user preference → browser → default
+        // Priority: session > auth user preference > browser > default
         if (session()->has('locale') && in_array(session('locale'), $supported)) {
             App::setLocale(session('locale'));
         } elseif ($request->user() && in_array($request->user()->preferred_language, $supported)) {
@@ -22,6 +22,9 @@ class LocaleMiddleware
             $browserLocale = substr($request->getPreferredLanguage($supported) ?? 'en', 0, 2);
             App::setLocale(in_array($browserLocale, $supported) ? $browserLocale : config('app.locale'));
         }
+
+        // Dates ("il y a 2 heures", month names in isoFormat) follow the interface language.
+        \Illuminate\Support\Carbon::setLocale(App::getLocale());
 
         return $next($request);
     }

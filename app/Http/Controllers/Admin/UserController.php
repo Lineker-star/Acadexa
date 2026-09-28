@@ -36,21 +36,68 @@ class UserController extends Controller
     {
         $user->update(['is_active' => true]);
         ActivityLog::record('user_activate', "Activated user #{$user->id}: {$user->email}");
-        return back()->with('success', 'User activated.');
+        return back()->with('success', __('User activated.'));
     }
 
-    public function deactivate(User $user)
+    public function deactivate(Request $request, User $user)
     {
+        $this->guardTarget($request, $user);
         $user->update(['is_active' => false]);
         ActivityLog::record('user_deactivate', "Deactivated user #{$user->id}: {$user->email}");
-        return back()->with('success', 'User deactivated.');
+        return back()->with('success', __('User deactivated.'));
     }
 
-    public function ban(User $user)
+    /** A ban blocks sign-in everywhere and records why; unlike deactivation it is shown to the user. */
+    public function ban(Request $request, User $user)
     {
-        $user->update(['is_active' => false, 'email_verified_at' => null]);
-        ActivityLog::record('user_ban', "Banned user #{$user->id}: {$user->email}");
-        return back()->with('success', 'User banned.');
+        $this->guardTarget($request, $user);
+        $data = $request->validate(['reason' => ['nullable', 'string', 'max:500']]);
+
+        $user->update(['banned_at' => now(), 'ban_reason' => $data['reason'] ?? null]);
+        // End the banned user's sessions right away.
+        \Illuminate\Support\Facades\DB::table('sessions')->where('user_id', $user->id)->delete();
+        ActivityLog::record('user_ban', "Banned user #{$user->id}: {$user->email}" . (! empty($data['reason']) ? " — {$data['reason']}" : ''));
+
+        return back()->with('success', __('security.user_banned'));
+    }
+
+    public function unban(Request $request, User $user)
+    {
+        $this->guardTarget($request, $user);
+        $user->update(['banned_at' => null, 'ban_reason' => null]);
+        ActivityLog::record('user_unban', "Unbanned user #{$user->id}: {$user->email}");
+
+        return back()->with('success', __('security.user_unbanned'));
+    }
+
+    /** Super admin only: role and back-office areas of an admin. */
+    public function updatePermissions(Request $request, User $user)
+    {
+        abort_unless($request->user()->isSuperAdmin(), 403);
+        abort_if($user->id === $request->user()->id, 422, __('security.cannot_edit_self'));
+
+        $data = $request->validate([
+            'role'          => ['required', 'in:student,instructor,admin'],
+            'permissions'   => ['nullable', 'array'],
+            'permissions.*' => ['in:' . implode(',', User::ADMIN_PERMISSIONS)],
+        ]);
+
+        $attributes = ['role' => $data['role'], 'admin_permissions' => $data['role'] === 'admin' ? array_values($data['permissions'] ?? []) : null];
+        if ($data['role'] === 'instructor') {
+            $attributes['instructor_status'] = 'confirmed';
+        }
+        $user->update($attributes);
+        ActivityLog::record('user_permissions', "Set role {$data['role']} for #{$user->id}: " . implode(',', $attributes['admin_permissions'] ?? []));
+
+        return back()->with('success', __('security.permissions_saved'));
+    }
+
+    /** Nobody can act on themselves; only a super admin can act on another admin. */
+    private function guardTarget(Request $request, User $user): void
+    {
+        abort_if($user->id === $request->user()->id, 422, __('security.cannot_edit_self'));
+        abort_if($user->isSuperAdmin(), 403);
+        abort_if($user->isAdmin() && ! $request->user()->isSuperAdmin(), 403);
     }
 
     public function extendTrial(Request $request, User $user)
@@ -59,7 +106,7 @@ class UserController extends Controller
         $newStart = ($user->trial_started_at ?? now())->addDays($request->days);
         $user->update(['trial_started_at' => $newStart]);
         ActivityLog::record('trial_extended', "Extended trial for #{$user->id} by {$request->days} days.");
-        return back()->with('success', "Trial extended by {$request->days} days.");
+        return back()->with('success', trans_choice('Trial extended by :count day.|Trial extended by :count days.', $request->days, ['count' => $request->days]));
     }
 
     public function resetPassword(Request $request, User $user)
@@ -67,6 +114,6 @@ class UserController extends Controller
         $request->validate(['password' => ['required', 'string', 'min:8', 'confirmed']]);
         $user->update(['password' => Hash::make($request->password)]);
         ActivityLog::record('password_reset', "Reset password for user #{$user->id}: {$user->email}");
-        return back()->with('success', 'Password reset successfully.');
+        return back()->with('success', __('Password reset successfully.'));
     }
 }

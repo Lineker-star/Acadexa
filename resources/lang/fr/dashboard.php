@@ -26,4 +26,12 @@ return [
     'create_course' => 'Créer un Cours',
     'view_courses' => 'Mes Cours',
     'earnings' => 'Revenus',
+    'instructor_dashboard' => 'Tableau de bord formateur',
+    'total_students' => 'Total des étudiants',
+    'my_courses_count' => 'Mes cours',
+    'published_courses' => 'Publiés',
+    'avg_rating' => 'Note moyenne',
+    'recent_reviews' => 'Avis récents',
+    'pending_review' => 'En attente de validation',
+    'students_enrolled' => ':count étudiants inscrits',
 ];

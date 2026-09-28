@@ -1,13 +1,13 @@
 @extends('layouts.app')
-@section('title', $category->name)
+@section('title', $category->name())
 
 @section('content')
 <!-- Category Hero -->
 <div style="background:var(--primary);padding:3rem 0;">
     <div class="container text-white text-center">
-        <div style="font-size:3rem;">{{ $category->icon ?? '📚' }}</div>
-        <h1 class="fw-bold mt-2">{{ $category->name }}</h1>
-        <p class="opacity-75 mb-0">{{ $courses->total() }} courses available</p>
+        <x-icon :name="$category->icon ?: 'book'" style="font-size:3rem" />
+        <h1 class="fw-bold mt-2">{{ $category->name() }}</h1>
+        <p class="opacity-75 mb-0">{{ trans_choice(':count course available|:count courses available', $courses->total(), ['count' => $courses->total()]) }}</p>
     </div>
 </div>
 
@@ -16,10 +16,10 @@
     @if($category->children->isNotEmpty())
     <div class="mb-4">
         <div class="d-flex gap-2 flex-wrap">
-            <a href="{{ route('categories.show', $category->slug) }}" class="btn btn-sm btn-primary">All</a>
+            <a href="{{ route('categories.show', $category->slug) }}" class="btn btn-sm btn-primary">{{ __('All') }}</a>
             @foreach($category->children as $sub)
             <a href="{{ route('categories.show', $sub->slug) }}" class="btn btn-sm btn-outline-secondary">
-                {{ $sub->icon ?? '' }} {{ $sub->name }}
+                <x-icon :name="$sub->icon ?: 'folder'" class="me-1" />{{ $sub->name() }}
             </a>
             @endforeach
         </div>
@@ -37,7 +37,7 @@
                 </a>
                 <div class="card-body d-flex flex-column">
                     <div class="d-flex align-items-center gap-1 mb-2" style="color:#F59E0B;font-size:.85rem;">
-                        <i class="bi bi-star-fill"></i>
+                        <x-icon name="star-fill" />
                         <span>{{ number_format($course->avgRating(),1) }}</span>
                         <span class="text-muted">({{ $course->reviews->count() }})</span>
                     </div>
@@ -49,18 +49,18 @@
                     <div class="text-muted small mb-2">{{ $course->instructor?->name }}</div>
                     <div class="d-flex justify-content-between align-items-center mt-auto">
                         <div class="small text-muted">
-                            <i class="bi bi-people me-1"></i>{{ $course->enrollments->count() }} students
+                            <x-icon name="people" class="me-1" />{{ trans_choice(':count student|:count students', $course->enrollments->count(), ['count' => $course->enrollments->count()]) }}
                         </div>
-                        <span class="badge bg-light text-dark border">{{ ucfirst($course->level) }}</span>
+                        <span class="badge bg-light text-dark border">{{ __('messages.' . $course->level) }}</span>
                     </div>
                 </div>
             </div>
         </div>
         @empty
         <div class="col-12 text-center py-5 text-muted">
-            <i class="bi bi-collection-play" style="font-size:2.5rem;opacity:.3;"></i>
-            <p class="mt-2">No courses in this category yet.</p>
-            <a href="{{ route('courses.index') }}" class="btn btn-outline-primary">Browse All Courses</a>
+            <x-icon name="collection-play" style="font-size:2.5rem;opacity:.3;" />
+            <p class="mt-2">{{ __('No courses in this category yet.') }}</p>
+            <a href="{{ route('courses.index') }}" class="btn btn-outline-primary">{{ __('Browse All Courses') }}</a>
         </div>
         @endforelse
     </div>

@@ -7,11 +7,11 @@
     </a>
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-start mb-2">
-            <span class="badge-level {{ $course->level }}">{{ ucfirst($course->level) }}</span>
+            <span class="badge-level {{ $course->level }}">{{ __('messages.' . $course->level) }}</span>
             @auth
-                <button class="btn btn-link p-0 text-decoration-none" data-wishlist="{{ $course->id }}" aria-label="Wishlist">
+                <button class="btn btn-link p-0 text-decoration-none" data-wishlist="{{ $course->id }}" aria-label="{{ __('Wishlist') }}">
                     <span class="wishlist-icon">
-                        @if(auth()->user()->wishlist->contains($course->id)) ❤️ @else 🤍 @endif
+                        @if(auth()->user()->wishlist->contains($course->id)) <x-icon name="heart-fill" class="me-1" />@else <x-icon name="heart" class="me-1" />@endif
                     </span>
                 </button>
             @endauth
@@ -22,14 +22,14 @@
         </a>
 
         <div class="instructor-name mb-2">
-            <i class="bi bi-person-circle me-1"></i>
-            {{ $course->instructor->name ?? 'Instructor' }}
+            <x-icon name="person-circle" class="me-1" />
+            {{ $course->instructor->name ?? __('Instructor') }}
         </div>
 
         <div class="d-flex align-items-center gap-2 mb-2">
             <div class="stars">
                 @for($s = 1; $s <= 5; $s++)
-                    <i class="bi bi-star{{ $s <= round($course->avgRating()) ? '-fill' : '' }}"></i>
+                    <x-icon :name="'star' . ($s <= round($course->avgRating()) ? '-fill' : '')" />
                 @endfor
             </div>
             <span style="font-size:.8rem;color:var(--text-muted);">
@@ -39,16 +39,16 @@
 
         <div class="d-flex align-items-center gap-2 mt-auto">
             <span style="font-size:.8rem;color:var(--text-muted);">
-                <i class="bi bi-clock me-1"></i>{{ $course->durationFormatted() }}
+                <x-icon name="clock" class="me-1" />{{ $course->hoursLabel() }}
             </span>
             <span style="font-size:.8rem;color:var(--text-muted);">
-                <i class="bi bi-people me-1"></i>{{ $course->enrollmentCount() }}
+                <x-icon name="people" class="me-1" />{{ $course->enrollmentCount() }}
             </span>
         </div>
 
         <div class="d-flex justify-content-between align-items-center mt-3">
             <div class="price {{ $course->price == 0 ? 'free' : '' }}">
-                {{ $course->price == 0 ? __('courses.free') : 'XAF ' . number_format($course->price) }}
+                {{ $course->price == 0 ? __('courses.free') : number_format($course->price, 0, ',', ' ') . ' FCFA' }}
             </div>
             <a href="{{ route('courses.show', $course) }}" class="btn btn-primary btn-sm">
                 {{ __('courses.view_course') }}

@@ -10,11 +10,11 @@
                  width="100" height="100" alt="{{ $user->name }}">
             <div class="text-white">
                 <h2 class="fw-bold mb-1">{{ $user->name }}</h2>
-                <p class="mb-1 opacity-75">Verified Instructor at ACADEXXA</p>
+                <p class="mb-1 opacity-75">{{ __('Verified instructor at :site', ['site' => $siteSettings['site_name'] ?? 'ACADEXA']) }}</p>
                 <div class="d-flex gap-3 text-white-50 small">
-                    <span><i class="bi bi-collection-play me-1"></i>{{ $courses->total() }} courses</span>
-                    <span><i class="bi bi-people me-1"></i>{{ $totalStudents }} students</span>
-                    <span><i class="bi bi-star-fill me-1" style="color:#F59E0B;"></i>{{ number_format($avgRating,1) }} avg rating</span>
+                    <span><x-icon name="collection-play" class="me-1" />{{ trans_choice(':count course|:count courses', $courses->total(), ['count' => $courses->total()]) }}</span>
+                    <span><x-icon name="people" class="me-1" />{{ trans_choice(':count student|:count students', $totalStudents, ['count' => $totalStudents]) }}</span>
+                    <span><x-icon name="star-fill" class="me-1" style="color:#F59E0B;" />{{ __(':rating average rating', ['rating' => number_format($avgRating, 1)]) }}</span>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
     <div class="row g-4">
         <div class="col-lg-8">
             <!-- Courses -->
-            <h4 class="fw-bold mb-3">Courses by {{ $user->name }}</h4>
+            <h4 class="fw-bold mb-3">{{ __('Courses by :name', ['name' => $user->name]) }}</h4>
             <div class="row g-3">
                 @forelse($courses as $course)
                 <div class="col-md-6">
@@ -35,15 +35,15 @@
                         <div class="card-body">
                             <h6 class="card-title">{{ $course->title() }}</h6>
                             <div class="d-flex justify-content-between align-items-center mt-auto">
-                                <span class="badge bg-light text-dark border">{{ ucfirst($course->level) }}</span>
-                                <a href="{{ route('courses.show', $course->slug) }}" class="btn btn-primary btn-sm">View</a>
+                                <span class="badge bg-light text-dark border">{{ __('messages.' . $course->level) }}</span>
+                                <a href="{{ route('courses.show', $course->slug) }}" class="btn btn-primary btn-sm">{{ __('View') }}</a>
                             </div>
                         </div>
                     </div>
                 </div>
                 @empty
                 <div class="col-12">
-                    <p class="text-muted">No published courses yet.</p>
+                    <p class="text-muted">{{ __('No published courses yet.') }}</p>
                 </div>
                 @endforelse
             </div>
@@ -54,11 +54,11 @@
 
         <div class="col-lg-4">
             <div class="bg-white rounded-xl shadow-brand p-4">
-                <h5 class="fw-bold mb-3">About</h5>
-                <p class="text-muted" style="font-size:.9rem;white-space:pre-wrap;">{{ $user->bio ?? 'This instructor has not added a bio yet.' }}</p>
+                <h5 class="fw-bold mb-3">{{ __('About') }}</h5>
+                <p class="text-muted" style="font-size:.9rem;white-space:pre-wrap;">{{ $user->bio ?? __('This instructor has not added a bio yet.') }}</p>
                 @if($user->website)
                 <a href="{{ $user->website }}" class="btn btn-outline-primary w-100 mt-2" target="_blank">
-                    <i class="bi bi-globe me-1"></i>Visit Website
+                    <x-icon name="globe" class="me-1" />{{ __('Visit Website') }}
                 </a>
                 @endif
             </div>

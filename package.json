@@ -3,11 +3,15 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "icons": "node scripts/build-icons.cjs --strict",
+        "prebuild": "node scripts/build-icons.cjs --strict"
     },
     "devDependencies": {
         "axios": "^1.7.4",
+        "bootstrap-icons": "^1.11.3",
         "laravel-vite-plugin": "^1.0",
+        "pdfjs-dist": "^4.10.38",
         "vite": "^6.0"
     }
 }

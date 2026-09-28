@@ -31,7 +31,9 @@ class SettingController extends Controller
             'instagram_url'     => ['nullable', 'url'],
             'cert_sig_name'     => ['nullable', 'string', 'max:255'],
             'cert_sig_title'    => ['nullable', 'string', 'max:255'],
-            'maintenance_mode'  => ['nullable'],
+            'maintenance_mode'           => ['nullable', 'in:0,1'],
+            'allow_registration'         => ['nullable', 'in:0,1'],
+            'require_email_verification' => ['nullable', 'in:0,1'],
         ]);
 
         foreach ($data as $key => $value) {
@@ -41,6 +43,6 @@ class SettingController extends Controller
         Cache::forget('site_settings');
         ActivityLog::record('settings_update', 'Admin updated site settings.');
 
-        return back()->with('success', 'Settings saved.');
+        return back()->with('success', __('Settings saved.'));
     }
 }

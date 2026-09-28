@@ -3,24 +3,30 @@
 namespace App\Http\Controllers\Instructor;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Instructor\Concerns\AuthorizesCourse;
 use App\Models\Category;
 use App\Models\Course;
-use App\Models\Lesson;
-use App\Models\LessonTranslation;
-use App\Models\Module;
-use App\Models\ModuleTranslation;
 use App\Models\CourseTranslation;
+use App\Models\User;
+use App\Notifications\CourseSubmittedForReview;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
+    use AuthorizesCourse;
+
+    /** Content languages an instructor can author in. */
+    public const CONTENT_LOCALES = ['fr', 'en', 'es', 'pt', 'zh', 'ar'];
+
     public function index(Request $request)
     {
         $courses = $request->user()->courses()
             ->with(['translations', 'category.translations'])
-            ->withCount(['enrollments', 'reviews'])
+            ->withCount(['enrollments', 'reviews', 'modules'])
+            ->withAvg('reviews', 'rating')
             ->latest()
             ->paginate(15);
 
@@ -36,179 +42,217 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
-            'category_id' => ['required', 'exists:categories,id'],
-            'level'       => ['required', 'in:beginner,intermediate,advanced'],
-            'price'       => ['required', 'numeric', 'min:0'],
-            'thumbnail'   => ['nullable', 'image', 'max:4096', 'mimes:jpeg,png,jpg,webp'],
+            'language'       => ['required', 'in:' . implode(',', self::CONTENT_LOCALES)],
+            'title'          => ['required', 'string', 'max:255'],
+            'description'    => ['required', 'string', 'max:20000'],
+            'category_id'    => ['required', 'exists:categories,id'],
+            'level'          => ['required', 'in:beginner,intermediate,advanced'],
+            'duration_hours' => ['required', 'numeric', 'min:0.5', 'max:2000'],
+            'price'          => ['nullable', 'numeric', 'min:0'],
+            'thumbnail'      => ['nullable', 'image', 'max:4096', 'mimes:jpeg,png,jpg,webp'],
         ]);
 
-        $slug = Str::slug($data['title']) . '-' . Str::random(4);
-
-        $thumbnailName = null;
-        if ($request->hasFile('thumbnail')) {
-            $thumbnailName = time() . '_' . $request->file('thumbnail')->getClientOriginalName();
-            $request->file('thumbnail')->storeAs('thumbnails', $thumbnailName, 'public');
-        }
-
         $course = Course::create([
-            'instructor_id'   => $request->user()->id,
-            'category_id'     => $data['category_id'],
-            'level'           => $data['level'],
-            'price'           => $data['price'],
-            'status'          => 'draft',
-            'slug'            => $slug,
-            'thumbnail'       => $thumbnailName,
+            'instructor_id'  => $request->user()->id,
+            'category_id'    => $data['category_id'],
+            'level'          => $data['level'],
+            'language'       => $data['language'],
+            'duration_hours' => $data['duration_hours'],
+            'price'          => $data['price'] ?? 0,
+            'status'         => 'draft',
+            'slug'           => Str::slug($data['title']) . '-' . Str::lower(Str::random(5)),
+            'thumbnail'      => $this->storeThumbnail($request),
         ]);
 
         CourseTranslation::create([
             'course_id'   => $course->id,
-            'locale'      => 'en',
+            'locale'      => $data['language'],
             'title'       => $data['title'],
             'description' => $data['description'],
         ]);
 
-        return redirect()->route('instructor.courses.edit', $course)
-            ->with('success', __('messages.course_created'));
+        return redirect()->route('instructor.courses.edit', ['course' => $course, 'tab' => 'curriculum'])
+            ->with('success', __('lms.course_created_next_step'));
     }
 
-    public function edit(Course $course)
+    public function edit(Request $request, Course $course)
     {
-        $this->authorizeInstructor($course);
+        $this->authorizeCourse($course);
 
         $categories = Category::active()->with('translations')->orderBy('order')->get();
-        $locales    = config('app.supported_locales', ['en', 'fr', 'es', 'pt', 'zh', 'ar']);
-        $course->load(['translations', 'modules.lessons.translations', 'modules.translations']);
+        $course->load([
+            'translations',
+            'modules.translations',
+            'modules.lessons.translations',
+            'modules.lessons.quiz.questions',
+            'modules.lessons.resources',
+            'modules.exam.questions',
+            'finalExam.questions',
+            'books',
+        ])->loadCount('enrollments')->loadAvg('reviews', 'rating');
 
-        return view('instructor.courses.edit', compact('course', 'categories', 'locales'));
+        $locales   = self::CONTENT_LOCALES;
+        $checklist = $this->publishChecklist($course);
+        $tab       = $request->query('tab', 'info');
+
+        return view('instructor.courses.edit', compact('course', 'categories', 'locales', 'checklist', 'tab'));
     }
 
     public function update(Request $request, Course $course)
     {
-        $this->authorizeInstructor($course);
+        $this->authorizeCourse($course);
+        $this->ensureEditable($course);
 
         $data = $request->validate([
-            'category_id'     => ['required', 'exists:categories,id'],
-            'level'           => ['required', 'in:beginner,intermediate,advanced'],
-            'price'           => ['required', 'numeric', 'min:0'],
-            'thumbnail'       => ['nullable', 'image', 'max:4096', 'mimes:jpeg,png,jpg,webp'],
-            'translations'    => ['required', 'array'],
-            'translations.en.title' => ['required', 'string', 'max:255'],
+            'category_id'    => ['required', 'exists:categories,id'],
+            'level'          => ['required', 'in:beginner,intermediate,advanced'],
+            'language'       => ['required', 'in:' . implode(',', self::CONTENT_LOCALES)],
+            'duration_hours' => ['required', 'numeric', 'min:0.5', 'max:2000'],
+            'is_sequential'  => ['nullable', 'boolean'],
+            'price'          => ['nullable', 'numeric', 'min:0'],
+            'thumbnail'      => ['nullable', 'image', 'max:4096', 'mimes:jpeg,png,jpg,webp'],
+            'translations'                    => ['required', 'array'],
+            'translations.*.title'            => ['nullable', 'string', 'max:255'],
+            'translations.*.description'      => ['nullable', 'string', 'max:20000'],
+            'translations.*.what_you_learn'   => ['nullable', 'string', 'max:5000'],
+            'translations.*.requirements'     => ['nullable', 'string', 'max:5000'],
+            'translations.*.meta_description' => ['nullable', 'string', 'max:300'],
         ]);
 
+        // The course's main language must always have a title.
+        $request->validate([
+            "translations.{$data['language']}.title"       => ['required', 'string', 'max:255'],
+            "translations.{$data['language']}.description" => ['required', 'string'],
+        ], [], [
+            "translations.{$data['language']}.title"       => __('lms.title'),
+            "translations.{$data['language']}.description" => __('lms.description'),
+        ]);
+
+        $thumbnail = $course->thumbnail;
         if ($request->hasFile('thumbnail')) {
-            if ($course->thumbnail) Storage::disk('public')->delete('thumbnails/' . $course->thumbnail);
-            $fn = time() . '_' . $request->file('thumbnail')->getClientOriginalName();
-            $request->file('thumbnail')->storeAs('thumbnails', $fn, 'public');
-            $data['thumbnail'] = $fn;
+            if ($course->thumbnail && ! str_starts_with($course->thumbnail, 'http')) {
+                Storage::disk('public')->delete('thumbnails/' . $course->thumbnail);
+            }
+            $thumbnail = $this->storeThumbnail($request);
         }
 
         $course->update([
-            'category_id' => $data['category_id'],
-            'level'       => $data['level'],
-            'price'       => $data['price'],
-            'thumbnail'   => $data['thumbnail'] ?? $course->thumbnail,
+            'category_id'    => $data['category_id'],
+            'level'          => $data['level'],
+            'language'       => $data['language'],
+            'duration_hours' => $data['duration_hours'],
+            'is_sequential'  => $request->boolean('is_sequential'),
+            'price'          => $data['price'] ?? $course->price,
+            'thumbnail'      => $thumbnail,
         ]);
 
-        foreach ($request->translations as $locale => $trans) {
-            if (empty($trans['title'])) continue;
+        foreach (self::CONTENT_LOCALES as $locale) {
+            $trans = $data['translations'][$locale] ?? [];
+            if (blank($trans['title'] ?? null)) {
+                // An emptied secondary language is removed rather than kept stale.
+                if ($locale !== $data['language']) {
+                    CourseTranslation::where('course_id', $course->id)->where('locale', $locale)->delete();
+                }
+                continue;
+            }
             CourseTranslation::updateOrCreate(
                 ['course_id' => $course->id, 'locale' => $locale],
                 [
-                    'title'           => $trans['title'],
-                    'description'     => $trans['description'] ?? '',
-                    'requirements'    => $trans['requirements'] ?? '',
-                    'what_you_learn'  => $trans['what_you_learn'] ?? '',
+                    'title'            => $trans['title'],
+                    'description'      => $trans['description'] ?? '',
+                    'requirements'     => $trans['requirements'] ?? '',
+                    'what_you_learn'   => $trans['what_you_learn'] ?? '',
+                    'meta_title'       => $trans['title'],
+                    'meta_description' => $trans['meta_description'] ?? Str::limit(strip_tags($trans['description'] ?? ''), 155),
                 ]
             );
         }
 
-        // Recalculate duration
-        $totalMinutes = $course->modules()->with('lessons')->get()
-            ->flatMap->lessons->sum('duration_minutes');
-        $course->update(['duration_minutes' => $totalMinutes]);
+        $course->recalculateDuration();
 
-        return back()->with('success', __('messages.course_updated'));
+        return redirect()->route('instructor.courses.edit', ['course' => $course, 'tab' => 'info'])
+            ->with('success', __('messages.course_updated'));
     }
 
     public function destroy(Course $course)
     {
-        $this->authorizeInstructor($course);
-        abort_if(in_array($course->status, ['published']), 403, 'Cannot delete a published course.');
+        $this->authorizeCourse($course);
+        abort_if($course->status === 'published' || $course->enrollments()->exists(), 403, __('lms.course_delete_forbidden'));
+
+        foreach ($course->lessons()->get() as $lesson) {
+            app(\App\Services\ChunkedVideoUpload::class)->deleteVideo($lesson);
+        }
+        Storage::disk('local')->deleteDirectory("videos/course_{$course->id}");
+        Storage::disk('local')->deleteDirectory("resources/course_{$course->id}");
         $course->delete();
+
         return redirect()->route('instructor.courses.index')->with('success', __('messages.course_deleted'));
     }
 
     public function submit(Course $course)
     {
-        $this->authorizeInstructor($course);
-        abort_if(! in_array($course->status, ['draft', 'rejected']), 403);
-        $course->update(['status' => 'pending']);
+        $this->authorizeCourse($course);
+        abort_if(! in_array($course->status, ['draft', 'rejected', 'unpublished']), 403);
+
+        $course->load(['translations', 'modules.lessons.quiz.questions', 'modules.exam.questions', 'finalExam.questions']);
+        $checklist = $this->publishChecklist($course);
+        $missing = array_filter($checklist, fn ($item) => ! $item['ok']);
+
+        if ($missing) {
+            return back()->withErrors(['submit' => __('lms.submit_incomplete')])
+                ->with('checklist_failed', true);
+        }
+
+        $course->update(['status' => 'pending', 'admin_feedback' => null]);
+
+        $admins = User::whereIn('role', ['admin', 'super_admin'])->where('is_active', true)->get()
+            ->filter(fn ($admin) => $admin->hasAdminPermission('courses'));
+        Notification::send($admins, new CourseSubmittedForReview($course));
+
         return back()->with('success', __('messages.course_submitted'));
     }
 
-    public function storeModule(Request $request, Course $course)
+    /**
+     * Requirements before a course can be sent for review.
+     *
+     * @return array<string, array{ok: bool, label: string}>
+     */
+    public function publishChecklist(Course $course): array
     {
-        $this->authorizeInstructor($course);
-        $request->validate(['title' => ['required', 'string', 'max:255']]);
+        $modules = $course->modules;
+        $lessons = $modules->flatMap->lessons;
+        $trans   = $course->translationExact($course->language);
 
-        $order  = $course->modules()->max('order') + 1;
-        $module = Module::create(['course_id' => $course->id, 'order' => $order, 'title' => $request->title]);
-        ModuleTranslation::create(['module_id' => $module->id, 'locale' => 'en', 'title' => $request->title]);
+        $videosOk = $lessons->where('type', 'video')->every(fn ($l) => $l->hasVideo());
+        $min = config('lms.assessment.min_questions');
+        // Every lesson except assignments is followed by a quiz of at least 10 questions.
+        $quizzesOk = $lessons->isNotEmpty() && $lessons->where('type', '!=', 'assignment')
+            ->every(fn ($l) => $l->quiz && $l->quiz->questions->count() >= $min['lesson']);
+        $exercisesOk = $modules->isNotEmpty() && $modules->every(fn ($m) => $m->exam && $m->exam->questions->count() >= $min['module']);
+        $finalOk = $course->finalExam && $course->finalExam->questions->count() >= $min['course'];
+        $modulesHaveLessons = $modules->isNotEmpty() && $modules->every(fn ($m) => $m->lessons->isNotEmpty());
+        $hoursOk = $course->duration_hours > 0 && $modules->every(fn ($m) => $m->duration_hours > 0);
 
-        return response()->json(['module' => $module, 'message' => 'Module created']);
+        return [
+            'info'     => ['ok' => $trans && filled($trans->title) && filled($trans->description), 'label' => __('lms.check_info')],
+            'hours'    => ['ok' => $hoursOk, 'label' => __('lms.check_hours')],
+            'modules'  => ['ok' => $modulesHaveLessons, 'label' => __('lms.check_modules')],
+            'videos'   => ['ok' => $videosOk, 'label' => __('lms.check_videos')],
+            'quizzes'  => ['ok' => $quizzesOk, 'label' => __('learn.check_lesson_quizzes', ['min' => $min['lesson']])],
+            'exercises' => ['ok' => $exercisesOk, 'label' => __('learn.check_module_exercises', ['min' => $min['module']])],
+            'final'    => ['ok' => $finalOk, 'label' => __('learn.check_final_evaluation', ['min' => $min['course']])],
+            'thumb'    => ['ok' => (bool) $course->thumbnail, 'label' => __('lms.check_thumbnail')],
+        ];
     }
 
-    public function storeLesson(Request $request, Module $module)
+    private function storeThumbnail(Request $request): ?string
     {
-        $this->authorizeInstructor($module->course);
-        $request->validate([
-            'title'            => ['required', 'string', 'max:255'],
-            'type'             => ['required', 'in:video,text,quiz,assignment'],
-            'video_url'        => ['nullable', 'string'],
-            'content'          => ['nullable', 'string'],
-            'duration_minutes' => ['nullable', 'integer', 'min:0'],
-            'is_free_preview'  => ['boolean'],
-        ]);
-
-        $order  = $module->lessons()->max('order') + 1;
-        $lesson = Lesson::create([
-            'module_id'        => $module->id,
-            'order'            => $order,
-            'type'             => $request->type,
-            'video_url'        => $request->video_url,
-            'content'          => $request->content,
-            'duration_minutes' => $request->duration_minutes ?? 0,
-            'is_free_preview'  => $request->boolean('is_free_preview'),
-        ]);
-
-        LessonTranslation::create(['lesson_id' => $lesson->id, 'locale' => 'en', 'title' => $request->title]);
-
-        return response()->json(['lesson' => $lesson, 'message' => 'Lesson created']);
-    }
-
-    public function destroyModule(Module $module)
-    {
-        $this->authorizeInstructor($module->course);
-        $module->delete();
-        return response()->json(['message' => 'Module deleted']);
-    }
-
-    public function destroyLesson(Lesson $lesson)
-    {
-        $this->authorizeInstructor($lesson->module->course);
-        $lesson->delete();
-        return response()->json(['message' => 'Lesson deleted']);
-    }
-
-    private function authorizeInstructor(Course $course): void
-    {
-        $user = auth()->user();
-        abort_if(
-            $course->instructor_id !== $user->id && ! $user->isAdmin(),
-            403,
-            'Unauthorized.'
-        );
+        if (! $request->hasFile('thumbnail')) {
+            return null;
+        }
+        $file = $request->file('thumbnail');
+        $name = time() . '_' . Str::random(8) . '.' . $file->extension();
+        $file->storeAs('thumbnails', $name, 'public');
+        return $name;
     }
 }

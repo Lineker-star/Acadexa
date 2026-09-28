@@ -23,3 +23,6 @@ yarn-error.log
 *.suo
 *.user
 /public/build
+/storage/app/backups
+/storage/app/private
+/.phpunit.cache

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Course;
+use App\Models\Lesson;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -78,6 +79,18 @@ class CourseController extends Controller
             ->get();
 
         return view('courses.show', compact('course', 'isEnrolled', 'enrollment', 'relatedCourses'));
+    }
+
+    /** Free-preview lesson, viewable without an account. */
+    public function preview(Course $course, Lesson $lesson)
+    {
+        abort_if($course->status !== 'published', 404);
+        abort_unless($lesson->is_free_preview && $lesson->module->course_id === $course->id, 404);
+
+        $lesson->load(['translations', 'resources']);
+        $course->load('translations');
+
+        return view('courses.preview', compact('course', 'lesson'));
     }
 
     public function instructorProfile(User $user)

@@ -8,7 +8,7 @@ class Enrollment extends Model
 {
     protected $fillable = [
         'user_id', 'course_id', 'enrolled_at', 'completed_at',
-        'progress_percent', 'last_lesson_id',
+        'progress_percent', 'last_lesson_id', 'reassess_reminded_at',
     ];
 
     protected function casts(): array
@@ -16,6 +16,7 @@ class Enrollment extends Model
         return [
             'enrolled_at'      => 'datetime',
             'completed_at'     => 'datetime',
+            'reassess_reminded_at' => 'datetime',
             'progress_percent' => 'decimal:2',
         ];
     }
@@ -47,17 +48,9 @@ class Enrollment extends Model
 
     public function recalculateProgress(): void
     {
-        $course       = $this->course()->with(['modules.lessons'])->first();
-        $totalLessons = $course->modules->sum(fn($m) => $m->lessons->count());
-
-        if ($totalLessons === 0) {
-            $this->update(['progress_percent' => 0]);
-            return;
-        }
-
-        $completed = $this->lessonProgress()->count();
-        $percent   = round(($completed / $totalLessons) * 100, 2);
-        $completedAt = $percent >= 100 ? now() : null;
+        // Lessons, module exercises and the final evaluation all count (see ProgressService).
+        $percent = app(\App\Services\ProgressService::class)->percent($this);
+        $completedAt = $percent >= 100 ? ($this->completed_at ?? now()) : null;
 
         $this->update([
             'progress_percent' => $percent,

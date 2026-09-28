@@ -2,24 +2,29 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasTranslations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
 
     protected $fillable = [
         'instructor_id', 'category_id', 'thumbnail', 'level', 'price',
-        'status', 'featured', 'duration_minutes', 'slug', 'admin_feedback',
+        'status', 'featured', 'duration_minutes', 'duration_hours', 'language',
+        'is_sequential', 'slug', 'admin_feedback', 'published_at',
     ];
 
     protected function casts(): array
     {
         return [
             'featured'         => 'boolean',
+            'is_sequential'    => 'boolean',
             'price'            => 'decimal:2',
             'duration_minutes' => 'integer',
+            'duration_hours'   => 'decimal:1',
+            'published_at'     => 'datetime',
         ];
     }
 
@@ -43,6 +48,22 @@ class Course extends Model
     public function modules()
     {
         return $this->hasMany(Module::class)->orderBy('order');
+    }
+
+    public function lessons()
+    {
+        return $this->hasManyThrough(Lesson::class, Module::class);
+    }
+
+    /** Final evaluation: closes the course and measures knowledge over time. */
+    public function finalExam()
+    {
+        return $this->hasOne(Quiz::class)->where('scope', Quiz::SCOPE_COURSE);
+    }
+
+    public function books()
+    {
+        return $this->hasMany(Book::class)->orderBy('order');
     }
 
     public function enrollments()
@@ -71,16 +92,16 @@ class Course extends Model
         return $this->belongsToMany(User::class, 'wishlists');
     }
 
+    public function announcements()
+    {
+        return $this->hasMany(CourseAnnouncement::class)->latest();
+    }
+
     // ─── Helpers ──────────────────────────────────────────────────────────────
 
     public function translation(string $locale = null)
     {
-        $locale = $locale ?? app()->getLocale();
-        $trans = $this->translations->where('locale', $locale)->first();
-        if (! $trans) {
-            $trans = $this->translations->where('locale', 'en')->first();
-        }
-        return $trans;
+        return $this->translationFor($locale);
     }
 
     public function title(string $locale = null): string
@@ -95,33 +116,82 @@ class Course extends Model
 
     public function avgRating(): float
     {
+        // Use the preloaded withAvg() value or loaded relation when available to avoid N+1 queries.
+        if (array_key_exists('reviews_avg_rating', $this->attributes)) {
+            return round((float) $this->attributes['reviews_avg_rating'], 1);
+        }
+        if ($this->relationLoaded('reviews')) {
+            return round($this->reviews->avg('rating') ?? 0, 1);
+        }
         return round($this->reviews()->avg('rating') ?? 0, 1);
     }
 
     public function reviewCount(): int
     {
-        return $this->reviews()->count();
+        if (array_key_exists('reviews_count', $this->attributes)) {
+            return (int) $this->attributes['reviews_count'];
+        }
+        return $this->relationLoaded('reviews') ? $this->reviews->count() : $this->reviews()->count();
     }
 
     public function enrollmentCount(): int
     {
-        return $this->enrollments()->count();
+        if (array_key_exists('enrollments_count', $this->attributes)) {
+            return (int) $this->attributes['enrollments_count'];
+        }
+        return $this->relationLoaded('enrollments') ? $this->enrollments->count() : $this->enrollments()->count();
     }
 
     public function thumbnailUrl(): string
     {
         if ($this->thumbnail) {
-            if (str_starts_with($this->thumbnail, 'http')) { return $this->thumbnail; } return asset('storage/thumbnails/' . $this->thumbnail);
+            if (str_starts_with($this->thumbnail, 'http')) {
+                return $this->thumbnail;
+            }
+            return asset('storage/thumbnails/' . $this->thumbnail);
         }
         return asset('images/course-placeholder.jpg');
     }
 
+    /** Video/reading time computed from lesson durations. */
     public function durationFormatted(): string
     {
         $h = intdiv($this->duration_minutes, 60);
         $m = $this->duration_minutes % 60;
-        if ($h > 0) return "{$h}h {$m}m";
-        return "{$m}m";
+        if ($h > 0) {
+            return $m > 0 ? __('lms.hours_minutes_short', ['hours' => $h, 'minutes' => $m]) : __('lms.hours_short', ['count' => $h]);
+        }
+        return __('lms.minutes_short', ['count' => $m]);
+    }
+
+    /** Declared teaching volume (volume horaire), falling back to lesson time. */
+    public function hoursLabel(): string
+    {
+        if ($this->duration_hours !== null && (float) $this->duration_hours > 0) {
+            return self::formatHours((float) $this->duration_hours);
+        }
+        return $this->durationFormatted();
+    }
+
+    /** Sum of the hours declared on the modules. */
+    public function modulesHoursTotal(): float
+    {
+        $modules = $this->relationLoaded('modules') ? $this->modules : $this->modules()->get();
+        return (float) $modules->sum(fn ($m) => (float) $m->duration_hours);
+    }
+
+    public function recalculateDuration(): void
+    {
+        $this->update(['duration_minutes' => (int) $this->lessons()->sum('lessons.duration_minutes')]);
+    }
+
+    public static function formatHours(float $hours): string
+    {
+        $whole = (int) floor($hours);
+        $minutes = (int) round(($hours - $whole) * 60);
+        return $minutes > 0
+            ? __('lms.hours_minutes_short', ['hours' => $whole, 'minutes' => $minutes])
+            : __('lms.hours_short', ['count' => $whole]);
     }
 
     // ─── Scopes ───────────────────────────────────────────────────────────────

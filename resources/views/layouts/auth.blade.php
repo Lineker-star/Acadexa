@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Login') — ACADEXXA</title>
+    @include('partials.pwa-head')
+    <title>@yield('title', __('Log in')) — {{ $siteSettings['site_name'] ?? 'ACADEXA' }}</title>
    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    @include('partials.bootstrap-css')
     @vite(['resources/css/app.css'])
 </head>
-<body style="background:var(--light);min-height:100vh;">
+<body style="background:var(--light);min-height:100vh;" data-user-id="{{ auth()->id() }}">
     <div class="min-vh-100 d-flex">
         <!-- Left decorative panel (hidden on mobile) -->
         <div class="d-none d-lg-flex col-lg-6 flex-column justify-content-center align-items-center p-5"
@@ -19,10 +19,10 @@
             <div style="position:relative;z-index:2;text-align:center;color:#fff;">
                 <h1 style="font-family:'Poppins',sans-serif;font-size:2.5rem;font-weight:800;">ACADE<span style="color:#C1440E;">XA</span></h1>
                 <p style="font-size:1.1rem;opacity:.9;max-width:400px;margin:1rem auto 0;">
-                    Empowering World Innovators and Leaders for Global Impact — Now Online.
+                    {{ __('Empowering World Innovators and Leaders for Global Impact — Now Online.') }}
                 </p>
                 <div style="margin-top:2rem;font-size:.85rem;opacity:.7;">
-                    Operated by ZTF University Institute<br>Bertoua, East Region, Cameroon
+                    {{ __('Operated by ZTF University Institute') }}<br>{{ __('Bertoua, East Region, Cameroon') }}
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
                 @yield('content')
                 <div class="text-center mt-4">
                     <a href="{{ route('home') }}" class="text-muted small">
-                        <i class="bi bi-arrow-left"></i> Back to ACADEXXA
+                        <x-icon name="arrow-left" /> {{ __('Back to ACADEXA') }}
                     </a>
                 </div>
             </div>

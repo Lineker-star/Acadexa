@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ModuleTranslation extends Model
 {
-    protected $fillable = ['module_id', 'locale', 'title'];
+    protected $fillable = ['module_id', 'locale', 'title', 'description'];
 
     public function module()
     {

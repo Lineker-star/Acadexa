@@ -23,6 +23,6 @@ class ActivityLogController extends Controller
     public function clear()
     {
         ActivityLog::where('created_at', '<', now()->subDays(30))->delete();
-        return back()->with('success', 'Activity logs older than 30 days have been cleared.');
+        return back()->with('success', __('Activity logs older than 30 days have been cleared.'));
     }
 }

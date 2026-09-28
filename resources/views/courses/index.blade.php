@@ -45,7 +45,7 @@
                                        value="{{ $lvl }}" id="level_{{ $lvl }}"
                                        {{ request('level') == $lvl ? 'checked' : '' }}
                                        onchange="document.getElementById('filterForm').submit()">
-                                <label class="form-check-label small" for="level_{{ $lvl }}">{{ ucfirst($lvl) }}</label>
+                                <label class="form-check-label small" for="level_{{ $lvl }}">{{ __('messages.' . $lvl) }}</label>
                             </div>
                             @endforeach
                         </div>
@@ -63,13 +63,13 @@
                                 <input class="form-check-input" type="radio" name="price" value="paid"
                                        {{ request('price') == 'paid' ? 'checked' : '' }}
                                        onchange="document.getElementById('filterForm').submit()">
-                                <label class="form-check-label small">Paid</label>
+                                <label class="form-check-label small">{{ __('Paid') }}</label>
                             </div>
                         </div>
 
                         @if(request()->hasAny(['category','level','price','search']))
                         <a href="{{ route('courses.index') }}" class="btn btn-outline-secondary btn-sm w-100">
-                            <i class="bi bi-x-circle me-1"></i>Clear Filters
+                            <x-icon name="x-circle" class="me-1" />{{ __('Clear Filters') }}
                         </a>
                         @endif
                     </form>
@@ -106,10 +106,10 @@
                 <div class="mt-4">{{ $courses->links() }}</div>
                 @else
                 <div class="text-center py-5">
-                    <div style="font-size:4rem;">🔍</div>
+                    <div style="font-size:4rem;"><x-icon name="search" /></div>
                     <h5 class="mt-3">{{ __('courses.no_courses_found') }}</h5>
                     <p class="text-muted">{{ __('courses.try_different_filters') }}</p>
-                    <a href="{{ route('courses.index') }}" class="btn btn-primary">Browse All Courses</a>
+                    <a href="{{ route('courses.index') }}" class="btn btn-primary">{{ __('Browse All Courses') }}</a>
                 </div>
                 @endif
             </div>

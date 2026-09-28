@@ -217,6 +217,74 @@ When you're ready to put ACADEXA live on the internet:
 
 ---
 
+## Mise à jour « LMS complet » (septembre 2026) — déploiement
+
+Cette version ajoute : constructeur de cours (cours → modules → leçons avec volume horaire), upload vidéo par morceaux, lecture YouTube intégrée, quiz, devoirs, ressources, règles de progression, notifications et e-mails, messagerie, annonces, application installable (PWA) avec **mode hors ligne**, rapports, 2FA admin, sauvegardes.
+
+**Sur le serveur, après avoir envoyé le code :**
+
+```
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force          # 4 migrations additives, aucune donnée supprimée
+npm install && npm run build         # puis copier public/build vers public_html/build
+php artisan config:cache && php artisan route:cache && php artisan view:cache
+```
+
+1. **Tâche cron (obligatoire)** — une seule ligne dans hPanel/cPanel, toutes les minutes :
+   `* * * * * php /home/<compte>/<dossier>/artisan schedule:run >> /dev/null 2>&1`
+   Elle envoie les e-mails en file d'attente, les rappels de fin d'essai, fait la **sauvegarde quotidienne** de la base (`storage/app/backups`, 14 jours gardés) et nettoie les uploads abandonnés.
+2. **E-mails** — renseigner `MAIL_*` dans `.env` (voir `.env.example`). Ensuite seulement, activer si souhaité « Exiger la vérification de l'adresse e-mail » dans Admin → Settings.
+3. **HTTPS obligatoire** pour l'installation de l'application et le mode hors ligne (service worker).
+4. **Vidéos** — stockées de façon privée dans `storage/app/private/videos` (jamais dans `public/`), servies uniquement aux inscrits. Prévoir l'espace disque. Taille max configurable (`LMS_VIDEO_MAX_MB`).
+5. **Sécurité admin** — chaque administrateur active sa double authentification dans *Sécurité du compte*. Changer les mots de passe de démonstration.
+
+**Tests automatisés :** `php vendor/bin/phpunit` (base SQLite en mémoire, aucune donnée réelle touchée).
+
+### Langues (en, fr, es, pt, zh, ar)
+
+Toute l'interface est traduite dans les 6 langues ; l'arabe s'affiche de droite à gauche.
+
+- **Textes de l'interface** : jamais écrits en dur dans les vues. On écrit `{{ __('Texte en anglais') }}` (ou une clé de groupe comme `__('lms.save')`).
+  - Chaînes « en anglais » : `resources/lang/{langue}.json` — `en.json` est généré par `node scripts/collect-translations.cjs`.
+  - Clés de groupe : `resources/lang/{langue}/*.php` (lms, security, validation, messages…).
+  - Les traductions es/pt/zh/ar (et le JSON français) sont écrites dans `resources/lang-src/` puis générées :
+    `node scripts/write-locale.cjs es resources/lang-src/es.cjs` (idem pt, zh, ar, fr).
+- **Contrôles** (lancés aussi par les tests) :
+  - `php scripts/check-locales.php` — même clés et mêmes paramètres (`:name`…) dans chaque langue ;
+  - `node scripts/collect-translations.cjs --check` — toute chaîne utilisée dans le code est traduite partout ;
+  - `node scripts/find-hardcoded-text.cjs` — aucun texte en dur dans les vues.
+- **Contenus** : catégories et pages (À propos, Confidentialité, Conditions) se traduisent dans l'admin (*Traductions*, *Pages du site*) ; chaque formateur peut traduire son cours dans les 6 langues. Un champ vide affiche la version de référence.
+- **Certificats PDF** : générés dans la langue de l'étudiant (en, fr, es, pt) ; en anglais pour le chinois et l'arabe, que les polices PDF ne savent pas afficher.
+
+### Évaluations et suivi des connaissances
+
+- **Après chaque leçon** (vidéo/texte) : un quiz d’au moins **10 questions** ; la leçon n’est validée qu’avec **7/10 (70 %)** minimum. Le formateur peut être plus exigeant, jamais moins.
+- **Après chaque module** : un exercice complet d’au moins 10 questions (70 %), qui débloque la suite dans un cours séquentiel.
+- **Après le cours** : une évaluation finale d’au moins 20 questions (70 %), nécessaire pour le certificat.
+- **Progression / régression** : l’évaluation finale sert aussi de *test de positionnement* (avant d’étudier, une seule fois, sans correction affichée) et de *réévaluation* (après réussite, au plus une fois tous les 7 jours ; rappel automatique au bout de 30 jours). La comparaison des scores donne le niveau de départ, le niveau actuel et la tendance ; chaque question peut être rattachée à un module pour mesurer la maîtrise par module.
+- **Formateur** : onglet *Évaluations* du cours (plan complet), éditeur de questions avec import en texte, page *Suivi des connaissances* par cours, fiche de chaque étudiant (courbe), encart sur le tableau de bord et notification en cas de régression.
+- **Étudiant** : page *Mes résultats* pour chaque cours.
+- Un cours ne peut être soumis à validation que si tout le parcours d’évaluation est complet. Les cours déjà publiés sans quiz continuent de fonctionner comme avant.
+- Réglages : `config/lms.php` → `assessment` (`LMS_RETAKE_COOLDOWN_DAYS`, `LMS_REASSESS_AFTER_DAYS`).
+
+### Bibliothèque et lecture hors ligne
+
+- Le formateur ajoute des **livres** (PDF, audio, vidéo — onglet *Livres* du cours, `LMS_BOOK_MAX_MB`).
+- L’étudiant les ajoute à **Ma bibliothèque** : la liste est enregistrée **dans son compte**, pas dans les fichiers de l’appareil. Sur chaque appareil où il se connecte, l’application en garde une copie privée (effacée à la déconnexion) et la position de lecture est synchronisée.
+- PDF, audio, vidéo et images (livres et ressources des leçons) s’ouvrent dans le **lecteur intégré**, en ligne comme hors ligne (`/offline`).
+- Hors ligne, les quiz de leçon et exercices de module donnent un résultat provisoire ; la correction du serveur à la reconnexion fait foi. L’évaluation finale se passe en ligne.
+
+**Déploiement de cette version :** `php artisan migrate --force` (1 migration additive), `npm install && npm run build`, et la tâche cron existante (elle lance aussi `acadexa:reassessment-reminders`). Les traductions du groupe `learn` sont générées par `node scripts/write-group.cjs learn resources/lang-src/learn.cjs`.
+
+### Icônes
+
+Aucun emoji : toutes les icônes sont des **SVG** (jeu Bootstrap Icons) regroupés dans `resources/icons/sprite.svg`, servi par `/icons.svg` et disponible hors ligne.
+
+- Blade : `<x-icon name="play-circle" class="me-1" />` — JavaScript : `icon('play-circle', 'me-1')` (`resources/js/icons.js`).
+- Après avoir utilisé une nouvelle icône : `npm run icons` (lancé aussi automatiquement par `npm run build`). La liste des noms : https://icons.getbootstrap.com
+
+---
+
 ## Common Problems & Solutions
 
 **Problem:** Page shows "No application encryption key has been specified"

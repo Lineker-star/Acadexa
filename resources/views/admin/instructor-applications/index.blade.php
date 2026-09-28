@@ -1,21 +1,21 @@
 @extends('layouts.admin')
-@section('title', 'Instructor Applications')
-@section('breadcrumb') <li class="breadcrumb-item active">Instructor Applications</li> @endsection
+@section('title', __('Instructor Applications'))
+@section('breadcrumb') <li class="breadcrumb-item active">{{ __('Instructor Applications') }}</li> @endsection
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h4 class="fw-bold mb-0">Instructor Applications</h4>
+    <h4 class="fw-bold mb-0">{{ __('Instructor Applications') }}</h4>
 </div>
 
 <div class="bg-white rounded-xl shadow-brand p-3 mb-4">
     <form method="GET" class="d-flex gap-2">
         <select name="status" class="form-select form-select-sm" style="width:auto;">
-            <option value="">All Status</option>
-            <option value="pending" {{ request('status')=='pending'?'selected':'' }}>Pending</option>
-            <option value="approved" {{ request('status')=='approved'?'selected':'' }}>Approved</option>
-            <option value="rejected" {{ request('status')=='rejected'?'selected':'' }}>Rejected</option>
+            <option value="">{{ __('All Status') }}</option>
+            <option value="pending" {{ request('status')=='pending'?'selected':'' }}>{{ __('Pending') }}</option>
+            <option value="approved" {{ request('status')=='approved'?'selected':'' }}>{{ __('Approved') }}</option>
+            <option value="rejected" {{ request('status')=='rejected'?'selected':'' }}>{{ __('Rejected') }}</option>
         </select>
-        <button class="btn btn-primary btn-sm">Filter</button>
+        <button class="btn btn-primary btn-sm">{{ __('Filter') }}</button>
     </form>
 </div>
 
@@ -23,7 +23,7 @@
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
-                <tr><th>Applicant</th><th>Expertise</th><th>Status</th><th>Applied</th><th>Actions</th></tr>
+                <tr><th>{{ __('Applicant') }}</th><th>{{ __('Expertise') }}</th><th>{{ __('Status') }}</th><th>{{ __('Applied') }}</th><th>{{ __('Actions') }}</th></tr>
             </thead>
             <tbody>
                 @forelse($applications as $app)
@@ -40,18 +40,18 @@
                     <td style="font-size:.85rem;">{{ $app->expertise }}</td>
                     <td>
                         <span class="badge {{ match($app->status) {'pending'=>'bg-warning text-dark','approved'=>'bg-success',default=>'bg-danger'} }}">
-                            {{ ucfirst($app->status) }}
+                            {{ __('lms.application_status_' . $app->status) }}
                         </span>
                     </td>
-                    <td style="font-size:.8rem;">{{ $app->created_at->format('M d, Y') }}</td>
+                    <td style="font-size:.8rem;">{{ $app->created_at->isoFormat('ll') }}</td>
                     <td>
                         <a href="{{ route('admin.applications.show', $app) }}" class="btn btn-primary btn-sm">
-                            <i class="bi bi-eye"></i> Review
+                            <x-icon name="eye" /> {{ __('Review') }}
                         </a>
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="5" class="text-center py-4 text-muted">No applications found.</td></tr>
+                <tr><td colspan="5" class="text-center py-4 text-muted">{{ __('No applications found.') }}</td></tr>
                 @endforelse
             </tbody>
         </table>

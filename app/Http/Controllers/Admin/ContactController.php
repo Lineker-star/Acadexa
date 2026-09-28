@@ -22,6 +22,6 @@ class ContactController extends Controller
     public function destroy(ContactSubmission $contact)
     {
         $contact->delete();
-        return redirect()->route('admin.contacts.index')->with('success', 'Deleted.');
+        return redirect()->route('admin.contacts.index')->with('success', __('Deleted.'));
     }
 }

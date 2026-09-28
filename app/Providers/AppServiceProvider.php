@@ -13,6 +13,15 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Bootstrap 5 pagination markup (the UI uses Bootstrap); its labels are translated in lang/*.json.
+        \Illuminate\Pagination\Paginator::useBootstrapFive();
+
+        // Queued notifications/e-mails are rendered in the recipient's language (User::preferredLocale),
+        // including dates.
+        \Illuminate\Support\Facades\Event::listen(\Illuminate\Foundation\Events\LocaleUpdated::class, function ($event) {
+            \Illuminate\Support\Carbon::setLocale($event->locale);
+        });
+
         Gate::define('admin-access', function ($user) {
             return in_array($user->role, ['admin', 'super_admin']);
         });

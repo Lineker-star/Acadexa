@@ -19,12 +19,12 @@ class ReviewController extends Controller
     public function flag(Review $review)
     {
         $review->update(['is_flagged' => ! $review->is_flagged]);
-        return back()->with('success', 'Review flag toggled.');
+        return back()->with('success', __('Review flag toggled.'));
     }
 
     public function destroy(Review $review)
     {
         $review->delete();
-        return back()->with('success', 'Review deleted.');
+        return back()->with('success', __('Review deleted.'));
     }
 }

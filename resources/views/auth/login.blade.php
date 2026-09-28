@@ -17,7 +17,7 @@
                 <label class="form-label small fw-bold">{{ __('auth.email') }}</label>
                 <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
                        value="{{ old('email') }}" required autofocus autocomplete="email"
-                       placeholder="you@example.com">
+                       placeholder="{{ __('you@example.com') }}">
                 @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
