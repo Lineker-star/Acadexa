@@ -147,6 +147,9 @@ module.exports = {
         read: 'Read',
         continue_reading: 'Continue reading',
         open: 'Open',
+        hero_image: 'Home page photo',
+        hero_image_help: 'JPG, PNG or WebP, landscape (e.g. 1920×1080), max. 5 MB. Shown behind the title of the home page.',
+        hero_image_reset: 'Go back to the default photo',
         js: {
             now_take_quiz: 'Video finished: take the quiz to validate the lesson.',
             knowledge_evolution: 'Knowledge evolution',
@@ -315,6 +318,9 @@ module.exports = {
         read: 'Lire',
         continue_reading: 'Reprendre la lecture',
         open: 'Ouvrir',
+        hero_image: 'Photo de la page d’accueil',
+        hero_image_help: 'JPG, PNG ou WebP, au format paysage (ex. 1920×1080), 5 Mo max. Affichée derrière le titre de la page d’accueil.',
+        hero_image_reset: 'Revenir à la photo par défaut',
         js: {
             now_take_quiz: 'Vidéo terminée : passez le quiz pour valider la leçon.',
             knowledge_evolution: 'Évolution des connaissances',
@@ -483,6 +489,9 @@ module.exports = {
         read: 'Leer',
         continue_reading: 'Seguir leyendo',
         open: 'Abrir',
+        hero_image: 'Foto de la página de inicio',
+        hero_image_help: 'JPG, PNG o WebP, horizontal (p. ej. 1920×1080), máx. 5 MB. Se muestra detrás del título de la página de inicio.',
+        hero_image_reset: 'Volver a la foto predeterminada',
         js: {
             now_take_quiz: 'Vídeo terminado: haz el cuestionario para validar la lección.',
             knowledge_evolution: 'Evolución de los conocimientos',
@@ -651,6 +660,9 @@ module.exports = {
         read: 'Ler',
         continue_reading: 'Continuar a ler',
         open: 'Abrir',
+        hero_image: 'Foto da página inicial',
+        hero_image_help: 'JPG, PNG ou WebP, na horizontal (ex. 1920×1080), máx. 5 MB. Aparece atrás do título da página inicial.',
+        hero_image_reset: 'Voltar à foto predefinida',
         js: {
             now_take_quiz: 'Vídeo terminado: faça o questionário para validar a aula.',
             knowledge_evolution: 'Evolução dos conhecimentos',
@@ -819,6 +831,9 @@ module.exports = {
         read: '阅读',
         continue_reading: '继续阅读',
         open: '打开',
+        hero_image: '首页图片',
+        hero_image_help: 'JPG、PNG 或 WebP，横向（例如 1920×1080），最大 5 MB。显示在首页标题的背后。',
+        hero_image_reset: '恢复默认图片',
         js: {
             now_take_quiz: '视频已看完：请参加测验以通过本课时。',
             knowledge_evolution: '知识变化',
@@ -987,6 +1002,9 @@ module.exports = {
         read: 'قراءة',
         continue_reading: 'متابعة القراءة',
         open: 'فتح',
+        hero_image: 'صورة الصفحة الرئيسية',
+        hero_image_help: 'JPG أو PNG أو WebP بالوضع الأفقي (مثل 1920×1080)، بحد أقصى 5 ميغابايت. تظهر خلف عنوان الصفحة الرئيسية.',
+        hero_image_reset: 'العودة إلى الصورة الافتراضية',
         js: {
             now_take_quiz: 'انتهى الفيديو: أجرِ الاختبار لإتمام الدرس.',
             knowledge_evolution: 'تطوّر المعارف',

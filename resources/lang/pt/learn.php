@@ -151,6 +151,9 @@ Quais são números pares?
     'read' => 'Ler',
     'continue_reading' => 'Continuar a ler',
     'open' => 'Abrir',
+    'hero_image' => 'Foto da página inicial',
+    'hero_image_help' => 'JPG, PNG ou WebP, na horizontal (ex. 1920×1080), máx. 5 MB. Aparece atrás do título da página inicial.',
+    'hero_image_reset' => 'Voltar à foto predefinida',
     'js' => [
         'now_take_quiz' => 'Vídeo terminado: faça o questionário para validar a aula.',
         'knowledge_evolution' => 'Evolução dos conhecimentos',

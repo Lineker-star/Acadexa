@@ -151,6 +151,9 @@ return [
     'read' => '阅读',
     'continue_reading' => '继续阅读',
     'open' => '打开',
+    'hero_image' => '首页图片',
+    'hero_image_help' => 'JPG、PNG 或 WebP，横向（例如 1920×1080），最大 5 MB。显示在首页标题的背后。',
+    'hero_image_reset' => '恢复默认图片',
     'js' => [
         'now_take_quiz' => '视频已看完：请参加测验以通过本课时。',
         'knowledge_evolution' => '知识变化',

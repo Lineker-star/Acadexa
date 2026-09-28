@@ -58,6 +58,13 @@ return [
         'bi-building', 'bi-tools', 'bi-calculator', 'bi-eyedropper', 'bi-dribbble', 'bi-folder',
     ],
 
+    // Home page photo. Admins can replace it in Settings; the default one is under CC BY-SA 4.0 and must be credited.
+    'hero' => [
+        'default_image'  => '/images/hero.jpg',
+        'default_credit' => 'Photo © Serieminou · CC BY-SA 4.0 · Wikimedia Commons',
+        'credit_url'     => 'https://commons.wikimedia.org/wiki/File:Africa_Environnement_2023_Atelier_%C3%A0_Dschang.jpg',
+    ],
+
     // Days before the end of the trial at which the reminder e-mail is sent.
     'trial_reminder_days' => [3, 1],
 ];

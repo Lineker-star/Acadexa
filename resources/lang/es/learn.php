@@ -151,6 +151,9 @@ return [
     'read' => 'Leer',
     'continue_reading' => 'Seguir leyendo',
     'open' => 'Abrir',
+    'hero_image' => 'Foto de la página de inicio',
+    'hero_image_help' => 'JPG, PNG o WebP, horizontal (p. ej. 1920×1080), máx. 5 MB. Se muestra detrás del título de la página de inicio.',
+    'hero_image_reset' => 'Volver a la foto predeterminada',
     'js' => [
         'now_take_quiz' => 'Vídeo terminado: haz el cuestionario para validar la lección.',
         'knowledge_evolution' => 'Evolución de los conocimientos',

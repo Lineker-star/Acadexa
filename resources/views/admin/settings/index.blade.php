@@ -7,7 +7,7 @@
     <div class="col-lg-8">
         <div class="bg-white rounded-xl shadow-brand p-4">
             <h5 class="mb-4">{{ __('Site Settings') }}</h5>
-            <form method="POST" action="{{ route('admin.settings.update') }}">
+            <form method="POST" action="{{ route('admin.settings.update') }}" enctype="multipart/form-data">
                 @csrf
 
                 <h6 class="fw-bold text-muted mb-3">{{ __('General') }}</h6>
@@ -21,6 +21,24 @@
                         <label class="form-label small fw-bold">{{ __('Trial Days (Default: 30)') }}</label>
                         <input type="number" name="trial_days" class="form-control" min="1" max="365"
                                value="{{ $settings['trial_days'] ?? 30 }}">
+                    </div>
+                </div>
+
+                <h6 class="fw-bold text-muted mb-3">{{ __('learn.hero_image') }}</h6>
+                <div class="row g-3 mb-4 align-items-center">
+                    <div class="col-md-5">
+                        <img src="{{ \App\Support\Branding::heroUrl() }}" alt="" class="img-fluid rounded border" style="aspect-ratio:16/9;object-fit:cover;width:100%">
+                    </div>
+                    <div class="col-md-7">
+                        <input type="file" name="hero_image" class="form-control @error('hero_image') is-invalid @enderror" accept="image/jpeg,image/png,image/webp">
+                        @error('hero_image')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        <div class="form-text">{{ __('learn.hero_image_help') }}</div>
+                        @if(! empty($settings['hero_image']))
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" name="remove_hero_image" value="1" id="removeHero">
+                                <label class="form-check-label small" for="removeHero">{{ __('learn.hero_image_reset') }}</label>
+                            </div>
+                        @endif
                     </div>
                 </div>
 

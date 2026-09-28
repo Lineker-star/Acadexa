@@ -151,6 +151,9 @@ Which of these are even numbers?
     'read' => 'Read',
     'continue_reading' => 'Continue reading',
     'open' => 'Open',
+    'hero_image' => 'Home page photo',
+    'hero_image_help' => 'JPG, PNG or WebP, landscape (e.g. 1920×1080), max. 5 MB. Shown behind the title of the home page.',
+    'hero_image_reset' => 'Go back to the default photo',
     'js' => [
         'now_take_quiz' => 'Video finished: take the quiz to validate the lesson.',
         'knowledge_evolution' => 'Knowledge evolution',

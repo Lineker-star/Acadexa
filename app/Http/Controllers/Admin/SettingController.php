@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
 {
@@ -34,10 +35,24 @@ class SettingController extends Controller
             'maintenance_mode'           => ['nullable', 'in:0,1'],
             'allow_registration'         => ['nullable', 'in:0,1'],
             'require_email_verification' => ['nullable', 'in:0,1'],
+            'hero_image'        => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
+            'remove_hero_image' => ['nullable', 'boolean'],
         ]);
+        unset($data['hero_image'], $data['remove_hero_image']);
 
         foreach ($data as $key => $value) {
             Setting::set($key, $value);
+        }
+
+        // Home page photo: stored on the public disk, the default photo is used otherwise.
+        $current = Setting::get('hero_image');
+        if ($request->hasFile('hero_image') || $request->boolean('remove_hero_image')) {
+            if ($current) {
+                Storage::disk('public')->delete($current);
+            }
+            Setting::set('hero_image', $request->hasFile('hero_image')
+                ? $request->file('hero_image')->store('branding', 'public')
+                : '');
         }
 
         Cache::forget('site_settings');

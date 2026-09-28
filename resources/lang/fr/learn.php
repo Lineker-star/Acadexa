@@ -151,6 +151,9 @@ Lesquels sont des nombres pairs ?
     'read' => 'Lire',
     'continue_reading' => 'Reprendre la lecture',
     'open' => 'Ouvrir',
+    'hero_image' => 'Photo de la page d’accueil',
+    'hero_image_help' => 'JPG, PNG ou WebP, au format paysage (ex. 1920×1080), 5 Mo max. Affichée derrière le titre de la page d’accueil.',
+    'hero_image_reset' => 'Revenir à la photo par défaut',
     'js' => [
         'now_take_quiz' => 'Vidéo terminée : passez le quiz pour valider la leçon.',
         'knowledge_evolution' => 'Évolution des connaissances',
