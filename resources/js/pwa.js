@@ -19,6 +19,11 @@ const t = (key, vars = {}) => Object.entries(vars).reduce(
 );
 const currentUserId = Number(document.body?.dataset.userId || 0) || null;
 
+// Installed app: iOS Safari does not support the display-mode media query, it exposes navigator.standalone.
+if (window.navigator.standalone === true || window.matchMedia?.('(display-mode: standalone)').matches) {
+    document.documentElement.classList.add('is-standalone');
+}
+
 // ─── Service worker ───────────────────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

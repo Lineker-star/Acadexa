@@ -43,4 +43,11 @@ class HomeHeroTest extends LmsTestCase
         Storage::disk('public')->assertMissing($path);
         $this->get('/')->assertOk()->assertSee("url('/images/hero.svg')", false);
     }
+
+    public function test_footer_only_on_the_home_page(): void
+    {
+        $this->get('/')->assertOk()->assertSee('acadexxa-footer', false);
+        $this->get(route('courses.index'))->assertOk()->assertDontSee('acadexxa-footer', false);
+        $this->get(route('contact'))->assertOk()->assertDontSee('acadexxa-footer', false);
+    }
 }
