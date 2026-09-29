@@ -176,3 +176,26 @@
 .media-viewer .page-info { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .library-card { display: flex; gap: .9rem; align-items: center; padding: .9rem 1rem; border: 1px solid var(--border, #E5E7EB); border-radius: .75rem; background: #fff; }
 .library-card .cover { width: 3rem; height: 3.8rem; border-radius: .4rem; display: grid; place-items: center; background: #EEF3FF; color: var(--bs-primary); font-size: 1.5rem; flex-shrink: 0; }
+
+/* ─── Course content protection (see resources/js/content-protection.js) ─────── */
+[data-protected] { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+[data-protected] input, [data-protected] textarea { -webkit-user-select: text; user-select: text; }
+.wm-layer { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 5; }
+.wm-tiles { position: absolute; inset: -50%; display: flex; flex-wrap: wrap; gap: 90px 120px; align-content: center; justify-content: center; transform: rotate(-24deg); }
+.wm-tiles span { font-size: 13px; font-weight: 600; color: rgba(128,128,128,.13); white-space: nowrap; }
+.video-stage .wm-tiles span, .media-viewer .wm-tiles span { color: rgba(255,255,255,.10); }
+.wm-moving { position: absolute; font-size: 14px; font-weight: 700; color: rgba(128,128,128,.35); white-space: nowrap; transition: top 1.2s ease, left 1.2s ease; }
+.video-stage .wm-moving, .media-viewer .wm-moving { color: rgba(255,255,255,.38); text-shadow: 0 1px 2px rgba(0,0,0,.4); }
+.wm-shield { position: absolute; inset: 0; z-index: 6; display: none; align-items: center; justify-content: center; text-align: center; padding: 1rem;
+             background: rgba(10,42,94,.92); color: #fff; font-weight: 600; }
+html.content-shielded [data-protected] > :not(.wm-shield) { filter: blur(18px); }
+html.content-shielded .wm-shield { display: flex; }
+.video-stage { position: relative; }
+.video-stage:fullscreen, .video-stage:-webkit-full-screen { display: flex; align-items: center; justify-content: center; }
+.video-stage:fullscreen .ratio { max-height: 100vh; width: 100%; }
+.wm-fullscreen { position: absolute; top: .6rem; inset-inline-end: .6rem; z-index: 7; border: 0; border-radius: .4rem; padding: .35rem .5rem;
+                 background: rgba(0,0,0,.45); color: #fff; line-height: 1; }
+.wm-fullscreen:hover { background: rgba(0,0,0,.7); }
+@media print {
+    [data-protected], .media-viewer { display: none !important; }
+}

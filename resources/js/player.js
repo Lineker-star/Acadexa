@@ -214,7 +214,8 @@ function initYoutube(tracker) {
             width: '100%',
             height: '100%',
             playerVars: {
-                rel: 0, modestbranding: 1, playsinline: 1, iv_load_policy: 3,
+                // fs: 0 — fullscreen goes through our button so that the watermark stays visible.
+                rel: 0, modestbranding: 1, playsinline: 1, iv_load_policy: 3, fs: 0,
                 start: config.resumeAt ? Math.floor(config.resumeAt) : 0,
                 hl: document.documentElement.lang || 'fr',
                 origin: window.location.origin,

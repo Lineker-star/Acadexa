@@ -309,6 +309,15 @@ Aucun emoji : toutes les icônes sont des **SVG** (jeu Bootstrap Icons) regroup�
 
 Vidéos : **20 Mo maximum** par leçon (`LMS_VIDEO_MAX_MB`), envoyées par morceaux de 1 Mo.
 
+### Protection des contenus de cours
+
+Un site web ne peut pas techniquement interdire une capture d'écran ou un enregistrement de l'écran (c'est le système du téléphone ou de l'ordinateur qui les fait). ACADEXA applique donc les mesures des grandes plateformes () :
+- **filigrane dynamique** (nom, e-mail, n° de l'étudiant, date) sur les vidéos, leçons, quiz et documents, qui se déplace et reste visible en plein écran : une capture qui circule identifie son auteur ;
+- **contenu flouté** dès que la fenêtre perd le focus (outils de capture, changement d'application) et à l'appui sur *Impr. écran* (presse-papiers vidé) ;
+- clic droit, copier, sélection, glisser, impression, téléchargement et « image dans l'image » bloqués sur les contenus.
+
+Pour un blocage réel des enregistrements : vidéos chiffrées **DRM** (service payant : VdoCipher, Mux…) ou **application Android** (emballage de la PWA avec l'option ).
+
 ### Connexion avec Google et vérification en deux étapes
 
 - **Inscription** : un code à 6 chiffres est envoyé par e-mail pour confirmer l'adresse avant l'ouverture du compte (réglable dans Admin → Paramètres). **Un envoi d'e-mails fonctionnel (`MAIL_*`) est donc indispensable en production.**

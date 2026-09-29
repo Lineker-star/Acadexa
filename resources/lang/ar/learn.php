@@ -189,6 +189,9 @@ return [
         'provisional_score' => 'درجة مؤقتة: :score % (:correct/:total)',
         'provisional_passed' => 'ناجح (يُؤكَّد عند عودة الاتصال)',
         'provisional_failed' => 'غير ناجح: يلزم :score %',
+        'fullscreen' => 'ملء الشاشة',
+        'content_hidden' => 'المحتوى مخفي ما دامت النافذة غير نشطة. عُد إلى الصفحة للمتابعة.',
+        'capture_blocked' => 'لا يُسمح بتصوير شاشة الدورات. يظهر اسمك في كل صفحة.',
     ],
     'or' => 'أو',
     'continue_with_google' => 'المتابعة باستخدام Google',
@@ -245,4 +248,5 @@ return [
     'code_from_app' => 'الرمز من التطبيق',
     'code_from_email' => 'الرمز المستلم بالبريد',
     'send_me_a_code' => 'أرسل لي رمزًا',
+    'fullscreen' => 'ملء الشاشة',
 ];

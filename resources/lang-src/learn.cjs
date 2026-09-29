@@ -1055,3 +1055,11 @@ module.exports = {
 // Sign in with Google, confirmation codes, two-factor authentication and profile.
 const auth = require('./learn-auth.cjs');
 for (const locale of Object.keys(module.exports)) Object.assign(module.exports[locale], auth[locale]);
+
+// Course content protection (keys also merged into the "js" block used by the scripts).
+const protect = require('./learn-protect.cjs');
+for (const locale of Object.keys(module.exports)) {
+    const { js, ...rest } = protect[locale];
+    Object.assign(module.exports[locale], rest);
+    Object.assign(module.exports[locale].js, js);
+}

@@ -3,6 +3,7 @@
 import './bootstrap';
 import './pwa';
 import './media-viewer';
+import './content-protection';
 import { icon } from './icons';
 
 document.addEventListener('DOMContentLoaded', () => {

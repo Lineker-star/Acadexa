@@ -189,6 +189,9 @@ Quais são números pares?
         'provisional_score' => 'Pontuação provisória: :score % (:correct/:total)',
         'provisional_passed' => 'aprovado (confirmado quando voltar a ligação)',
         'provisional_failed' => 'não aprovado: são necessários :score %',
+        'fullscreen' => 'Ecrã inteiro',
+        'content_hidden' => 'Conteúdo oculto enquanto a janela não está ativa. Volte à página para continuar.',
+        'capture_blocked' => 'As capturas de ecrã dos cursos não são permitidas. O seu nome aparece em cada página.',
     ],
     'or' => 'ou',
     'continue_with_google' => 'Continuar com o Google',
@@ -245,4 +248,5 @@ Quais são números pares?
     'code_from_app' => 'Código da aplicação',
     'code_from_email' => 'Código recebido por e-mail',
     'send_me_a_code' => 'Enviar-me um código',
+    'fullscreen' => 'Ecrã inteiro',
 ];

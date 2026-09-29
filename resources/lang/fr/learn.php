@@ -189,6 +189,9 @@ Lesquels sont des nombres pairs ?
         'provisional_score' => 'Score provisoire : :score % (:correct/:total)',
         'provisional_passed' => 'validé (confirmé au retour de la connexion)',
         'provisional_failed' => 'non validé : il faut :score %',
+        'fullscreen' => 'Plein écran',
+        'content_hidden' => 'Contenu masqué tant que la fenêtre n’est pas active. Revenez sur la page pour continuer.',
+        'capture_blocked' => 'Les captures d’écran des cours sont interdites. Votre nom figure sur chaque page.',
     ],
     'or' => 'ou',
     'continue_with_google' => 'Continuer avec Google',
@@ -245,4 +248,5 @@ Lesquels sont des nombres pairs ?
     'code_from_app' => 'Code de l’application',
     'code_from_email' => 'Code reçu par e-mail',
     'send_me_a_code' => 'M’envoyer un code',
+    'fullscreen' => 'Plein écran',
 ];

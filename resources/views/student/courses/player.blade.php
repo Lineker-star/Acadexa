@@ -96,7 +96,7 @@
                 </div>
             @elseif($currentQuiz)
                 {{-- ─── Module exercise / final evaluation ─── --}}
-                <div class="lesson-body">
+                <div class="lesson-body" data-protected>
                     @include('student.courses.partials.assessment', [
                         'quiz' => $currentQuiz,
                         'state' => $quizState,
@@ -108,10 +108,11 @@
             @else
                 {{-- ─── Video stage ─── --}}
                 @if($currentLesson->type === 'video' && $currentLesson->hasVideo())
-                    <div class="video-stage">
+                    <div class="video-stage" data-protected>
+                        <button type="button" class="wm-fullscreen" data-protected-fullscreen aria-label="{{ __('learn.fullscreen') }}"><x-icon name="arrows-fullscreen" /></button>
                         <div class="ratio ratio-16x9">
                             @if($kind === 'upload')
-                                <video id="lessonVideo" controls playsinline preload="metadata" controlsList="nodownload" oncontextmenu="return false;"
+                                <video id="lessonVideo" controls playsinline preload="metadata" controlsList="nodownload nofullscreen noremoteplayback" disablePictureInPicture oncontextmenu="return false;"
                                        src="{{ route('media.lesson.video', $currentLesson) }}"></video>
                             @elseif($kind === 'youtube')
                                 <div id="ytPlayer"></div>
@@ -119,7 +120,7 @@
                                 <iframe src="https://player.vimeo.com/video/{{ $currentLesson->vimeoId() }}?title=0&byline=0&portrait=0&dnt=1"
                                         title="{{ $currentLesson->title() }}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
                             @else
-                                <video id="lessonVideo" controls playsinline preload="metadata" src="{{ $currentLesson->video_url }}"></video>
+                                <video id="lessonVideo" controls playsinline preload="metadata" controlsList="nodownload nofullscreen noremoteplayback" disablePictureInPicture src="{{ $currentLesson->video_url }}"></video>
                             @endif
                         </div>
                     </div>
@@ -127,7 +128,7 @@
                     <div class="alert alert-warning m-3">{{ __('lms.video_unavailable') }}</div>
                 @endif
 
-                <div class="lesson-body">
+                <div class="lesson-body" data-protected>
                     <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
                         <div>
                             <div class="small text-muted">{{ $currentLesson->module->title() }}</div>

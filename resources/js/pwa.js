@@ -12,6 +12,7 @@ import {
 } from './offline/downloader';
 import { db } from './offline/db';
 import { syncLibrary } from './offline/library';
+import { forgetWatermark } from './content-protection';
 
 const i18n = window.ACADEXA_I18N || {};
 const t = (key, vars = {}) => Object.entries(vars).reduce(
@@ -113,7 +114,7 @@ document.addEventListener('submit', event => {
     event.preventDefault();
     const done = () => { form.dataset.offlineCleared = '1'; form.submit(); };
     Promise.race([
-        flush().catch(() => {}).then(() => removeAll()),
+        flush().catch(() => {}).then(() => { forgetWatermark(); return removeAll(); }),
         new Promise(resolve => setTimeout(resolve, 2500)),
     ]).finally(done);
 }, true);

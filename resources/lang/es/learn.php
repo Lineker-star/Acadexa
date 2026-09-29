@@ -189,6 +189,9 @@ return [
         'provisional_score' => 'Puntuación provisional: :score % (:correct/:total)',
         'provisional_passed' => 'aprobado (se confirmará al volver la conexión)',
         'provisional_failed' => 'no aprobado: se necesita :score %',
+        'fullscreen' => 'Pantalla completa',
+        'content_hidden' => 'Contenido oculto mientras la ventana no está activa. Vuelve a la página para continuar.',
+        'capture_blocked' => 'Las capturas de pantalla de los cursos no están permitidas. Tu nombre aparece en cada página.',
     ],
     'or' => 'o',
     'continue_with_google' => 'Continuar con Google',
@@ -245,4 +248,5 @@ return [
     'code_from_app' => 'Código de la aplicación',
     'code_from_email' => 'Código recibido por correo',
     'send_me_a_code' => 'Enviarme un código',
+    'fullscreen' => 'Pantalla completa',
 ];

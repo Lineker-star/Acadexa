@@ -189,6 +189,9 @@ return [
         'provisional_score' => '暂定得分：:score %（:correct/:total）',
         'provisional_passed' => '已通过（联网后确认）',
         'provisional_failed' => '未通过：需要 :score %',
+        'fullscreen' => '全屏',
+        'content_hidden' => '窗口未处于活动状态时内容已隐藏。回到页面即可继续。',
+        'capture_blocked' => '禁止对课程进行截屏。你的姓名会显示在每一页上。',
     ],
     'or' => '或',
     'continue_with_google' => '使用 Google 继续',
@@ -245,4 +248,5 @@ return [
     'code_from_app' => '应用中的验证码',
     'code_from_email' => '邮件中的验证码',
     'send_me_a_code' => '给我发送验证码',
+    'fullscreen' => '全屏',
 ];

@@ -27,6 +27,7 @@ function loadPdfJs() {
 export function openMedia({ url, kind, title = '', startAt = 0, onPosition = () => {} }) {
     const viewer = document.createElement('div');
     viewer.className = 'media-viewer';
+    viewer.setAttribute('data-protected', ''); // watermark + blur (content-protection.js)
     viewer.setAttribute('role', 'dialog');
     viewer.setAttribute('aria-modal', 'true');
     viewer.setAttribute('aria-label', title);
@@ -57,7 +58,8 @@ export function openMedia({ url, kind, title = '', startAt = 0, onPosition = () 
     viewer.querySelector('[data-action=close]').addEventListener('click', close);
 
     const fail = () => {
-        body.innerHTML = `<div class="text-center py-5 px-3">${icon('wifi-off', 'fs-1 d-block mb-2')}${esc(navigator.onLine ? t('media_error') : t('media_not_offline'))}</div>`;
+        body.querySelectorAll(':scope > :not(.wm-layer):not(.wm-shield)').forEach(n => n.remove());
+        body.insertAdjacentHTML('afterbegin', `<div class="text-center py-5 px-3">${icon('wifi-off', 'fs-1 d-block mb-2')}${esc(navigator.onLine ? t('media_error') : t('media_not_offline'))}</div>`);
     };
 
     if (kind === 'pdf') {
@@ -69,7 +71,8 @@ export function openMedia({ url, kind, title = '', startAt = 0, onPosition = () 
         el.preload = 'metadata';
         el.src = url;
         el.setAttribute('playsinline', '');
-        el.setAttribute('controlsList', 'nodownload');
+        el.setAttribute('controlsList', 'nodownload nofullscreen noremoteplayback');
+        el.setAttribute('disablepictureinpicture', '');
         el.addEventListener('contextmenu', e => e.preventDefault());
         el.addEventListener('error', fail);
         el.addEventListener('loadedmetadata', () => { if (startAt && startAt < el.duration - 5) el.currentTime = startAt; }, { once: true });
@@ -80,12 +83,13 @@ export function openMedia({ url, kind, title = '', startAt = 0, onPosition = () 
         };
         el.addEventListener('timeupdate', () => { if (Date.now() - last > 15000) { last = Date.now(); report(); } });
         el.addEventListener('pause', report);
-        body.innerHTML = '';
-        body.appendChild(el);
+        body.querySelector('.text-center')?.remove();
+        body.prepend(el);
         cleanup = () => { report(); el.pause(); el.removeAttribute('src'); el.load(); };
     } else {
         body.classList.add('center');
-        body.innerHTML = `<img src="${esc(url)}" alt="${esc(title)}">`;
+        body.querySelector('.text-center')?.remove();
+        body.insertAdjacentHTML('afterbegin', `<img src="${esc(url)}" alt="${esc(title)}" draggable="false">`);
         body.querySelector('img').addEventListener('error', fail);
     }
 
@@ -161,8 +165,8 @@ function renderPdf(url, body, tools, startAt, onPosition, fail) {
         .then(loaded => {
             if (cancelled) return;
             doc = loaded;
-            body.innerHTML = '';
-            body.appendChild(canvas);
+            body.querySelector('.text-center')?.remove();
+            body.prepend(canvas);
             draw();
         })
         .catch(fail);

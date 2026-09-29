@@ -189,6 +189,9 @@ Which of these are even numbers?
         'provisional_score' => 'Provisional score: :score % (:correct/:total)',
         'provisional_passed' => 'passed (confirmed when back online)',
         'provisional_failed' => 'not passed: :score % needed',
+        'fullscreen' => 'Fullscreen',
+        'content_hidden' => 'Content hidden while the window is not active. Come back to the page to continue.',
+        'capture_blocked' => 'Screen captures of the courses are not allowed. Your name is shown on every page.',
     ],
     'or' => 'or',
     'continue_with_google' => 'Continue with Google',
@@ -245,4 +248,5 @@ Which of these are even numbers?
     'code_from_app' => 'Code from the app',
     'code_from_email' => 'Code received by e-mail',
     'send_me_a_code' => 'Send me a code',
+    'fullscreen' => 'Fullscreen',
 ];

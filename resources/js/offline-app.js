@@ -267,7 +267,7 @@ function lessonHtml(course, lesson, done) {
     const module = course.modules.find(m => m.lessons.includes(lesson));
     return `
         ${renderMedia(lesson)}
-        <div class="p-3 p-md-4">
+        <div class="p-3 p-md-4" data-protected>
             <div class="small text-muted">${esc(module?.title)}</div>
             <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
                 <h1 class="h5 fw-bold mb-0">${esc(lesson.title)}</h1>
@@ -293,7 +293,7 @@ function lessonHtml(course, lesson, done) {
 
 function examHtml(course, step, done) {
     return `
-        <div class="p-3 p-md-4">
+        <div class="p-3 p-md-4" data-protected>
             <div class="small text-muted">${esc(step.module.title)}</div>
             <h1 class="h5 fw-bold mb-1">${icon('clipboard-check', 'me-1 text-primary')}${esc(step.quiz.title)}</h1>
             <div class="small text-muted mb-3">${t('questions_n', { count: step.quiz.questions.length })} · ${t('pass_at', { score: step.quiz.passing_score })}
@@ -305,8 +305,10 @@ function examHtml(course, step, done) {
 function renderMedia(lesson) {
     if (lesson.type !== 'video' || !lesson.video) return '';
     if (lesson.video.offline) {
-        return `<div class="video-stage"><div class="ratio ratio-16x9">
-            <video id="offVideo" controls playsinline preload="metadata" src="${esc(lesson.video.url)}"></video></div></div>`;
+        return `<div class="video-stage" data-protected>
+            <button type="button" class="wm-fullscreen" data-protected-fullscreen aria-label="${esc(t('fullscreen'))}">${icon('arrows-fullscreen')}</button>
+            <div class="ratio ratio-16x9">
+            <video id="offVideo" controls playsinline preload="metadata" controlsList="nodownload nofullscreen noremoteplayback" disablepictureinpicture src="${esc(lesson.video.url)}"></video></div></div>`;
     }
     return `<div class="p-4 text-center bg-dark text-white">
         ${icon('wifi-off', 'fs-2 d-block mb-2')}
