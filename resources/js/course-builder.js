@@ -443,8 +443,85 @@ function initQuizBuilder() {
     }
 }
 
+// ─── New course: step-by-step wizard (the course is only created at the last step) ───
+function initCreateWizard() {
+    const form = document.getElementById('courseWizard');
+    if (!form) return;
+    const steps = [...form.querySelectorAll('[data-step]')];
+    const tabs = [...document.querySelectorAll('[data-step-tab]')];
+    const prev = form.querySelector('[data-wizard-prev]');
+    const next = form.querySelector('[data-wizard-next]');
+    const submit = form.querySelector('[data-wizard-submit]');
+    // After a server-side error, open the first step containing an invalid field.
+    let current = Math.max(0, steps.findIndex(step => step.querySelector('.is-invalid')));
+
+    const show = index => {
+        current = index;
+        steps.forEach((step, i) => { step.hidden = i !== index; });
+        tabs.forEach((tab, i) => {
+            tab.classList.toggle('active', i === index);
+            tab.classList.toggle('done', i < index);
+        });
+        prev.hidden = index === 0;
+        next.hidden = index === steps.length - 1;
+        submit.hidden = index !== steps.length - 1;
+        steps[index].querySelector('input, select, textarea')?.focus({ preventScroll: true });
+    };
+
+    // Fields of the current step must be valid before going on.
+    const stepValid = index => [...steps[index].querySelectorAll('input, select, textarea')].every(field => {
+        if (field.checkValidity()) { field.classList.remove('is-invalid'); return true; }
+        field.classList.add('is-invalid');
+        field.reportValidity();
+        return false;
+    });
+
+    next.addEventListener('click', () => { if (stepValid(current)) show(current + 1); });
+    prev.addEventListener('click', () => show(current - 1));
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => {
+        if (i <= current || steps.slice(0, i).every((_, k) => stepValid(k))) show(i);
+    }));
+
+    // "Enter" in a field goes to the next step instead of creating the course early.
+    form.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA' && current < steps.length - 1) {
+            e.preventDefault();
+            next.click();
+        }
+    });
+    form.addEventListener('submit', e => {
+        if (current < steps.length - 1) { e.preventDefault(); next.click(); return; }
+        const invalid = steps.findIndex((_, i) => !stepValid(i));
+        if (invalid !== -1) { e.preventDefault(); show(invalid); return; }
+        submit.disabled = true;
+    });
+
+    show(current);
+}
+
+// ─── Live preview of a YouTube link ([data-youtube-input] + [data-youtube-preview]) ───
+function initYoutubePreview() {
+    document.querySelectorAll('[data-youtube-input]').forEach(input => {
+        const box = input.closest('section, form, div').querySelector('[data-youtube-preview]');
+        if (!box) return;
+        const render = () => {
+            const value = input.value.trim();
+            const id = parseYoutubeId(value);
+            input.classList.toggle('is-invalid', Boolean(value) && !id);
+            box.innerHTML = id ? `<div class="ratio ratio-16x9 rounded overflow-hidden bg-dark">
+                <iframe src="https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1" title="YouTube"
+                        allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`
+                : (value ? `<div class="text-danger small">${t('youtube_invalid')}</div>` : '');
+        };
+        input.addEventListener('input', render);
+        render();
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initCurriculum();
+    initCreateWizard();
+    initYoutubePreview();
     initModuleModal();
     initLessonModal();
     initRichEditors();

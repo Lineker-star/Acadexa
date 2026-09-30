@@ -50,7 +50,9 @@ class CourseController extends Controller
             'duration_hours' => ['required', 'numeric', 'min:0.5', 'max:2000'],
             'price'          => ['nullable', 'numeric', 'min:0'],
             'thumbnail'      => ['nullable', 'image', 'max:4096', 'mimes:jpeg,png,jpg,webp'],
+            'intro_youtube_url' => ['nullable', 'string', 'max:500'],
         ]);
+        $introId = $this->youtubeId($request);
 
         $course = Course::create([
             'instructor_id'  => $request->user()->id,
@@ -62,6 +64,7 @@ class CourseController extends Controller
             'status'         => 'draft',
             'slug'           => Str::slug($data['title']) . '-' . Str::lower(Str::random(5)),
             'thumbnail'      => $this->storeThumbnail($request),
+            'intro_youtube_id' => $introId,
         ]);
 
         CourseTranslation::create([
@@ -117,7 +120,9 @@ class CourseController extends Controller
             'translations.*.what_you_learn'   => ['nullable', 'string', 'max:5000'],
             'translations.*.requirements'     => ['nullable', 'string', 'max:5000'],
             'translations.*.meta_description' => ['nullable', 'string', 'max:300'],
+            'intro_youtube_url'               => ['nullable', 'string', 'max:500'],
         ]);
+        $introId = $this->youtubeId($request);
 
         // The course's main language must always have a title.
         $request->validate([
@@ -144,6 +149,7 @@ class CourseController extends Controller
             'is_sequential'  => $request->boolean('is_sequential'),
             'price'          => $data['price'] ?? $course->price,
             'thumbnail'      => $thumbnail,
+            'intro_youtube_id' => $introId,
         ]);
 
         foreach (self::CONTENT_LOCALES as $locale) {
@@ -243,6 +249,23 @@ class CourseController extends Controller
             'final'    => ['ok' => $finalOk, 'label' => __('learn.check_final_evaluation', ['min' => $min['course']])],
             'thumb'    => ['ok' => (bool) $course->thumbnail, 'label' => __('lms.check_thumbnail')],
         ];
+    }
+
+    /**
+     * YouTube id of the presentation video from any usual link (watch, youtu.be, shorts, embed…).
+     * Empty field = no video; an unreadable link is refused rather than silently ignored.
+     */
+    private function youtubeId(Request $request): ?string
+    {
+        $url = trim((string) $request->input('intro_youtube_url'));
+        if ($url === '') {
+            return null;
+        }
+        $id = \App\Models\Lesson::parseYoutubeId($url);
+        if (! $id) {
+            throw \Illuminate\Validation\ValidationException::withMessages(['intro_youtube_url' => __('lms.youtube_invalid')]);
+        }
+        return $id;
     }
 
     private function storeThumbnail(Request $request): ?string

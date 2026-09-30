@@ -249,4 +249,12 @@ return [
     'code_from_email' => 'الرمز المستلم بالبريد',
     'send_me_a_code' => 'أرسل لي رمزًا',
     'fullscreen' => 'ملء الشاشة',
+    'wizard_help' => 'ثلاث خطوات سريعة. لا تُنشأ الدورة إلا في النهاية، ثم تضيف الوحدات والدروس.',
+    'wizard_step_info' => 'المعلومات',
+    'wizard_step_category' => 'الفئة والصورة',
+    'wizard_step_video' => 'فيديو التعريف',
+    'thumbnail_generated_help' => 'بدون صورة، يتم إنشاء غلاف انطلاقًا من العنوان.',
+    'intro_video' => 'فيديو التعريف',
+    'intro_video_help' => 'اختياري. الصق رابط فيديو على YouTube (مثل https://youtu.be/…): يُعرض في صفحة الدورة داخل المنصة.',
+    'create_course' => 'إنشاء الدورة',
 ];

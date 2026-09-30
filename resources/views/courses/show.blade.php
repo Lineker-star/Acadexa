@@ -45,6 +45,18 @@
         <div class="row g-5">
             <!-- Main Content -->
             <div class="col-lg-8">
+                <!-- Presentation video, played inside the platform -->
+                @if($course->intro_youtube_id)
+                <div class="bg-white rounded-xl shadow-brand p-3 mb-4">
+                    <h3 class="h5 mb-3 px-1"><x-icon name="play-circle" class="text-primary me-1" />{{ __('learn.intro_video') }}</h3>
+                    <div class="ratio ratio-16x9 rounded overflow-hidden bg-dark">
+                        <iframe src="https://www.youtube-nocookie.com/embed/{{ $course->intro_youtube_id }}?rel=0&modestbranding=1&playsinline=1&hl={{ app()->getLocale() }}"
+                                title="{{ __('learn.intro_video') }} — {{ $course->title() }}" loading="lazy"
+                                allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
+                    </div>
+                </div>
+                @endif
+
                 <!-- What You Learn -->
                 @if($trans?->what_you_learn)
                 <div class="bg-white rounded-xl shadow-brand p-4 mb-4">

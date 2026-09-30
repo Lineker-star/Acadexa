@@ -199,3 +199,10 @@ html.content-shielded .wm-shield { display: flex; }
 @media print {
     [data-protected], .media-viewer { display: none !important; }
 }
+
+/* ─── New course wizard ─────────────────────────────────────────────────────── */
+.wizard-steps li { display: flex; align-items: center; gap: .45rem; padding: .4rem .8rem; border-radius: 2rem; background: #F1F5F9; color: #64748B; font-size: .875rem; cursor: pointer; }
+.wizard-steps li .num { display: inline-grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: #CBD5E1; color: #fff; font-weight: 700; font-size: .8rem; }
+.wizard-steps li.active { background: #EEF3FF; color: var(--bs-primary); font-weight: 600; }
+.wizard-steps li.active .num { background: var(--bs-primary); }
+.wizard-steps li.done .num { background: #10B981; }

@@ -249,4 +249,12 @@ Quais são números pares?
     'code_from_email' => 'Código recebido por e-mail',
     'send_me_a_code' => 'Enviar-me um código',
     'fullscreen' => 'Ecrã inteiro',
+    'wizard_help' => 'Três passos rápidos. O curso só é criado no fim; depois vai adicionar os módulos e as aulas.',
+    'wizard_step_info' => 'Informações',
+    'wizard_step_category' => 'Categoria e imagem',
+    'wizard_step_video' => 'Vídeo de apresentação',
+    'thumbnail_generated_help' => 'Sem imagem, é gerada uma capa a partir do título.',
+    'intro_video' => 'Vídeo de apresentação',
+    'intro_video_help' => 'Opcional. Cole a ligação de um vídeo do YouTube (ex. https://youtu.be/…): é reproduzido na página do curso, dentro da plataforma.',
+    'create_course' => 'Criar o curso',
 ];

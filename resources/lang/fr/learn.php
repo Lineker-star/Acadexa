@@ -249,4 +249,12 @@ Lesquels sont des nombres pairs ?
     'code_from_email' => 'Code reçu par e-mail',
     'send_me_a_code' => 'M’envoyer un code',
     'fullscreen' => 'Plein écran',
+    'wizard_help' => 'Trois étapes rapides. Le cours n’est créé qu’à la fin ; vous ajouterez ensuite les modules et les leçons.',
+    'wizard_step_info' => 'Informations',
+    'wizard_step_category' => 'Catégorie et image',
+    'wizard_step_video' => 'Vidéo de présentation',
+    'thumbnail_generated_help' => 'Sans image, une couverture est générée à partir du titre.',
+    'intro_video' => 'Vidéo de présentation',
+    'intro_video_help' => 'Facultatif. Collez le lien d’une vidéo YouTube (ex. https://youtu.be/…) : elle est lue sur la page du cours, dans la plateforme.',
+    'create_course' => 'Créer le cours',
 ];

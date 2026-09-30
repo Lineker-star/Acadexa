@@ -249,4 +249,12 @@ return [
     'code_from_email' => '邮件中的验证码',
     'send_me_a_code' => '给我发送验证码',
     'fullscreen' => '全屏',
+    'wizard_help' => '三个简单步骤。课程在最后一步才会创建，之后再添加模块和课时。',
+    'wizard_step_info' => '基本信息',
+    'wizard_step_category' => '分类与图片',
+    'wizard_step_video' => '介绍视频',
+    'thumbnail_generated_help' => '未上传图片时，将根据标题自动生成封面。',
+    'intro_video' => '介绍视频',
+    'intro_video_help' => '可选。粘贴 YouTube 视频链接（如 https://youtu.be/…），视频将在平台内的课程页面播放。',
+    'create_course' => '创建课程',
 ];

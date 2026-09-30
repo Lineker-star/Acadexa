@@ -249,4 +249,12 @@ Which of these are even numbers?
     'code_from_email' => 'Code received by e-mail',
     'send_me_a_code' => 'Send me a code',
     'fullscreen' => 'Fullscreen',
+    'wizard_help' => 'Three short steps. The course is only created at the end; you will then add modules and lessons.',
+    'wizard_step_info' => 'Information',
+    'wizard_step_category' => 'Category and picture',
+    'wizard_step_video' => 'Presentation video',
+    'thumbnail_generated_help' => 'Without a picture, a cover is generated from the title.',
+    'intro_video' => 'Presentation video',
+    'intro_video_help' => 'Optional. Paste the link of a YouTube video (e.g. https://youtu.be/…): it plays on the course page, inside the platform.',
+    'create_course' => 'Create the course',
 ];

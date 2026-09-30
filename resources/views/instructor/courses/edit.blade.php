@@ -107,6 +107,16 @@
                         </div>
                     </div>
 
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold" for="intro_youtube_url"><x-icon name="youtube" class="me-1 text-danger" />{{ __('learn.intro_video') }}</label>
+                        <input type="text" name="intro_youtube_url" id="intro_youtube_url" class="form-control @error('intro_youtube_url') is-invalid @enderror" data-youtube-input
+                               value="{{ old('intro_youtube_url', $course->intro_youtube_id ? 'https://www.youtube.com/watch?v=' . $course->intro_youtube_id : '') }}"
+                               placeholder="{{ __('https://www.youtube.com/watch?v=…') }}">
+                        @error('intro_youtube_url')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        <div class="form-text">{{ __('learn.intro_video_help') }}</div>
+                        <div class="mt-2" style="max-width:480px" data-youtube-preview></div>
+                    </div>
+
                     <div class="form-check form-switch mb-4">
                         <input class="form-check-input" type="checkbox" role="switch" name="is_sequential" value="1" id="isSequential" @checked($course->is_sequential)>
                         <label class="form-check-label" for="isSequential"><strong>{{ __('lms.sequential') }}</strong> — <span class="text-muted">{{ __('lms.sequential_help') }}</span></label>

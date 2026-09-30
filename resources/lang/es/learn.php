@@ -249,4 +249,12 @@ return [
     'code_from_email' => 'Código recibido por correo',
     'send_me_a_code' => 'Enviarme un código',
     'fullscreen' => 'Pantalla completa',
+    'wizard_help' => 'Tres pasos rápidos. El curso solo se crea al final; después añadirás los módulos y las lecciones.',
+    'wizard_step_info' => 'Información',
+    'wizard_step_category' => 'Categoría e imagen',
+    'wizard_step_video' => 'Vídeo de presentación',
+    'thumbnail_generated_help' => 'Sin imagen, se genera una portada a partir del título.',
+    'intro_video' => 'Vídeo de presentación',
+    'intro_video_help' => 'Opcional. Pega el enlace de un vídeo de YouTube (p. ej. https://youtu.be/…): se reproduce en la página del curso, dentro de la plataforma.',
+    'create_course' => 'Crear el curso',
 ];

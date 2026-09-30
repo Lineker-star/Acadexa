@@ -1063,3 +1063,7 @@ for (const locale of Object.keys(module.exports)) {
     Object.assign(module.exports[locale], rest);
     Object.assign(module.exports[locale].js, js);
 }
+
+// New course wizard and presentation video.
+const course = require('./learn-course.cjs');
+for (const locale of Object.keys(module.exports)) Object.assign(module.exports[locale], course[locale]);

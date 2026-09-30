@@ -13,7 +13,7 @@ class Course extends Model
     protected $fillable = [
         'instructor_id', 'category_id', 'thumbnail', 'level', 'price',
         'status', 'featured', 'duration_minutes', 'duration_hours', 'language',
-        'is_sequential', 'slug', 'admin_feedback', 'published_at',
+        'is_sequential', 'slug', 'admin_feedback', 'published_at', 'intro_youtube_id',
     ];
 
     protected function casts(): array
