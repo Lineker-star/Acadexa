@@ -87,12 +87,8 @@
 
                 {{-- ─── Step 3: presentation video (YouTube) ─── --}}
                 <section data-step="2">
-                    <label class="form-label fw-semibold" for="intro_youtube_url"><x-icon name="youtube" class="me-1 text-danger" />{{ __('learn.intro_video') }}</label>
-                    <input type="text" name="intro_youtube_url" id="intro_youtube_url" class="form-control @error('intro_youtube_url') is-invalid @enderror"
-                           value="{{ old('intro_youtube_url') }}" placeholder="{{ __('https://www.youtube.com/watch?v=…') }}" data-youtube-input>
-                    @error('intro_youtube_url')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    <div class="form-text">{{ __('learn.intro_video_help') }}</div>
-                    <div class="mt-3" data-youtube-preview></div>
+                    <p class="small text-muted">{{ __('learn.intro_video_optional') }}</p>
+                    @include('instructor.courses.partials.intro-video', ['course' => null])
                 </section>
 
                 <div class="d-flex justify-content-between gap-2 mt-4">

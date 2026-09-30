@@ -64,8 +64,8 @@ class CourseController extends Controller
             'status'         => 'draft',
             'slug'           => Str::slug($data['title']) . '-' . Str::lower(Str::random(5)),
             'thumbnail'      => $this->storeThumbnail($request),
-            'intro_youtube_id' => $introId,
         ]);
+        $this->applyIntroVideo($request, $course, $introId);
 
         CourseTranslation::create([
             'course_id'   => $course->id,
@@ -149,8 +149,8 @@ class CourseController extends Controller
             'is_sequential'  => $request->boolean('is_sequential'),
             'price'          => $data['price'] ?? $course->price,
             'thumbnail'      => $thumbnail,
-            'intro_youtube_id' => $introId,
         ]);
+        $this->applyIntroVideo($request, $course, $introId);
 
         foreach (self::CONTENT_LOCALES as $locale) {
             $trans = $data['translations'][$locale] ?? [];
@@ -247,8 +247,32 @@ class CourseController extends Controller
             'quizzes'  => ['ok' => $quizzesOk, 'label' => __('learn.check_lesson_quizzes', ['min' => $min['lesson']])],
             'exercises' => ['ok' => $exercisesOk, 'label' => __('learn.check_module_exercises', ['min' => $min['module']])],
             'final'    => ['ok' => $finalOk, 'label' => __('learn.check_final_evaluation', ['min' => $min['course']])],
-            'thumb'    => ['ok' => (bool) $course->thumbnail, 'label' => __('lms.check_thumbnail')],
         ];
+    }
+
+    /**
+     * Presentation video: an uploaded file (token of a finished chunked upload) or a YouTube link.
+     * Only one is kept. An emptied YouTube field removes the link; "remove_intro_video" removes the file.
+     */
+    private function applyIntroVideo(Request $request, Course $course, ?string $youtubeId): void
+    {
+        $upload = IntroVideoController::pending($request->user()->id, $request->input('intro_video_token'));
+        $deleteFile = fn () => $course->intro_video_path && Storage::disk('local')->delete($course->intro_video_path);
+
+        if ($upload) {
+            $deleteFile();
+            $target = "videos/course_{$course->id}/intro-" . Str::uuid() . '.' . pathinfo($upload['path'], PATHINFO_EXTENSION);
+            Storage::disk('local')->move($upload['path'], $target);
+            $course->update(['intro_video_path' => $target, 'intro_video_mime' => $upload['mime'], 'intro_video_size' => $upload['size'], 'intro_youtube_id' => null]);
+        } elseif ($youtubeId) {
+            $deleteFile();
+            $course->update(['intro_youtube_id' => $youtubeId, 'intro_video_path' => null, 'intro_video_mime' => null, 'intro_video_size' => null]);
+        } elseif ($request->boolean('remove_intro_video')) {
+            $deleteFile();
+            $course->update(['intro_youtube_id' => null, 'intro_video_path' => null, 'intro_video_mime' => null, 'intro_video_size' => null]);
+        } else {
+            $course->update(['intro_youtube_id' => null]);
+        }
     }
 
     /**

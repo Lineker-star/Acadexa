@@ -14,7 +14,10 @@ class Course extends Model
         'instructor_id', 'category_id', 'thumbnail', 'level', 'price',
         'status', 'featured', 'duration_minutes', 'duration_hours', 'language',
         'is_sequential', 'slug', 'admin_feedback', 'published_at', 'intro_youtube_id',
+        'intro_video_path', 'intro_video_mime', 'intro_video_size',
     ];
+
+    protected $hidden = ['intro_video_path'];
 
     protected function casts(): array
     {
@@ -59,6 +62,11 @@ class Course extends Model
     public function finalExam()
     {
         return $this->hasOne(Quiz::class)->where('scope', Quiz::SCOPE_COURSE);
+    }
+
+    public function hasIntroVideo(): bool
+    {
+        return (bool) ($this->intro_youtube_id || $this->intro_video_path);
     }
 
     public function books()

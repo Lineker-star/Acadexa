@@ -65,10 +65,10 @@
                     <td>
                         <div class="d-flex gap-1">
                             <a href="{{ route('admin.courses.show', $course) }}" class="btn btn-primary btn-sm"><x-icon name="eye" /></a>
-                            @if($course->status === 'pending')
-                            <form method="POST" action="{{ route('admin.courses.approve', $course) }}">
+                            @if($course->status !== 'published')
+                            <form method="POST" action="{{ route('admin.courses.approve', $course) }}" data-confirm="{{ __('learn.publish_confirm') }}">
                                 @csrf
-                                <button class="btn btn-success btn-sm" title="{{ __('Approve') }}"><x-icon name="check" /></button>
+                                <button class="btn btn-success btn-sm" title="{{ $course->status === 'pending' ? __('Approve') : __('learn.publish_now') }}"><x-icon name="check" /></button>
                             </form>
                             @endif
                             <form method="POST" action="{{ route('admin.courses.feature', $course) }}">

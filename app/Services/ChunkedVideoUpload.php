@@ -50,10 +50,34 @@ class ChunkedVideoUpload
      */
     public function finalize(Lesson $lesson, int $userId, string $uploadId, int $total, string $originalName): Lesson
     {
+        $ext = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+        $relative = "videos/course_{$lesson->module->course_id}/" . Str::uuid() . '.' . $ext;
+        $video = $this->assemble($userId, $uploadId, $total, $originalName, $relative);
+
+        $this->deleteVideo($lesson);
+
+        $lesson->update([
+            'video_source'        => Lesson::VIDEO_UPLOAD,
+            'video_path'          => $video['path'],
+            'video_original_name' => Str::limit($originalName, 250, ''),
+            'video_size'          => $video['size'],
+            'video_mime'          => $video['mime'],
+            'video_url'           => null,
+            'youtube_id'          => null,
+        ]);
+
+        return $lesson;
+    }
+
+    /**
+     * Joins the chunks into $relative (private disk) and checks the result is a real video.
+     *
+     * @return array{path: string, mime: string, size: int}
+     */
+    public function assemble(int $userId, string $uploadId, int $total, string $originalName, string $relative): array
+    {
         $dir = $this->chunkDir($userId, $uploadId);
         $ext = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
-        $courseId = $lesson->module->course_id;
-        $relative = "videos/course_{$courseId}/" . Str::uuid() . '.' . $ext;
         $target = Storage::disk('local')->path($relative);
         File::ensureDirectoryExists(dirname($target));
 
@@ -88,19 +112,7 @@ class ChunkedVideoUpload
             $mime = 'video/mp4';
         }
 
-        $this->deleteVideo($lesson);
-
-        $lesson->update([
-            'video_source'        => Lesson::VIDEO_UPLOAD,
-            'video_path'          => $relative,
-            'video_original_name' => Str::limit($originalName, 250, ''),
-            'video_size'          => filesize($target),
-            'video_mime'          => $mime,
-            'video_url'           => null,
-            'youtube_id'          => null,
-        ]);
-
-        return $lesson;
+        return ['path' => $relative, 'mime' => $mime, 'size' => filesize($target)];
     }
 
     public function deleteVideo(Lesson $lesson): void
@@ -113,6 +125,13 @@ class ChunkedVideoUpload
     /** Removes abandoned chunk folders (scheduled daily). */
     public function purgeStale(int $olderThanHours = 24): int
     {
+        // Presentation videos uploaded in the creation wizard but never attached to a course.
+        foreach (Storage::disk('local')->files('videos/intro_tmp') as $file) {
+            if (Storage::disk('local')->lastModified($file) < time() - $olderThanHours * 3600) {
+                Storage::disk('local')->delete($file);
+            }
+        }
+
         $root = Storage::disk('local')->path('chunks');
         if (! is_dir($root)) {
             return 0;

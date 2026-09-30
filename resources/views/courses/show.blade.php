@@ -15,6 +15,16 @@
     </div>
 </div>
 
+@if($course->status !== 'published')
+<div class="alert alert-warning rounded-0 mb-0 text-center small">
+    <x-icon name="eye" class="me-1" />{{ __('learn.preview_unpublished', ['status' => __('lms.status_' . $course->status)]) }}
+    @if(auth()->user()?->isAdmin())
+        <form method="POST" action="{{ route('admin.courses.approve', $course) }}" class="d-inline ms-2" data-confirm="{{ __('learn.publish_confirm') }}">
+            @csrf <button class="btn btn-sm btn-success">{{ __('learn.publish_now') }}</button>
+        </form>
+    @endif
+</div>
+@endif
 <!-- Hero -->
 <section class="hero-section py-5"
          style="min-height:380px;background-image:url('{{ $course->thumbnailUrl() }}');"
@@ -46,13 +56,17 @@
             <!-- Main Content -->
             <div class="col-lg-8">
                 <!-- Presentation video, played inside the platform -->
-                @if($course->intro_youtube_id)
+                @if($course->hasIntroVideo())
                 <div class="bg-white rounded-xl shadow-brand p-3 mb-4">
                     <h3 class="h5 mb-3 px-1"><x-icon name="play-circle" class="text-primary me-1" />{{ __('learn.intro_video') }}</h3>
                     <div class="ratio ratio-16x9 rounded overflow-hidden bg-dark">
+                        @if($course->intro_video_path)
+                        <video controls playsinline preload="metadata" controlsList="nodownload" src="{{ route('media.course.intro', $course) }}"></video>
+                        @else
                         <iframe src="https://www.youtube-nocookie.com/embed/{{ $course->intro_youtube_id }}?rel=0&modestbranding=1&playsinline=1&hl={{ app()->getLocale() }}"
                                 title="{{ __('learn.intro_video') }} — {{ $course->title() }}" loading="lazy"
                                 allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
+                        @endif
                     </div>
                 </div>
                 @endif

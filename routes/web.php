@@ -75,6 +75,7 @@ Route::get('/offline', [OfflineController::class, 'index'])->name('offline');
 
 Route::get('/media/lessons/{lesson}/video', [MediaController::class, 'video'])->name('media.lesson.video');
 Route::get('/media/resources/{resource}', [MediaController::class, 'resource'])->name('media.resource');
+Route::get('/media/courses/{course}/intro', [MediaController::class, 'courseIntro'])->whereNumber('course')->name('media.course.intro');
 Route::get('/media/books/{book}', [MediaController::class, 'book'])->middleware('auth')->name('media.book');
 Route::get('/media/submissions/{submission}', [MediaController::class, 'submission'])->middleware('auth')->name('media.submission');
 
@@ -197,6 +198,7 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'verified'
 
         Route::resource('courses', InstructorCourse::class)->except(['show']);
         Route::post('courses/{course}/submit', [InstructorCourse::class, 'submit'])->name('courses.submit');
+        Route::post('intro-video/chunk', [\App\Http\Controllers\Instructor\IntroVideoController::class, 'chunk'])->middleware('throttle:120,1')->name('intro-video.chunk');
 
         // Curriculum: modules
         Route::post('courses/{course}/modules', [InstructorModule::class, 'store'])->name('modules.store');

@@ -63,6 +63,16 @@ class MediaController extends Controller
         return $this->serve($path, $book->original_name, $book->mime, false);
     }
 
+    /** Presentation video of a course: public once the course is published, otherwise its instructor and admins. */
+    public function courseIntro(Request $request, \App\Models\Course $course): BinaryFileResponse
+    {
+        $user = $request->user();
+        abort_unless($course->status === 'published' || ($user && ($user->isAdmin() || $course->instructor_id === $user->id)), 404);
+        abort_unless($course->intro_video_path && Storage::disk('local')->exists($course->intro_video_path), 404);
+
+        return $this->serve(Storage::disk('local')->path($course->intro_video_path), 'presentation.' . pathinfo($course->intro_video_path, PATHINFO_EXTENSION), $course->intro_video_mime, false);
+    }
+
     /** Range-capable response (seeking in audio/video, progressive PDF loading). */
     private function serve(string $path, string $name, ?string $mime, bool $download): BinaryFileResponse
     {

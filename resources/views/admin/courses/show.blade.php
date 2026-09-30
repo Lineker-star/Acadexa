@@ -20,12 +20,26 @@
                 @if($course->featured)<span class="badge bg-info text-dark"><x-icon name="star-fill" class="me-1" />{{ __('Featured') }}</span>@endif
             </div>
 
+            {{-- Publish: approval of a submitted course, or direct publication by an admin --}}
+            @if($course->status !== 'published')
+                @if($course->status !== 'pending')
+                    <div class="alert alert-light border small py-2">{{ __('learn.not_submitted_help', ['status' => __('lms.status_' . $course->status)]) }}</div>
+                @endif
+                @if($missing->isNotEmpty())
+                    <div class="alert alert-warning small py-2">
+                        <div class="fw-semibold mb-1"><x-icon name="exclamation-triangle" class="me-1" />{{ __('learn.publish_missing') }}</div>
+                        <ul class="mb-0 ps-3">@foreach($missing as $label)<li>{{ $label }}</li>@endforeach</ul>
+                    </div>
+                @endif
+                <form method="POST" action="{{ route('admin.courses.approve', $course) }}" class="mb-2"
+                      @if($missing->isNotEmpty()) data-confirm="{{ __('learn.publish_anyway_confirm') }}" @endif>
+                    @csrf
+                    <button class="btn btn-success w-100 mb-2"><x-icon name="check-circle-fill" class="me-1" />{{ $course->status === 'pending' ? __('Approve & Publish') : __('learn.publish_now') }}</button>
+                </form>
+            @endif
+
             <!-- Admin Feedback (for rejection) -->
             @if($course->status === 'pending')
-            <form method="POST" action="{{ route('admin.courses.approve', $course) }}" class="mb-2">
-                @csrf
-                <button class="btn btn-success w-100 mb-2"><x-icon name="check-circle-fill" class="me-1" />{{ __('Approve & Publish') }}</button>
-            </form>
             <form method="POST" action="{{ route('admin.courses.reject', $course) }}">
                 @csrf
                 <div class="mb-2">

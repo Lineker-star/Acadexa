@@ -44,4 +44,50 @@ class CourseIntroVideoTest extends LmsTestCase
         $this->actingAs($instructor)->post(route('instructor.courses.store'), $this->payload(['title' => 'Sans vidéo']))->assertSessionHasNoErrors();
         $this->assertNull(Course::latest('id')->first()->intro_youtube_id);
     }
+
+    public function test_presentation_video_uploaded_in_chunks_and_attached_on_creation(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('local');
+        $instructor = $this->makeUser('instructor');
+        // Minimal MP4 header (ftyp box): recognised as video/mp4.
+        $mp4 = "\x00\x00\x00\x18ftypmp42\x00\x00\x00\x00mp42isom" . str_repeat("\x00", 2000);
+        $chunk = fn () => \Illuminate\Http\UploadedFile::fake()->createWithContent('chunk', $mp4);
+
+        $token = $this->actingAs($instructor)->post(route('instructor.intro-video.chunk'), [
+            'upload_id' => 'abcdef123456', 'index' => 0, 'total' => 1, 'filename' => 'intro.mp4', 'size' => strlen($mp4), 'chunk' => $chunk(),
+        ])->assertOk()->assertJson(['done' => true])->json('token');
+
+        // Over 20 MB: refused.
+        $this->actingAs($instructor)->postJson(route('instructor.intro-video.chunk'), [
+            'upload_id' => 'abcdef999999', 'index' => 0, 'total' => 1, 'filename' => 'big.mp4', 'size' => 21 * 1024 * 1024, 'chunk' => $chunk(),
+        ])->assertStatus(422);
+
+        $this->actingAs($instructor)->post(route('instructor.courses.store'), $this->payload(['intro_source' => 'upload', 'intro_video_token' => $token]))
+            ->assertSessionHasNoErrors();
+        $course = Course::first();
+        $this->assertNotNull($course->intro_video_path);
+        $this->assertNull($course->intro_youtube_id);
+        \Illuminate\Support\Facades\Storage::disk('local')->assertExists($course->intro_video_path);
+
+        // Not published: hidden from visitors, visible to its instructor (course page preview).
+        $this->actingAs($instructor)->get(route('media.course.intro', $course))->assertOk();
+        $this->actingAs($instructor)->get(route('courses.show', $course->slug))->assertOk()->assertSee(route('media.course.intro', $course), false);
+        auth()->logout();
+        $this->get(route('media.course.intro', $course))->assertNotFound();
+    }
+
+    public function test_admin_publishes_a_draft_directly(): void
+    {
+        $admin = $this->makeUser('super_admin');
+        $course = $this->makeCourse($this->makeUser('instructor'), ['text' => 1], ['status' => 'draft']);
+
+        $this->get(route('courses.show', $course->slug))->assertNotFound();
+        $this->actingAs($admin)->get(route('admin.courses.show', $course))->assertOk()
+            ->assertSee(__('learn.publish_now'))->assertSee(__('learn.publish_missing'));
+        $this->actingAs($admin)->post(route('admin.courses.approve', $course))->assertRedirect();
+        $this->assertSame('published', $course->fresh()->status);
+
+        auth()->logout();
+        $this->get(route('courses.show', $course->slug))->assertOk();
+    }
 }

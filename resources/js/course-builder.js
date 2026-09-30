@@ -518,8 +518,98 @@ function initYoutubePreview() {
     });
 }
 
+// ─── Course presentation video: YouTube link or uploaded file (1 MB chunks, 20 MB max) ───
+function initIntroVideo() {
+    const root = document.querySelector('[data-intro-video]');
+    if (!root) return;
+    const form = root.closest('form');
+    const panels = root.querySelectorAll('[data-intro-panel]');
+    const radios = root.querySelectorAll('[name=intro_source]');
+    const box = root.querySelector('[data-intro-uploader]');
+    const token = box.querySelector('[name=intro_video_token]');
+    const input = box.querySelector('input[type=file]');
+    const zone = box.querySelector('.dropzone');
+    const status = box.querySelector('[data-role=status]');
+    const preview = box.querySelector('[data-role=preview]');
+    const maxBytes = Number(box.dataset.maxMb) * 1024 * 1024;
+    const chunkSize = Number(box.dataset.chunkMb) * 1024 * 1024;
+    const allowed = box.dataset.extensions.split(',');
+    let uploading = false;
+
+    const source = () => root.querySelector('[name=intro_source]:checked')?.value || 'youtube';
+    radios.forEach(r => r.addEventListener('change', () => {
+        panels.forEach(p => { p.hidden = p.dataset.introPanel !== source(); });
+    }));
+
+    zone.addEventListener('click', () => !uploading && input.click());
+    zone.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !uploading) { e.preventDefault(); input.click(); } });
+    ['dragenter', 'dragover'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('is-over'); }));
+    ['dragleave', 'drop'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('is-over'); }));
+    zone.addEventListener('drop', e => { if (!uploading && e.dataTransfer.files[0]) upload(e.dataTransfer.files[0]); });
+    input.addEventListener('change', () => input.files[0] && upload(input.files[0]));
+
+    async function upload(file) {
+        const ext = file.name.split('.').pop().toLowerCase();
+        if (!allowed.includes(ext)) return toast(t('upload_bad_extension'), 'warning');
+        if (file.size > maxBytes) return toast(t('upload_too_large').replace(':max', box.dataset.maxMb), 'warning');
+
+        uploading = true;
+        token.value = '';
+        const uploadId = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()).replace(/[^A-Za-z0-9]/g, '').slice(0, 32);
+        const total = Math.max(1, Math.ceil(file.size / chunkSize));
+        status.innerHTML = `<div class="progress" style="height:8px"><div class="progress-bar" style="width:0%"></div></div>
+            <div class="small text-muted mt-1" data-role="label">${file.name}</div>`;
+        const bar = status.querySelector('.progress-bar');
+
+        try {
+            for (let index = 0; index < total; index++) {
+                const body = new FormData();
+                body.append('upload_id', uploadId);
+                body.append('index', index);
+                body.append('total', total);
+                body.append('filename', file.name);
+                body.append('size', file.size);
+                body.append('chunk', file.slice(index * chunkSize, (index + 1) * chunkSize), 'chunk');
+                const res = await fetch(box.dataset.url, {
+                    method: 'POST', body, credentials: 'same-origin',
+                    headers: { Accept: 'application/json', 'X-CSRF-TOKEN': csrf() },
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) throw new Error(data.message || Object.values(data.errors || {})[0]?.[0] || `HTTP ${res.status}`);
+                bar.style.width = `${Math.round(((index + 1) / total) * 100)}%`;
+                if (data.done) token.value = data.token;
+            }
+            status.innerHTML = `<span class="text-success small">${icon('check-circle', 'me-1')}${t('video_ready')} — ${file.name}</span>`;
+            preview.innerHTML = `<div class="ratio ratio-16x9 rounded overflow-hidden bg-dark"><video controls preload="metadata"></video></div>`;
+            preview.querySelector('video').src = URL.createObjectURL(file);
+            root.querySelector('[data-intro-current]')?.remove();
+        } catch (err) {
+            status.innerHTML = `<span class="text-danger small">${icon('exclamation-circle', 'me-1')}${err.message}</span>`;
+        } finally {
+            uploading = false;
+        }
+    }
+
+    // Only the chosen source is sent; the course cannot be saved while the file is still uploading.
+    form.addEventListener('submit', e => {
+        if (uploading) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            toast(t('upload_in_progress'), 'warning');
+            return;
+        }
+        if (source() === 'upload') {
+            const url = root.querySelector('[name=intro_youtube_url]');
+            if (url) url.value = '';
+        } else {
+            token.value = '';
+        }
+    }, true);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initCurriculum();
+    initIntroVideo();
     initCreateWizard();
     initYoutubePreview();
     initModuleModal();

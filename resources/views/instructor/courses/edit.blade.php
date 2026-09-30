@@ -108,13 +108,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label fw-semibold" for="intro_youtube_url"><x-icon name="youtube" class="me-1 text-danger" />{{ __('learn.intro_video') }}</label>
-                        <input type="text" name="intro_youtube_url" id="intro_youtube_url" class="form-control @error('intro_youtube_url') is-invalid @enderror" data-youtube-input
-                               value="{{ old('intro_youtube_url', $course->intro_youtube_id ? 'https://www.youtube.com/watch?v=' . $course->intro_youtube_id : '') }}"
-                               placeholder="{{ __('https://www.youtube.com/watch?v=…') }}">
-                        @error('intro_youtube_url')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        <div class="form-text">{{ __('learn.intro_video_help') }}</div>
-                        <div class="mt-2" style="max-width:480px" data-youtube-preview></div>
+                        @include('instructor.courses.partials.intro-video', ['course' => $course])
                     </div>
 
                     <div class="form-check form-switch mb-4">
@@ -366,6 +360,12 @@
                 </form>
             @elseif($course->status === 'pending')
                 <div class="alert alert-warning small mt-3 mb-0">{{ __('lms.pending_review_help') }}</div>
+            @endif
+            @if(auth()->user()->isAdmin() && $course->status !== 'published')
+                <form method="POST" action="{{ route('admin.courses.approve', $course) }}" class="mt-2" data-confirm="{{ __('learn.publish_confirm') }}">
+                    @csrf
+                    <button class="btn btn-outline-success w-100"><x-icon name="globe" class="me-1" />{{ __('learn.publish_now') }} ({{ __('learn.admin') }})</button>
+                </form>
             @endif
         </div>
 

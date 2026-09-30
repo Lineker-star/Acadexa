@@ -54,7 +54,8 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
-        abort_if($course->status !== 'published', 404);
+        $viewer = auth()->user();
+        abort_if($course->status !== 'published' && ! ($viewer && ($viewer->isAdmin() || $course->instructor_id === $viewer->id)), 404);
 
         $course->load([
             'translations',

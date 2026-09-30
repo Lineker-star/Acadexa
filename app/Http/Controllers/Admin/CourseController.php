@@ -28,12 +28,21 @@ class CourseController extends Controller
     public function show(Course $course)
     {
         $course->load(['translations', 'instructor', 'category.translations',
-            'modules.lessons.translations', 'reviews.user', 'enrollments.user']);
-        return view('admin.courses.show', compact('course'));
+            'modules.lessons.translations', 'modules.lessons.quiz.questions', 'modules.exam.questions',
+            'finalExam.questions', 'reviews.user', 'enrollments.user']);
+        // What the instructor would still have to do before submitting: shown as a warning, the admin decides.
+        $missing = collect(app(\App\Http\Controllers\Instructor\CourseController::class)->publishChecklist($course))
+            ->reject(fn ($item) => $item['ok'])->pluck('label');
+
+        return view('admin.courses.show', compact('course', 'missing'));
     }
 
+    /** Approves a submitted course — or publishes directly a draft, rejected or unpublished one. */
     public function approve(Course $course)
     {
+        if ($course->status === 'published') {
+            return back();
+        }
         $course->update(['status' => 'published', 'admin_feedback' => null, 'published_at' => $course->published_at ?? now()]);
         ActivityLog::record('course_approve', "Approved course #{$course->id}");
         $course->instructor->notify(new CourseReviewed($course, true));
