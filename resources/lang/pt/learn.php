@@ -191,7 +191,7 @@ Quais são números pares?
         'provisional_failed' => 'não aprovado: são necessários :score %',
         'fullscreen' => 'Ecrã inteiro',
         'content_hidden' => 'Conteúdo oculto enquanto a janela não está ativa. Volte à página para continuar.',
-        'capture_blocked' => 'As capturas de ecrã dos cursos não são permitidas. O seu nome aparece em cada página.',
+        'capture_blocked' => 'As capturas de ecrã dos cursos não são permitidas.',
         'video_ready' => 'Vídeo enviado',
         'upload_in_progress' => 'Aguarde até o envio do vídeo terminar.',
         'playlist_detected' => 'Lista de reprodução do YouTube detetada',

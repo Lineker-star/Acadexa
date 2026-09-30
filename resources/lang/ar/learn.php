@@ -191,7 +191,7 @@ return [
         'provisional_failed' => 'غير ناجح: يلزم :score %',
         'fullscreen' => 'ملء الشاشة',
         'content_hidden' => 'المحتوى مخفي ما دامت النافذة غير نشطة. عُد إلى الصفحة للمتابعة.',
-        'capture_blocked' => 'لا يُسمح بتصوير شاشة الدورات. يظهر اسمك في كل صفحة.',
+        'capture_blocked' => 'لا يُسمح بتصوير شاشة الدورات.',
         'video_ready' => 'تم رفع الفيديو',
         'upload_in_progress' => 'انتظر حتى ينتهي رفع الفيديو.',
         'playlist_detected' => 'تم التعرّف على قائمة تشغيل YouTube',

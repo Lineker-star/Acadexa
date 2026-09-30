@@ -27,7 +27,7 @@ function loadPdfJs() {
 export function openMedia({ url, kind, title = '', startAt = 0, onPosition = () => {} }) {
     const viewer = document.createElement('div');
     viewer.className = 'media-viewer';
-    viewer.setAttribute('data-protected', ''); // watermark + blur (content-protection.js)
+    viewer.setAttribute('data-protected', ''); // blur when inactive (content-protection.js)
     viewer.setAttribute('role', 'dialog');
     viewer.setAttribute('aria-modal', 'true');
     viewer.setAttribute('aria-label', title);

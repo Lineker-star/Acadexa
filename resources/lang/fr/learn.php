@@ -191,7 +191,7 @@ Lesquels sont des nombres pairs ?
         'provisional_failed' => 'non validé : il faut :score %',
         'fullscreen' => 'Plein écran',
         'content_hidden' => 'Contenu masqué tant que la fenêtre n’est pas active. Revenez sur la page pour continuer.',
-        'capture_blocked' => 'Les captures d’écran des cours sont interdites. Votre nom figure sur chaque page.',
+        'capture_blocked' => 'Les captures d’écran des cours sont interdites.',
         'video_ready' => 'Vidéo envoyée',
         'upload_in_progress' => 'Patientez jusqu’à la fin de l’envoi de la vidéo.',
         'playlist_detected' => 'Playlist YouTube détectée',

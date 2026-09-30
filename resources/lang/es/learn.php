@@ -191,7 +191,7 @@ return [
         'provisional_failed' => 'no aprobado: se necesita :score %',
         'fullscreen' => 'Pantalla completa',
         'content_hidden' => 'Contenido oculto mientras la ventana no está activa. Vuelve a la página para continuar.',
-        'capture_blocked' => 'Las capturas de pantalla de los cursos no están permitidas. Tu nombre aparece en cada página.',
+        'capture_blocked' => 'Las capturas de pantalla de los cursos no están permitidas.',
         'video_ready' => 'Vídeo subido',
         'upload_in_progress' => 'Espera a que termine la subida del vídeo.',
         'playlist_detected' => 'Lista de reproducción de YouTube detectada',

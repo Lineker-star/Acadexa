@@ -191,7 +191,7 @@ return [
         'provisional_failed' => '未通过：需要 :score %',
         'fullscreen' => '全屏',
         'content_hidden' => '窗口未处于活动状态时内容已隐藏。回到页面即可继续。',
-        'capture_blocked' => '禁止对课程进行截屏。你的姓名会显示在每一页上。',
+        'capture_blocked' => '禁止对课程进行截屏。',
         'video_ready' => '视频已上传',
         'upload_in_progress' => '请等待视频上传完成。',
         'playlist_detected' => '已识别 YouTube 播放列表',

@@ -191,7 +191,7 @@ Which of these are even numbers?
         'provisional_failed' => 'not passed: :score % needed',
         'fullscreen' => 'Fullscreen',
         'content_hidden' => 'Content hidden while the window is not active. Come back to the page to continue.',
-        'capture_blocked' => 'Screen captures of the courses are not allowed. Your name is shown on every page.',
+        'capture_blocked' => 'Screen captures of the courses are not allowed.',
         'video_ready' => 'Video uploaded',
         'upload_in_progress' => 'Please wait until the video upload is finished.',
         'playlist_detected' => 'YouTube playlist detected',

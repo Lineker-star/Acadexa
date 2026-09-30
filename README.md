@@ -311,8 +311,7 @@ Vidéos : **20 Mo maximum** par leçon (`LMS_VIDEO_MAX_MB`), envoyées par morce
 
 ### Protection des contenus de cours
 
-Un site web ne peut pas techniquement interdire une capture d'écran ou un enregistrement de l'écran (c'est le système du téléphone ou de l'ordinateur qui les fait). ACADEXA applique donc les mesures des grandes plateformes (`resources/js/content-protection.js`) :
-- **filigrane dynamique** (nom, e-mail, n° de l'étudiant, date) sur les vidéos, leçons, quiz et documents, qui se déplace et reste visible en plein écran : une capture qui circule identifie son auteur ;
+Un site web ne peut pas techniquement interdire une capture d'écran ou un enregistrement de l'écran (c'est le système du téléphone ou de l'ordinateur qui les fait). ACADEXA applique donc les mesures suivantes, sans filigrane (`resources/js/content-protection.js`) :
 - **contenu flouté** dès que la fenêtre perd le focus (outils de capture, changement d'application) et à l'appui sur *Impr. écran* (presse-papiers vidé) ;
 - clic droit, copier, sélection, glisser, impression, téléchargement et « image dans l'image » bloqués sur les contenus.
 

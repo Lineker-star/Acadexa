@@ -1,69 +1,34 @@
 // Course content protection — online player, in-app reader and offline app.
 //
 // A web page cannot technically forbid screenshots or screen recording (the operating system takes
-// them). What this does, like the big e-learning platforms:
-//  1. a moving watermark (student name, learner number, date) over videos, lessons and documents,
-//     also in fullscreen, so that any leaked capture identifies its author;
-//  2. the content is blurred as soon as the window loses focus (capture tools, app switching,
+// them). What this does:
+//  1. the content is blurred as soon as the window loses focus (capture tools, app switching,
 //     screen-sharing pickers) and when the Print Screen key is pressed (the clipboard is emptied);
-//  3. right-click, copy, text selection, drag and printing are disabled on protected content.
-// Protected zones carry the attribute [data-protected].
+//  2. right-click, copy, text selection, drag and printing are disabled on protected content.
+// No watermark is shown. Protected zones carry the attribute [data-protected].
 
-// Instructors and admins preview their own courses: no watermark and no masking for them.
+// Instructors and admins preview their own courses: no masking for them.
 const STAFF = document.body?.dataset.staff === '1';
 
 const i18n = window.ACADEXA_I18N || {};
 const t = key => i18n[key] || key;
-const STORE_KEY = 'acadexa.watermark';
 
-function watermarkText() {
-    const fromPage = document.body?.dataset.watermark;
-    try {
-        if (fromPage) localStorage.setItem(STORE_KEY, fromPage); // reused by the offline app
-        return fromPage || localStorage.getItem(STORE_KEY) || '';
-    } catch (e) {
-        return fromPage || '';
-    }
-}
-
+/** Removes the name an earlier version kept on the device for its watermark. */
 export function forgetWatermark() {
-    try { localStorage.removeItem(STORE_KEY); } catch (e) { /* ignore */ }
+    try { localStorage.removeItem('acadexa.watermark'); } catch (e) { /* ignore */ }
 }
+forgetWatermark();
 
-const text = () => `${watermarkText()} · ${new Date().toLocaleDateString(document.documentElement.lang || undefined)}`;
-
-/** Adds the moving watermark layer to a protected zone (idempotent). */
+/** Adds the "content hidden" layer shown while the window is not active (idempotent). */
 function decorate(zone) {
     if (STAFF || zone.dataset.protectedReady) return;
     zone.dataset.protectedReady = '1';
     if (getComputedStyle(zone).position === 'static') zone.style.position = 'relative';
 
-    const layer = document.createElement('div');
-    layer.className = 'wm-layer';
-    layer.setAttribute('aria-hidden', 'true');
-    // A tiled faint mark everywhere + one clearer mark that moves.
-    layer.innerHTML = `<div class="wm-tiles"></div><div class="wm-moving"></div>`;
-    zone.appendChild(layer);
-
-    const fill = () => {
-        const label = text();
-        layer.querySelector('.wm-tiles').innerHTML = Array.from({ length: 24 }, () => `<span>${escapeHtml(label)}</span>`).join('');
-        const moving = layer.querySelector('.wm-moving');
-        moving.textContent = label;
-        moving.style.top = `${8 + Math.random() * 78}%`;
-        moving.style.left = `${4 + Math.random() * 60}%`;
-    };
-    fill();
-    setInterval(fill, 12000);
-
     const shield = document.createElement('div');
     shield.className = 'wm-shield';
     shield.textContent = t('content_hidden');
     zone.appendChild(shield);
-}
-
-function escapeHtml(str) {
-    return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 function scan(root = document) {
@@ -81,8 +46,6 @@ document.addEventListener('visibilitychange', () => setShield(document.hidden));
 
 // ─── Print Screen, copy, right-click, drag, print ─────────────────────────────
 const inProtected = target => target instanceof Element && target.closest('[data-protected], .media-viewer');
-
-if (STAFF) forgetWatermark(); // never keep a staff account's name for the offline app
 
 document.addEventListener('keyup', e => {
     if (STAFF || e.key !== 'PrintScreen') return;
@@ -103,7 +66,7 @@ document.addEventListener('keydown', e => {
     document.addEventListener(type, e => { if (!STAFF && inProtected(e.target)) e.preventDefault(); });
 });
 
-// ─── Fullscreen keeps the watermark: the zone goes fullscreen, not the bare <video> ─
+// ─── Fullscreen button of the course player: the zone goes fullscreen ────────
 document.addEventListener('click', e => {
     const btn = e.target.closest('[data-protected-fullscreen]');
     if (!btn) return;
