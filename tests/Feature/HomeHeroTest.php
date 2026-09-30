@@ -44,6 +44,17 @@ class HomeHeroTest extends LmsTestCase
         $this->get('/')->assertOk()->assertSee("url('/images/hero.svg')", false);
     }
 
+    public function test_watermark_only_for_students_and_without_email(): void
+    {
+        $admin = $this->makeUser('super_admin');
+        $this->actingAs($admin)->get('/')->assertOk()->assertSee('data-staff="1"', false)->assertDontSee('data-watermark', false);
+
+        $student = $this->makeUser('student', ['name' => 'Awa Ndzie']);
+        $this->actingAs($student)->get('/')->assertOk()
+            ->assertSee('data-watermark="Awa Ndzie · #' . str_pad($student->id, 6, '0', STR_PAD_LEFT) . '"', false)
+            ->assertDontSee('data-watermark="Awa Ndzie · ' . $student->email, false);
+    }
+
     public function test_footer_only_on_the_home_page(): void
     {
         $this->get('/')->assertOk()->assertSee('acadexxa-footer', false);

@@ -15,7 +15,7 @@
     @vite(['resources/css/app.css'])
     @stack('styles')
 </head>
-<body data-user-id="{{ auth()->id() }}" @auth data-watermark="{{ auth()->user()->name }} · {{ auth()->user()->email }} · #{{ auth()->id() }}" @endauth @if(auth()->user()?->role === 'student') data-library="1" @endif>
+<body data-user-id="{{ auth()->id() }}" @auth @if(auth()->user()->role === 'student') data-watermark="{{ auth()->user()->name }} · #{{ str_pad(auth()->id(), 6, '0', STR_PAD_LEFT) }}" @else data-staff="1" @endif @endauth @if(auth()->user()?->role === 'student') data-library="1" @endif>
     <!-- Navbar -->
     @include('partials.navbar')
 

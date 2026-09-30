@@ -2,12 +2,15 @@
 //
 // A web page cannot technically forbid screenshots or screen recording (the operating system takes
 // them). What this does, like the big e-learning platforms:
-//  1. a moving watermark (student name, e-mail, id, date) over videos, lessons and documents,
+//  1. a moving watermark (student name, learner number, date) over videos, lessons and documents,
 //     also in fullscreen, so that any leaked capture identifies its author;
 //  2. the content is blurred as soon as the window loses focus (capture tools, app switching,
 //     screen-sharing pickers) and when the Print Screen key is pressed (the clipboard is emptied);
 //  3. right-click, copy, text selection, drag and printing are disabled on protected content.
 // Protected zones carry the attribute [data-protected].
+
+// Instructors and admins preview their own courses: no watermark and no masking for them.
+const STAFF = document.body?.dataset.staff === '1';
 
 const i18n = window.ACADEXA_I18N || {};
 const t = key => i18n[key] || key;
@@ -31,7 +34,7 @@ const text = () => `${watermarkText()} · ${new Date().toLocaleDateString(docume
 
 /** Adds the moving watermark layer to a protected zone (idempotent). */
 function decorate(zone) {
-    if (zone.dataset.protectedReady) return;
+    if (STAFF || zone.dataset.protectedReady) return;
     zone.dataset.protectedReady = '1';
     if (getComputedStyle(zone).position === 'static') zone.style.position = 'relative';
 
@@ -70,7 +73,7 @@ function scan(root = document) {
 // ─── Hide the content when the page is not the one being looked at ───────────
 let shieldTimer = null;
 function setShield(on) {
-    document.documentElement.classList.toggle('content-shielded', on);
+    document.documentElement.classList.toggle('content-shielded', on && !STAFF);
 }
 window.addEventListener('blur', () => setShield(true));
 window.addEventListener('focus', () => setShield(false));
@@ -79,8 +82,10 @@ document.addEventListener('visibilitychange', () => setShield(document.hidden));
 // ─── Print Screen, copy, right-click, drag, print ─────────────────────────────
 const inProtected = target => target instanceof Element && target.closest('[data-protected], .media-viewer');
 
+if (STAFF) forgetWatermark(); // never keep a staff account's name for the offline app
+
 document.addEventListener('keyup', e => {
-    if (e.key !== 'PrintScreen') return;
+    if (STAFF || e.key !== 'PrintScreen') return;
     setShield(true);
     navigator.clipboard?.writeText(' ').catch(() => {});
     window.showToast?.(t('capture_blocked'), 'warning');
@@ -89,13 +94,13 @@ document.addEventListener('keyup', e => {
 });
 document.addEventListener('keydown', e => {
     // Ctrl/Cmd + P (print) and Ctrl/Cmd + S (save page) on course pages.
-    if ((e.ctrlKey || e.metaKey) && ['p', 's'].includes(e.key.toLowerCase()) && document.querySelector('[data-protected], .media-viewer')) {
+    if (!STAFF && (e.ctrlKey || e.metaKey) && ['p', 's'].includes(e.key.toLowerCase()) && document.querySelector('[data-protected], .media-viewer')) {
         e.preventDefault();
         window.showToast?.(t('capture_blocked'), 'warning');
     }
 });
 ['contextmenu', 'copy', 'cut', 'dragstart'].forEach(type => {
-    document.addEventListener(type, e => { if (inProtected(e.target)) e.preventDefault(); });
+    document.addEventListener(type, e => { if (!STAFF && inProtected(e.target)) e.preventDefault(); });
 });
 
 // ─── Fullscreen keeps the watermark: the zone goes fullscreen, not the bare <video> ─
