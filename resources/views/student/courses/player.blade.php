@@ -19,6 +19,8 @@
         'type'          => $currentLesson->type,
         'videoKind'     => $currentLesson->type === 'video' ? $kind : null,
         'youtubeId'     => $kind === 'youtube' ? $currentLesson->youtubeId() : null,
+        'playlistId'    => $kind === 'youtube' ? $currentLesson->youtube_playlist_id : null,
+        'playlistIndex' => (int) $currentLesson->youtube_playlist_index,
         'completeUrl'   => route('student.lesson.complete', $currentLesson),
         'watchUrl'      => route('student.lesson.watch', $currentLesson),
         'completed'     => $lessonDone,
@@ -251,6 +253,27 @@
                 <strong>{{ __('lms.course_content') }}</strong>
                 <button class="btn btn-sm btn-light d-lg-none" id="outlineClose" aria-label="{{ __('lms.close') }}"><x-icon name="x-lg" /></button>
             </div>
+            @if($course->books->isNotEmpty())
+                <div class="course-materials border-bottom px-3 py-2">
+                    <div class="small fw-semibold mb-1"><x-icon name="folder2-open" class="me-1" />{{ __('learn.course_materials') }}</div>
+                    @foreach($course->books as $book)
+                        <div class="d-flex align-items-center gap-2 py-1 small">
+                            <x-icon :name="$book->icon()" class="text-primary" />
+                            <button type="button" class="btn btn-link btn-sm p-0 text-start flex-grow-1 text-truncate" data-open-media="{{ $book->url() }}"
+                                    data-media-kind="{{ $book->kind() }}" data-media-title="{{ $book->title }}" data-book-id="{{ $book->id }}">{{ $book->title }}</button>
+                            @if(in_array($book->id, $libraryBookIds, true))
+                                <span class="text-success" title="{{ __('learn.in_library') }}"><x-icon name="cloud-check" /></span>
+                            @else
+                                <form method="POST" action="{{ route('student.library.add', $book) }}">
+                                    @csrf
+                                    <button class="btn btn-sm btn-outline-primary py-0" title="{{ __('learn.add_to_library') }}"><x-icon name="cloud-arrow-down" /></button>
+                                </form>
+                            @endif
+                        </div>
+                    @endforeach
+                    <div class="small text-muted">{{ __('learn.course_materials_help') }}</div>
+                </div>
+            @endif
             @php $currentKey = $currentLesson ? \App\Services\ProgressService::lessonKey($currentLesson->id) : ($currentQuiz ? \App\Services\ProgressService::quizKey($currentQuiz->id) : null); @endphp
             @foreach($course->modules as $module)
                 @php

@@ -206,3 +206,9 @@ html.content-shielded .wm-shield { display: flex; }
 .wizard-steps li.active { background: #EEF3FF; color: var(--bs-primary); font-weight: 600; }
 .wizard-steps li.active .num { background: var(--bs-primary); }
 .wizard-steps li.done .num { background: #10B981; }
+
+.structure-row { display: flex; flex-wrap: wrap; gap: .6rem; align-items: flex-start; padding: .75rem; border: 1px solid #E5E7EB; border-radius: .6rem; margin-bottom: .6rem; background: #FAFBFF; }
+.structure-num { width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--bs-primary); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: .85rem; margin-top: 1.5rem; flex-shrink: 0; }
+.content-option { border: 1px solid #E5E7EB; border-radius: .75rem; padding: 1rem; margin-bottom: 1rem; }
+.upload-item { display: flex; align-items: center; gap: .6rem; padding: .5rem .6rem; border: 1px solid #E5E7EB; border-radius: .5rem; margin-bottom: .4rem; background: #fff; }
+.upload-item.is-error { border-color: #FCA5A5; background: #FEF2F2; }

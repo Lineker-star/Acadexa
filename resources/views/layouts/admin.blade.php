@@ -54,6 +54,14 @@
                 <x-icon name="translate" /> {{ __('Translations') }}
             </a>
 
+            <div class="nav-section">{{ __('learn.teaching') }}</div>
+            <a href="{{ route('instructor.courses.create') }}">
+                <x-icon name="plus-circle" /> {{ __('lms.new_course') }}
+            </a>
+            <a href="{{ route('instructor.courses.index') }}">
+                <x-icon name="journal-richtext" /> {{ __('navigation.my_courses') }}
+            </a>
+
             <div class="nav-section">{{ __('Monitoring') }}</div>
             <a href="{{ route('admin.reviews.index') }}" class="{{ request()->routeIs('admin.reviews.*') ? 'active' : '' }}">
                 <x-icon name="star" /> {{ __('Reviews') }}

@@ -14,7 +14,7 @@ const app = document.getElementById('offlineApp');
 
 const esc = str => String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const typeIcon = { video: 'play-circle', text: 'file-text', quiz: 'patch-question', assignment: 'clipboard-check', exam: 'clipboard-check', final: 'trophy' };
-const bookIcon = { pdf: 'file-earmark-pdf', audio: 'file-earmark-music', video: 'file-earmark-play' };
+const bookIcon = { pdf: 'file-earmark-pdf', slides: 'file-earmark-slides', audio: 'file-earmark-music', video: 'file-earmark-play' };
 
 let ownerId = null;
 let activeTracker = null;

@@ -26,11 +26,13 @@ class Book extends Model
         return $this->hasMany(LibraryItem::class);
     }
 
-    /** pdf | audio | video — decides which reader the app opens. */
+    /** pdf | slides | audio | video — decides which reader the app opens. */
     public function kind(): string
     {
         $mime = (string) $this->mime;
+        $ext = strtolower(pathinfo((string) $this->original_name, PATHINFO_EXTENSION));
         return match (true) {
+            in_array($ext, ['ppt', 'pptx'], true)  => 'slides',
             str_starts_with($mime, 'audio/') => 'audio',
             str_starts_with($mime, 'video/') => 'video',
             default                          => 'pdf',
@@ -42,6 +44,7 @@ class Book extends Model
         return match ($this->kind()) {
             'audio' => 'bi-file-earmark-music',
             'video' => 'bi-file-earmark-play',
+            'slides' => 'bi-file-earmark-slides',
             default => 'bi-file-earmark-pdf',
         };
     }

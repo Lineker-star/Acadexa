@@ -140,7 +140,7 @@
         <div data-for-source="youtube">
             <label class="form-label fw-semibold">{{ __('lms.youtube_url') }}</label>
             <input type="text" name="youtube_url" class="form-control @error('youtube_url') is-invalid @enderror"
-                   placeholder="{{ __('https://www.youtube.com/watch?v=…') }}" value="{{ old('youtube_url', $lesson->youtubeId() ? 'https://www.youtube.com/watch?v=' . $lesson->youtubeId() : '') }}">
+                   placeholder="{{ __('https://www.youtube.com/watch?v=…') }}" value="{{ old('youtube_url', $lesson->youtubeId() ? 'https://www.youtube.com/watch?v=' . $lesson->youtubeId() : ($lesson->youtube_playlist_id ? $lesson->video_url : '')) }}">
             @error('youtube_url')<div class="invalid-feedback">{{ $message }}</div>@enderror
             <div class="form-text">{{ __('lms.youtube_help') }}</div>
             <div id="youtubePreview" class="mt-3"></div>

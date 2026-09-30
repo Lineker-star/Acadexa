@@ -23,9 +23,12 @@ class CourseBuilderTest extends LmsTestCase
         $this->actingAs($instructor)->post(route('instructor.courses.store'), [
             'language' => 'fr', 'title' => 'Comptabilité générale', 'description' => 'Les bases',
             'category_id' => $category->id, 'level' => 'beginner', 'duration_hours' => 40,
+            'modules' => [['title' => 'Introduction', 'lessons' => 1]],
+            'content_youtube_url' => 'https://youtu.be/dQw4w9WgXcQ',
         ])->assertRedirect();
 
         $course = Course::firstOrFail();
+        $this->assertSame(1, $course->modules()->count());
         $this->assertSame('40.0', $course->duration_hours);
         $this->assertSame('draft', $course->status);
 
@@ -34,7 +37,7 @@ class CourseBuilderTest extends LmsTestCase
             'duration_hours' => 12,
             'translations' => ['fr' => ['title' => 'Le bilan', 'description' => 'Objectifs'], 'en' => ['title' => 'The balance sheet']],
         ])->assertRedirect();
-        $module = Module::firstOrFail();
+        $module = Module::latest('id')->firstOrFail();
         $this->assertSame('12.0', $module->duration_hours);
         $this->assertSame('The balance sheet', $module->title('en'));
         $this->assertSame('Le bilan', $module->title('fr'));
@@ -42,7 +45,7 @@ class CourseBuilderTest extends LmsTestCase
         // Lessons are created then edited on their own page.
         $this->actingAs($instructor)->post(route('instructor.lessons.store', $module), ['title' => 'Introduction', 'type' => 'video'])
             ->assertRedirect();
-        $lesson = Lesson::firstOrFail();
+        $lesson = Lesson::latest('id')->firstOrFail();
         $this->actingAs($instructor)->get(route('instructor.lessons.edit', $lesson))->assertOk()->assertSee('videoUploader', false);
 
         // A YouTube link is stored as an id and played inside the platform.

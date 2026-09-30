@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * Upload of a course presentation video (max 20 MB), in 1 MB chunks so that it works whatever
- * the PHP upload limits of the host. It can start before the course exists (creation wizard):
- * the assembled file waits in a temporary folder and is attached when the course is saved,
- * with the token returned here.
+ * Uploads made while creating or editing a course, in 1 MB chunks so that they work whatever the
+ * PHP upload limits of the host: videos (max 20 MB each) and course materials (PDF, PowerPoint).
+ * They can start before the course exists (creation wizard): the assembled file waits in a
+ * temporary folder and is attached when the course is saved, with the token returned here.
  */
 class IntroVideoController extends Controller
 {
@@ -21,7 +21,9 @@ class IntroVideoController extends Controller
 
     public function chunk(Request $request)
     {
-        $maxBytes = config('lms.video.max_size_mb') * 1024 * 1024;
+        $document = $request->input('kind') === 'document';
+        $limits = $document ? config('lms.document') : config('lms.video');
+        $maxBytes = $limits['max_size_mb'] * 1024 * 1024;
         $data = $request->validate([
             'upload_id' => ['required', 'string', 'regex:/^[A-Za-z0-9_-]{8,64}$/'],
             'index'     => ['required', 'integer', 'min:0'],
@@ -30,11 +32,11 @@ class IntroVideoController extends Controller
             'size'      => ['required', 'integer', 'min:1', 'max:' . $maxBytes],
             'chunk'     => ['required', 'file', 'max:' . (config('lms.video.chunk_size_mb') + 1) * 1024],
         ], [
-            'size.max' => __('lms.upload_too_large', ['max' => config('lms.video.max_size_mb')]),
+            'size.max' => __('lms.upload_too_large', ['max' => $limits['max_size_mb']]),
         ]);
 
         $ext = strtolower(pathinfo($data['filename'], PATHINFO_EXTENSION));
-        abort_unless(in_array($ext, config('lms.video.extensions'), true), 422, __('lms.upload_bad_extension'));
+        abort_unless(in_array($ext, $limits['extensions'], true), 422, $document ? __('learn.document_bad_extension') : __('lms.upload_bad_extension'));
         abort_if($data['index'] >= $data['total'], 422);
 
         $userId = $request->user()->id;
@@ -44,12 +46,26 @@ class IntroVideoController extends Controller
         }
 
         $token = $userId . '-' . $data['upload_id'];
-        $video = $this->uploads->assemble($userId, $data['upload_id'], $data['total'], $data['filename'], self::TMP_DIR . "/{$token}.{$ext}");
+        $relative = self::TMP_DIR . "/{$token}.{$ext}";
+
+        if ($document) {
+            $path = $this->uploads->join($userId, $data['upload_id'], $data['total'], $relative);
+            $mime = (new \finfo(FILEINFO_MIME_TYPE))->file($path) ?: 'application/octet-stream';
+            // A PDF must really be a PDF; PowerPoint files are reported under several types.
+            $valid = $ext === 'pdf' ? $mime === 'application/pdf' : in_array($mime, config('lms.document.mimes'), true);
+            if (! $valid) {
+                Storage::disk('local')->delete($relative);
+                return response()->json(['message' => __('learn.document_bad_extension')], 422);
+            }
+            $size = filesize($path);
+        } else {
+            $size = $this->uploads->assemble($userId, $data['upload_id'], $data['total'], $data['filename'], $relative)['size'];
+        }
 
         return response()->json([
             'done'  => true,
             'token' => $token,
-            'size'  => \App\Support\Format::bytes($video['size']),
+            'size'  => \App\Support\Format::bytes($size),
         ]);
     }
 
@@ -66,8 +82,15 @@ class IntroVideoController extends Controller
         foreach (Storage::disk('local')->files(self::TMP_DIR) as $file) {
             if (pathinfo($file, PATHINFO_FILENAME) === $token) {
                 $absolute = Storage::disk('local')->path($file);
-                $mime = (new \finfo(FILEINFO_MIME_TYPE))->file($absolute) ?: 'video/mp4';
-                return ['path' => $file, 'mime' => $mime === 'application/octet-stream' ? 'video/mp4' : $mime, 'size' => filesize($absolute)];
+                $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                $mime = (new \finfo(FILEINFO_MIME_TYPE))->file($absolute) ?: 'application/octet-stream';
+                $mime = match (true) {
+                    $ext === 'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                    $ext === 'ppt'  => 'application/vnd.ms-powerpoint',
+                    $mime === 'application/octet-stream' => 'video/mp4',
+                    default => $mime,
+                };
+                return ['path' => $file, 'mime' => $mime, 'size' => filesize($absolute), 'ext' => $ext];
             }
         }
         return null;

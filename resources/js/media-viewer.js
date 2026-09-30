@@ -62,7 +62,17 @@ export function openMedia({ url, kind, title = '', startAt = 0, onPosition = () 
         body.insertAdjacentHTML('afterbegin', `<div class="text-center py-5 px-3">${icon('wifi-off', 'fs-1 d-block mb-2')}${esc(navigator.onLine ? t('media_error') : t('media_not_offline'))}</div>`);
     };
 
-    if (kind === 'pdf') {
+    if (kind === 'slides') {
+        // Browsers cannot display PowerPoint files: they open in the device's presentation app
+        // (from the app's offline copy when there is no network).
+        body.classList.add('center');
+        body.querySelector('.text-center')?.remove();
+        body.insertAdjacentHTML('afterbegin', `<div class="text-center p-4" style="max-width:480px">
+            ${icon('file-earmark-slides', '', 'font-size:3.5rem;color:#F5B041')}
+            <p class="mt-3">${esc(t('slides_open_help'))}</p>
+            <a class="btn btn-warning" href="${esc(url)}" download>${icon('box-arrow-up-right', 'me-1')}${esc(t('slides_open'))}</a></div>`);
+        onPosition(1, 100);
+    } else if (kind === 'pdf') {
         cleanup = renderPdf(url, body, tools, startAt, onPosition, fail);
     } else if (kind === 'audio' || kind === 'video') {
         body.classList.add('center');

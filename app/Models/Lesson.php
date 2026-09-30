@@ -18,7 +18,7 @@ class Lesson extends Model
 
     protected $fillable = [
         'module_id', 'order', 'type', 'video_source', 'video_url', 'video_path',
-        'video_original_name', 'video_size', 'video_mime', 'youtube_id',
+        'video_original_name', 'video_size', 'video_mime', 'youtube_id', 'youtube_playlist_id', 'youtube_playlist_index',
         'content', 'attachment_path', 'duration_minutes', 'is_free_preview',
         'is_downloadable', 'assignment_max_score', 'assignment_pass_score',
     ];
@@ -106,7 +106,7 @@ class Lesson extends Model
         if (! $this->video_url) {
             return null;
         }
-        if (static::parseYoutubeId($this->video_url)) {
+        if (static::parseYoutubeId($this->video_url) || static::parseYoutubePlaylistId($this->video_url)) {
             return self::VIDEO_YOUTUBE;
         }
         if (static::parseVimeoId($this->video_url)) {
@@ -119,7 +119,7 @@ class Lesson extends Model
     {
         return match ($this->videoKind()) {
             self::VIDEO_UPLOAD  => (bool) $this->video_path,
-            self::VIDEO_YOUTUBE => (bool) $this->youtubeId(),
+            self::VIDEO_YOUTUBE => (bool) ($this->youtubeId() || $this->youtube_playlist_id),
             self::VIDEO_VIMEO, self::VIDEO_URL => (bool) $this->video_url,
             default => false,
         };
@@ -140,6 +140,12 @@ class Lesson extends Model
     {
         return $this->is_downloadable && in_array($this->type, ['video', 'text'], true)
             && (! $this->hasVideo() || $this->videoKind() === self::VIDEO_UPLOAD);
+    }
+
+    /** Playlist id of a YouTube link (…&list=PL… or /playlist?list=PL…), or null. */
+    public static function parseYoutubePlaylistId(string $url): ?string
+    {
+        return preg_match('~[?&]list=([A-Za-z0-9_-]{10,64})~', trim($url), $m) ? $m[1] : null;
     }
 
     public static function parseYoutubeId(string $url): ?string

@@ -1071,3 +1071,11 @@ for (const locale of Object.keys(module.exports)) {
     Object.assign(module.exports[locale], rest);
     Object.assign(module.exports[locale].js, js || {});
 }
+
+// Course creation with structure and content, YouTube playlists (overrides wizard_help).
+const course2 = require('./learn-course2.cjs');
+for (const locale of Object.keys(module.exports)) {
+    const { js, ...rest } = course2[locale];
+    Object.assign(module.exports[locale], rest);
+    Object.assign(module.exports[locale].js, js);
+}

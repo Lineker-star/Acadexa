@@ -51,8 +51,31 @@ class CourseController extends Controller
             'price'          => ['nullable', 'numeric', 'min:0'],
             'thumbnail'      => ['nullable', 'image', 'max:4096', 'mimes:jpeg,png,jpg,webp'],
             'intro_youtube_url' => ['nullable', 'string', 'max:500'],
+            // Structure: modules with a name and a number of lessons.
+            'modules'           => ['required', 'array', 'min:1', 'max:50'],
+            'modules.*.title'   => ['required', 'string', 'max:255'],
+            'modules.*.hours'   => ['nullable', 'numeric', 'min:0.5', 'max:500'],
+            'modules.*.lessons' => ['required', 'integer', 'min:1', 'max:100'],
+            // Content: at least one of a YouTube link (video or playlist), uploaded videos, course materials.
+            'content_youtube_url' => ['nullable', 'string', 'max:500'],
+            'videos'              => ['nullable', 'array', 'max:200'],
+            'videos.*.token'      => ['required', 'string', 'max:100'],
+            'videos.*.name'       => ['required', 'string', 'max:255'],
+            'documents'           => ['nullable', 'array', 'max:20'],
+            'documents.*.token'   => ['required', 'string', 'max:100'],
+            'documents.*.name'    => ['required', 'string', 'max:255'],
+        ], [
+            'modules.required' => __('learn.structure_required'),
         ]);
         $introId = $this->youtubeId($request);
+
+        $contentUrl = trim((string) ($data['content_youtube_url'] ?? ''));
+        if ($contentUrl !== '' && ! \App\Models\Lesson::parseYoutubePlaylistId($contentUrl) && ! \App\Models\Lesson::parseYoutubeId($contentUrl)) {
+            throw \Illuminate\Validation\ValidationException::withMessages(['content_youtube_url' => __('lms.youtube_invalid')]);
+        }
+        if ($contentUrl === '' && empty($data['videos']) && empty($data['documents'])) {
+            throw \Illuminate\Validation\ValidationException::withMessages(['content' => __('learn.content_required')]);
+        }
 
         $course = Course::create([
             'instructor_id'  => $request->user()->id,
@@ -74,8 +97,17 @@ class CourseController extends Controller
             'description' => $data['description'],
         ]);
 
+        app(\App\Services\CourseBlueprint::class)->build(
+            $course,
+            $request->user()->id,
+            array_map(fn ($m) => ['title' => $m['title'], 'hours' => $m['hours'] ?? null, 'lessons' => (int) $m['lessons']], $data['modules']),
+            array_values($data['videos'] ?? []),
+            $contentUrl ?: null,
+            array_values($data['documents'] ?? []),
+        );
+
         return redirect()->route('instructor.courses.edit', ['course' => $course, 'tab' => 'curriculum'])
-            ->with('success', __('lms.course_created_next_step'));
+            ->with('success', __('learn.course_created_with_content'));
     }
 
     public function edit(Request $request, Course $course)

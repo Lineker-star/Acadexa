@@ -152,8 +152,10 @@ function initTypeAndSource() {
     if (yt && preview) {
         const render = () => {
             const id = parseYoutubeId(yt.value);
-            preview.innerHTML = id
-                ? `<div class="ratio ratio-16x9 rounded overflow-hidden"><iframe src="https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1" allow="encrypted-media; picture-in-picture" allowfullscreen title="YouTube"></iframe></div>`
+            const list = id ? null : (yt.value.match(/[?&]list=([A-Za-z0-9_-]{10,64})/) || [])[1];
+            const src = id ? `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1` : `https://www.youtube-nocookie.com/embed/videoseries?list=${list}&rel=0`;
+            preview.innerHTML = (id || list)
+                ? `${list ? `<div class="small text-success mb-1">${icon('collection-play', 'me-1')}${t('playlist_detected')}</div>` : ''}<div class="ratio ratio-16x9 rounded overflow-hidden"><iframe src="${src}" allow="encrypted-media; picture-in-picture" allowfullscreen title="YouTube"></iframe></div>`
                 : (yt.value.trim() ? `<div class="text-danger small">${t('youtube_invalid')}</div>` : '');
         };
         yt.addEventListener('input', debounce(render, 400));
@@ -469,12 +471,24 @@ function initCreateWizard() {
     };
 
     // Fields of the current step must be valid before going on.
-    const stepValid = index => [...steps[index].querySelectorAll('input, select, textarea')].every(field => {
+    const fieldsValid = index => [...steps[index].querySelectorAll('input, select, textarea')].every(field => {
         if (field.checkValidity()) { field.classList.remove('is-invalid'); return true; }
         field.classList.add('is-invalid');
         field.reportValidity();
         return false;
     });
+    // Content step: at least one of YouTube link, uploaded video, course material.
+    const contentValid = index => {
+        const error = steps[index].querySelector('#contentError');
+        if (!error) return true;
+        const youtube = steps[index].querySelector('[name=content_youtube_url]')?.value.trim();
+        const files = steps[index].querySelectorAll('[name^="videos["][name$="[token]"], [name^="documents["][name$="[token]"]').length;
+        const ok = Boolean(youtube) || files > 0;
+        error.classList.toggle('d-none', ok);
+        if (!ok) error.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return ok;
+    };
+    const stepValid = index => fieldsValid(index) && contentValid(index);
 
     next.addEventListener('click', () => { if (stepValid(current)) show(current + 1); });
     prev.addEventListener('click', () => show(current - 1));
@@ -506,10 +520,14 @@ function initYoutubePreview() {
         if (!box) return;
         const render = () => {
             const value = input.value.trim();
+            const playlist = input.hasAttribute('data-allow-playlist') ? (value.match(/[?&]list=([A-Za-z0-9_-]{10,64})/) || [])[1] : null;
             const id = parseYoutubeId(value);
-            input.classList.toggle('is-invalid', Boolean(value) && !id);
-            box.innerHTML = id ? `<div class="ratio ratio-16x9 rounded overflow-hidden bg-dark">
-                <iframe src="https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1" title="YouTube"
+            input.classList.toggle('is-invalid', Boolean(value) && !id && !playlist);
+            const src = playlist
+                ? `https://www.youtube-nocookie.com/embed/videoseries?list=${playlist}&rel=0&modestbranding=1`
+                : `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1`;
+            box.innerHTML = (id || playlist) ? `${playlist ? `<div class="small text-success mb-1">${icon('collection-play', 'me-1')}${t('playlist_detected')}</div>` : ''}<div class="ratio ratio-16x9 rounded overflow-hidden bg-dark">
+                <iframe src="${src}" title="YouTube"
                         allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`
                 : (value ? `<div class="text-danger small">${t('youtube_invalid')}</div>` : '');
         };
@@ -607,8 +625,157 @@ function initIntroVideo() {
     }, true);
 }
 
+// ─── New course: modules with a name and a number of lessons ───────────────────
+function initStructure() {
+    const list = document.getElementById('moduleRows');
+    if (!list) return;
+    const total = document.getElementById('structureTotal');
+
+    const renumber = () => {
+        [...list.querySelectorAll('[data-module-row]')].forEach((row, i) => {
+            row.querySelector('.structure-num').textContent = i + 1;
+            row.querySelectorAll('input').forEach(input => {
+                input.name = input.name.replace(/modules\[\d+\]/, `modules[${i}]`);
+            });
+        });
+        const rows = list.querySelectorAll('[data-module-row]');
+        const lessons = [...rows].reduce((sum, row) => sum + (Number(row.querySelector('[name$="[lessons]"]').value) || 0), 0);
+        total.textContent = total.dataset.template.replace(':modules', rows.length).replace(':lessons', lessons);
+        rows.forEach(row => { row.querySelector('[data-remove-module]').disabled = rows.length === 1; });
+    };
+
+    document.getElementById('addModule').addEventListener('click', () => {
+        const rows = list.querySelectorAll('[data-module-row]');
+        const row = rows[rows.length - 1].cloneNode(true);
+        row.querySelectorAll('input').forEach(input => { input.classList.remove('is-invalid'); });
+        row.querySelector('[name$="[title]"]').value = `${list.dataset.moduleLabel} ${rows.length + 1}`;
+        row.querySelector('[name$="[hours]"]').value = '';
+        list.appendChild(row);
+        renumber();
+        row.querySelector('[name$="[title]"]').select();
+    });
+    list.addEventListener('click', e => {
+        const btn = e.target.closest('[data-remove-module]');
+        if (btn && list.querySelectorAll('[data-module-row]').length > 1) { btn.closest('[data-module-row]').remove(); renumber(); }
+    });
+    list.addEventListener('input', renumber);
+    renumber();
+}
+
+// ─── Several files uploaded in 1 MB chunks (videos, course materials) ─────────
+let uploadsRunning = 0;
+function initMultiUpload() {
+    document.querySelectorAll('[data-multi-upload]').forEach(box => {
+        const input = box.querySelector('input[type=file]');
+        const zone = box.querySelector('.dropzone');
+        const list = box.querySelector('[data-role=list]');
+        const maxBytes = Number(box.dataset.maxMb) * 1024 * 1024;
+        const chunkSize = Number(box.dataset.chunkMb) * 1024 * 1024;
+        const allowed = box.dataset.extensions.split(',');
+        const queue = [];
+        let busy = false;
+        let counter = 0;
+
+        zone.addEventListener('click', () => input.click());
+        zone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } });
+        ['dragenter', 'dragover'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('is-over'); }));
+        ['dragleave', 'drop'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('is-over'); }));
+        zone.addEventListener('drop', e => add([...e.dataTransfer.files]));
+        input.addEventListener('change', () => { add([...input.files]); input.value = ''; });
+
+        function add(files) {
+            files.forEach(file => {
+                const ext = file.name.split('.').pop().toLowerCase();
+                const item = document.createElement('li');
+                item.className = 'upload-item';
+                item.innerHTML = `<span class="flex-grow-1 min-w-0"><span class="d-block text-truncate small fw-semibold"></span>
+                    <span class="progress mt-1" style="height:5px"><span class="progress-bar" style="width:0%"></span></span>
+                    <span class="small text-muted" data-role="state"></span></span>
+                    <button type="button" class="btn btn-sm btn-light text-danger" aria-label="${t('delete')}">${icon('x-lg')}</button>`;
+                item.querySelector('.fw-semibold').textContent = file.name;
+                item.querySelector('button').addEventListener('click', () => { item.remove(); renumberInputs(); });
+                list.appendChild(item);
+                if (!allowed.includes(ext)) return fail(item, box.dataset.kind === 'document' ? t('document_bad_extension') : t('upload_bad_extension'));
+                if (file.size > maxBytes) return fail(item, t('upload_too_large').replace(':max', box.dataset.maxMb));
+                queue.push({ file, item });
+            });
+            run();
+        }
+
+        function fail(item, message) {
+            item.classList.add('is-error');
+            item.querySelector('[data-role=state]').innerHTML = `<span class="text-danger">${message}</span>`;
+        }
+
+        // Hidden inputs follow the visible order: field[0], field[1]…
+        function renumberInputs() {
+            [...list.querySelectorAll('.upload-item[data-token]')].forEach((item, i) => {
+                item.querySelector('[data-role=inputs]').innerHTML = '';
+                item.querySelector('[data-role=inputs]').insertAdjacentHTML('beforeend',
+                    `<input type="hidden" name="${box.dataset.field}[${i}][token]"><input type="hidden" name="${box.dataset.field}[${i}][name]">`);
+                const [token, name] = item.querySelectorAll('[data-role=inputs] input');
+                token.value = item.dataset.token;
+                name.value = item.dataset.name;
+            });
+        }
+
+        async function run() {
+            if (busy) return;
+            busy = true;
+            uploadsRunning++;
+            while (queue.length) {
+                const { file, item } = queue.shift();
+                if (!item.isConnected) continue;
+                const bar = item.querySelector('.progress-bar');
+                const state = item.querySelector('[data-role=state]');
+                const uploadId = `${Date.now().toString(36)}${(++counter).toString(36)}${Math.random().toString(36).slice(2, 10)}`.replace(/[^A-Za-z0-9]/g, '').slice(0, 40);
+                const total = Math.max(1, Math.ceil(file.size / chunkSize));
+                try {
+                    for (let index = 0; index < total; index++) {
+                        const body = new FormData();
+                        body.append('kind', box.dataset.kind);
+                        body.append('upload_id', uploadId);
+                        body.append('index', index);
+                        body.append('total', total);
+                        body.append('filename', file.name);
+                        body.append('size', file.size);
+                        body.append('chunk', file.slice(index * chunkSize, (index + 1) * chunkSize), 'chunk');
+                        const res = await fetch(box.dataset.url, { method: 'POST', body, credentials: 'same-origin', headers: { Accept: 'application/json', 'X-CSRF-TOKEN': csrf() } });
+                        const data = await res.json().catch(() => ({}));
+                        if (!res.ok) throw new Error(data.message || Object.values(data.errors || {})[0]?.[0] || `HTTP ${res.status}`);
+                        bar.style.width = `${Math.round(((index + 1) / total) * 100)}%`;
+                        if (data.done) {
+                            item.dataset.token = data.token;
+                            item.dataset.name = file.name;
+                            item.insertAdjacentHTML('beforeend', '<span data-role="inputs" hidden></span>');
+                            state.innerHTML = `<span class="text-success">${icon('check-circle', 'me-1')}${data.size}</span>`;
+                        }
+                    }
+                } catch (err) {
+                    fail(item, err.message);
+                }
+                renumberInputs();
+                document.getElementById('contentError')?.classList.add('d-none');
+            }
+            busy = false;
+            uploadsRunning--;
+        }
+    });
+
+    // The course cannot be created while files are still uploading.
+    document.getElementById('courseWizard')?.addEventListener('submit', e => {
+        if (uploadsRunning > 0) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            toast(t('upload_in_progress'), 'warning');
+        }
+    }, true);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initCurriculum();
+    initStructure();
+    initMultiUpload();
     initIntroVideo();
     initCreateWizard();
     initYoutubePreview();

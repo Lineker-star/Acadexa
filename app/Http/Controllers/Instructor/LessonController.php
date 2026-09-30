@@ -275,23 +275,32 @@ class LessonController extends Controller
             Lesson::VIDEO_YOUTUBE => $this->youtubeAttributes($lesson, (string) ($data['youtube_url'] ?? '')),
             Lesson::VIDEO_VIMEO   => $this->vimeoAttributes($lesson, (string) ($data['vimeo_url'] ?? '')),
             Lesson::VIDEO_URL     => $this->switchingFromUpload($lesson) + [
-                'video_source' => Lesson::VIDEO_URL, 'video_url' => $data['external_url'] ?? null, 'youtube_id' => null,
+                'video_source' => Lesson::VIDEO_URL, 'video_url' => $data['external_url'] ?? null, 'youtube_id' => null, 'youtube_playlist_id' => null,
             ],
             // Upload: keep the file already attached (or none yet).
             default => $lesson->video_path ? [] : ['video_source' => Lesson::VIDEO_UPLOAD],
         };
     }
 
+    /**
+     * A YouTube video, or a playlist link (…/playlist?list=… — optional &index=N, counted from 1
+     * like on YouTube): the lesson then plays that video of the playlist and offers the next one.
+     */
     private function youtubeAttributes(Lesson $lesson, string $url): array
     {
         $id = Lesson::parseYoutubeId($url);
-        if (! $id) {
+        $playlist = $id ? null : Lesson::parseYoutubePlaylistId($url);
+        if (! $id && ! $playlist) {
             throw \Illuminate\Validation\ValidationException::withMessages(['youtube_url' => __('lms.youtube_invalid')]);
         }
+        $index = $playlist && preg_match('~[?&]index=(\d+)~', $url, $m) ? max(0, (int) $m[1] - 1) : ($playlist ? (int) $lesson->youtube_playlist_index : null);
+
         return $this->switchingFromUpload($lesson) + [
-            'video_source' => Lesson::VIDEO_YOUTUBE,
-            'youtube_id'   => $id,
-            'video_url'    => 'https://www.youtube.com/watch?v=' . $id,
+            'video_source'           => Lesson::VIDEO_YOUTUBE,
+            'youtube_id'             => $id,
+            'youtube_playlist_id'    => $playlist,
+            'youtube_playlist_index' => $index,
+            'video_url'              => $id ? 'https://www.youtube.com/watch?v=' . $id : 'https://www.youtube.com/playlist?list=' . $playlist . '&index=' . ($index + 1),
         ];
     }
 
@@ -301,7 +310,7 @@ class LessonController extends Controller
             throw \Illuminate\Validation\ValidationException::withMessages(['vimeo_url' => __('lms.vimeo_invalid')]);
         }
         return $this->switchingFromUpload($lesson) + [
-            'video_source' => Lesson::VIDEO_VIMEO, 'video_url' => $url, 'youtube_id' => null,
+            'video_source' => Lesson::VIDEO_VIMEO, 'video_url' => $url, 'youtube_id' => null, 'youtube_playlist_id' => null,
         ];
     }
 

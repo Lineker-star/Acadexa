@@ -42,7 +42,18 @@ return [
     // Course books kept in the student's account library and readable offline in the app.
     'book' => [
         'max_size_mb' => (int) env('LMS_BOOK_MAX_MB', 200),
-        'extensions'  => ['pdf', 'mp3', 'm4a', 'ogg', 'wav', 'mp4', 'webm'],
+        'extensions'  => ['pdf', 'ppt', 'pptx', 'mp3', 'm4a', 'ogg', 'wav', 'mp4', 'webm'],
+    ],
+
+    // Course material uploaded when creating a course (PDF or PowerPoint), sent in chunks.
+    'document' => [
+        'max_size_mb' => (int) env('LMS_DOCUMENT_MAX_MB', 50),
+        'extensions'  => ['pdf', 'ppt', 'pptx'],
+        'mimes'       => [
+            'application/pdf', 'application/vnd.ms-powerpoint', 'application/vnd.ms-office',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'application/zip', 'application/x-zip-compressed', 'application/octet-stream', 'application/CDFV2',
+        ],
     ],
 
     // A video lesson can be marked complete once this share of it has been watched.

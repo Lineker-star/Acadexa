@@ -113,10 +113,11 @@ class CourseController extends Controller
         }
 
         $knowledge = $final ? app(KnowledgeService::class)->profile($enrollment) : null;
+        $libraryBookIds = $request->user()->libraryItems()->whereIn('book_id', $course->books->pluck('id'))->pluck('book_id')->all();
 
         return view('student.courses.player', array_merge(
             compact('enrollment', 'course', 'completedIds', 'doneKeys', 'unlocked', 'steps', 'ordered',
-                'currentLesson', 'currentQuiz', 'final', 'finalMode', 'knowledge'),
+                'currentLesson', 'currentQuiz', 'final', 'finalMode', 'knowledge', 'libraryBookIds'),
             [
                 'prevStep' => null, 'nextStep' => null, 'stepPosition' => 0, 'watchState' => null,
                 'submission' => null, 'lessonQuiz' => null, 'quizState' => null,

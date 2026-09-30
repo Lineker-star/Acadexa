@@ -64,20 +64,16 @@ class ChunkedVideoUpload
             'video_mime'          => $video['mime'],
             'video_url'           => null,
             'youtube_id'          => null,
+            'youtube_playlist_id' => null,
         ]);
 
         return $lesson;
     }
 
-    /**
-     * Joins the chunks into $relative (private disk) and checks the result is a real video.
-     *
-     * @return array{path: string, mime: string, size: int}
-     */
-    public function assemble(int $userId, string $uploadId, int $total, string $originalName, string $relative): array
+    /** Joins the chunks into $relative (private disk) and returns the absolute path. */
+    public function join(int $userId, string $uploadId, int $total, string $relative): string
     {
         $dir = $this->chunkDir($userId, $uploadId);
-        $ext = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
         $target = Storage::disk('local')->path($relative);
         File::ensureDirectoryExists(dirname($target));
 
@@ -99,6 +95,19 @@ class ChunkedVideoUpload
         }
         fclose($out);
         File::deleteDirectory($dir);
+
+        return $target;
+    }
+
+    /**
+     * Joins the chunks into $relative (private disk) and checks the result is a real video.
+     *
+     * @return array{path: string, mime: string, size: int}
+     */
+    public function assemble(int $userId, string $uploadId, int $total, string $originalName, string $relative): array
+    {
+        $ext = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+        $target = $this->join($userId, $uploadId, $total, $relative);
 
         $mime = (new \finfo(FILEINFO_MIME_TYPE))->file($target) ?: 'application/octet-stream';
         // Some MP4 variants are reported as application/octet-stream; trust the extension only for those.

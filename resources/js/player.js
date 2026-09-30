@@ -204,12 +204,16 @@ function initHtml5Video(tracker) {
 
 function initYoutube(tracker) {
     const holder = document.getElementById('ytPlayer');
-    if (!holder || !config.youtubeId) return;
+    if (!holder || !(config.youtubeId || config.playlistId)) return;
 
     let timer = null;
+    // Playlist lesson: the lesson plays video n° playlistIndex of the playlist; at the end the next
+    // lesson is offered, or — after the last lesson — the next video of the playlist, and so on.
+    let playlist = null;
+    let position = config.playlistIndex || 0;
     const start = () => {
         const player = new window.YT.Player('ytPlayer', {
-            videoId: config.youtubeId,
+            ...(config.playlistId ? {} : { videoId: config.youtubeId }),
             host: 'https://www.youtube-nocookie.com',
             width: '100%',
             height: '100%',
@@ -217,10 +221,24 @@ function initYoutube(tracker) {
                 // fs: 0 — fullscreen goes through our button so that the watermark stays visible.
                 rel: 0, modestbranding: 1, playsinline: 1, iv_load_policy: 3, fs: 0,
                 start: config.resumeAt ? Math.floor(config.resumeAt) : 0,
+                ...(config.playlistId ? { listType: 'playlist', list: config.playlistId, index: position } : {}),
                 hl: document.documentElement.lang || 'fr',
                 origin: window.location.origin,
             },
             events: {
+                onReady: () => {
+                    if (!config.playlistId) return;
+                    // Keep only this lesson's video in the player (YouTube would chain the whole playlist).
+                    let tries = 0;
+                    const waitForList = setInterval(() => {
+                        playlist = player.getPlaylist?.();
+                        if (playlist?.length || ++tries > 20) {
+                            clearInterval(waitForList);
+                            if (playlist?.[position]) player.cueVideoById({ videoId: playlist[position], startSeconds: config.resumeAt || 0 });
+                            else if (playlist) holder.outerHTML = `<div class="d-flex h-100 align-items-center justify-content-center text-white p-3 text-center">${t('playlist_no_video')}</div>`;
+                        }
+                    }, 150);
+                },
                 onStateChange: event => {
                     const YTS = window.YT.PlayerState;
                     clearInterval(timer);
@@ -232,6 +250,10 @@ function initYoutube(tracker) {
                         tracker.pause();
                     } else if (event.data === YTS.ENDED) {
                         tracker.ended();
+                        // Last lesson of the course but the playlist goes on: offer its next video here.
+                        if (config.playlistId && !config.nextUrl && playlist?.[position + 1]) {
+                            offerNextVideo(() => player.loadVideoById(playlist[++position]));
+                        }
                     }
                 },
             },
@@ -250,6 +272,27 @@ function initYoutube(tracker) {
         };
         document.head.appendChild(tag);
     }
+}
+
+// Playlist: "Next video in 5 s" inside the same lesson.
+function offerNextVideo(play) {
+    if (document.getElementById('autoNext')) return;
+    let seconds = 5;
+    const box = document.createElement('div');
+    box.id = 'autoNext';
+    box.className = 'alert alert-primary d-flex align-items-center justify-content-between gap-2 mt-3';
+    box.innerHTML = `<span>${t('next_video_in', { seconds: `<strong>${seconds}</strong>` })}</span>
+        <span class="d-flex gap-2"><button type="button" class="btn btn-sm btn-primary" data-go>${t('go_now')}</button>
+        <button type="button" class="btn btn-sm btn-light" data-cancel>${t('cancel')}</button></span>`;
+    document.querySelector('.lesson-body')?.prepend(box);
+    const go = () => { clearInterval(timer); box.remove(); play(); };
+    const timer = setInterval(() => {
+        seconds--;
+        box.querySelector('strong').textContent = seconds;
+        if (seconds <= 0) go();
+    }, 1000);
+    box.querySelector('[data-go]').addEventListener('click', go);
+    box.querySelector('[data-cancel]').addEventListener('click', () => { clearInterval(timer); box.remove(); });
 }
 
 // After a video ends: "Next lesson in 5 s" with a cancel button.

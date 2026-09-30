@@ -12,6 +12,8 @@ class CourseIntroVideoTest extends LmsTestCase
         return array_merge([
             'language' => 'fr', 'title' => 'Excel pour débutants', 'description' => 'Apprendre Excel pas à pas.',
             'category_id' => $this->makeCategory()->id, 'level' => 'beginner', 'duration_hours' => 12,
+            'modules' => [['title' => 'Module 1', 'lessons' => 2]],
+            'content_youtube_url' => 'https://www.youtube.com/watch?v=aqz-KE-bpKQ',
         ], $extra);
     }
 
@@ -19,7 +21,7 @@ class CourseIntroVideoTest extends LmsTestCase
     {
         $instructor = $this->makeUser('instructor');
         $this->actingAs($instructor)->get(route('instructor.courses.create'))->assertOk()
-            ->assertSee('data-step="2"', false)->assertSee(__('learn.intro_video'))->assertSee(__('learn.create_course'));
+            ->assertSee('data-step="3"', false)->assertSee(__('learn.intro_video'))->assertSee(__('learn.create_course'));
         $this->assertSame(0, Course::count());
     }
 
