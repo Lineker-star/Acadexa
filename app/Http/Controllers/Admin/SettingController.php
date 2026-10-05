@@ -17,6 +17,24 @@ class SettingController extends Controller
         return view('admin.settings.index', compact('settings'));
     }
 
+    /** Sends a test message right now (not queued) and reports the provider's answer. */
+    public function testMail(Request $request)
+    {
+        $data = $request->validate(['to' => ['required', 'email']]);
+
+        try {
+            \Illuminate\Support\Facades\Mail::raw(__('learn.mail_test_body', ['site' => Setting::get('site_name', 'ACADEXA')]), function ($message) use ($data) {
+                $message->to($data['to'])->subject(__('learn.mail_test_subject'));
+            });
+        } catch (\Throwable $e) {
+            report($e);
+            return back()->withErrors(['to' => __('learn.mail_test_failed', ['error' => $e->getMessage()])])->withInput();
+        }
+
+        ActivityLog::record('mail_test', 'Test e-mail sent to ' . $data['to']);
+        return back()->with('success', __('learn.mail_test_sent', ['email' => $data['to']]));
+    }
+
     public function update(Request $request)
     {
         $data = $request->validate([

@@ -111,6 +111,30 @@
     </div>
 
     <div class="col-lg-4">
+        <div class="bg-white rounded-xl shadow-brand p-4 mb-4">
+            <h6 class="fw-bold mb-3"><x-icon name="envelope-paper" class="me-1" />{{ __('learn.mail_settings') }}</h6>
+            @php $mailer = config('mail.default'); $mailReady = $mailer === 'brevo' ? filled(config('services.brevo.key')) : ! in_array($mailer, ['log', 'array'], true); @endphp
+            <dl class="small mb-3">
+                <dt class="fw-normal text-muted">{{ __('learn.mail_service') }}</dt>
+                <dd class="fw-semibold">{{ $mailer === 'brevo' ? 'Brevo (API)' : strtoupper($mailer) }}
+                    <span class="badge {{ $mailReady ? 'bg-success' : 'bg-warning text-dark' }}">{{ $mailReady ? __('learn.mail_ready') : __('learn.mail_not_ready') }}</span></dd>
+                <dt class="fw-normal text-muted">{{ __('learn.mail_sender') }}</dt>
+                <dd class="fw-semibold text-break">{{ config('mail.from.name') }} &lt;{{ config('mail.from.address') }}&gt;</dd>
+            </dl>
+            @unless($mailReady)
+                <div class="alert alert-warning small py-2">{{ __('learn.mail_not_ready_help') }}</div>
+            @endunless
+            <form method="POST" action="{{ route('admin.settings.test-mail') }}">
+                @csrf
+                <label class="form-label small" for="testMailTo">{{ __('learn.mail_test_to') }}</label>
+                <div class="input-group input-group-sm">
+                    <input type="email" name="to" id="testMailTo" class="form-control @error('to') is-invalid @enderror" value="{{ old('to', auth()->user()->email) }}" required>
+                    <button class="btn btn-outline-primary">{{ __('learn.mail_test_send') }}</button>
+                </div>
+                @error('to')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+            </form>
+        </div>
+
         <div class="bg-white rounded-xl shadow-brand p-4">
             <h6 class="fw-bold mb-3">{{ __('Quick Info') }}</h6>
             <ul class="list-unstyled" style="font-size:.875rem;">

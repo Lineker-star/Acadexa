@@ -74,6 +74,13 @@ return [
         'default_image' => '/images/hero.svg',
     ],
 
+    // "Pick up where you stopped" e-mail: after N days without opening an unfinished course,
+    // repeated at most every M days for the same course.
+    'reminders' => [
+        'inactive_days' => (int) env('LMS_INACTIVE_DAYS', 7),
+        'repeat_days'   => (int) env('LMS_INACTIVE_REPEAT_DAYS', 14),
+    ],
+
     // Days before the end of the trial at which the reminder e-mail is sent.
     'trial_reminder_days' => [3, 1],
 ];

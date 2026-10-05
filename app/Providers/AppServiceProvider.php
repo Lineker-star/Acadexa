@@ -13,6 +13,9 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Every e-mail (notifications, two-factor codes…) can go through Brevo's HTTP API: MAIL_MAILER=brevo.
+        \Illuminate\Support\Facades\Mail::extend('brevo', fn () => new \App\Mail\BrevoTransport(config('services.brevo.key')));
+
         // Bootstrap 5 pagination markup (the UI uses Bootstrap); its labels are translated in lang/*.json.
         \Illuminate\Pagination\Paginator::useBootstrapFive();
 

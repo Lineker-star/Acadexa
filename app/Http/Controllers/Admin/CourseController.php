@@ -43,7 +43,15 @@ class CourseController extends Controller
         if ($course->status === 'published') {
             return back();
         }
+        $firstPublication = $course->published_at === null;
         $course->update(['status' => 'published', 'admin_feedback' => null, 'published_at' => $course->published_at ?? now()]);
+
+        // News: tell the students a new course is available (once, at the first publication).
+        if ($firstPublication) {
+            $course->load(['translations', 'instructor']);
+            \App\Models\User::where('role', 'student')->where('is_active', true)->whereNull('banned_at')
+                ->chunkById(500, fn ($students) => \Illuminate\Support\Facades\Notification::send($students, new \App\Notifications\NewCoursePublished($course)));
+        }
         ActivityLog::record('course_approve', "Approved course #{$course->id}");
         $course->instructor->notify(new CourseReviewed($course, true));
         return back()->with('success', __('Course approved and published.'));

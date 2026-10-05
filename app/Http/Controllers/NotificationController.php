@@ -40,7 +40,10 @@ class NotificationController extends Controller
     /** Toggle for e-mail notifications (profile page). */
     public function preferences(Request $request)
     {
-        $request->user()->update(['email_notifications' => $request->boolean('email_notifications')]);
+        $request->user()->update([
+            'email_notifications' => $request->boolean('email_notifications'),
+            'email_news'          => $request->boolean('email_news'),
+        ]);
         return back()->with('success', __('lms.preferences_saved'));
     }
 }

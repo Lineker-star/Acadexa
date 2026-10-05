@@ -12,6 +12,11 @@ class ReassessmentReminder extends LmsNotification
         parent::__construct();
     }
 
+    protected function category(): string
+    {
+        return self::CATEGORY_NEWS;
+    }
+
     protected function subject(object $notifiable): string
     {
         return __('learn.notif_reassess_subject');

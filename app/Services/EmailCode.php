@@ -17,14 +17,22 @@ class EmailCode
     private const MAX_TRIES = 5;
     public const RESEND_SECONDS = 60;
 
-    public function send(User $user, string $purpose): void
+    /** @return bool false when the e-mail could not be sent (the provider's error is logged) */
+    public function send(User $user, string $purpose): bool
     {
         $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         Cache::put($this->key($user, $purpose), ['hash' => Hash::make($code), 'tries' => 0], now()->addMinutes(self::TTL_MINUTES));
         Cache::put($this->key($user, $purpose) . ':sent', now()->timestamp, now()->addMinutes(self::TTL_MINUTES));
 
         // Sent right away (not queued): the person is waiting for it on the screen.
-        $user->notifyNow(new VerificationCode($code, $purpose));
+        try {
+            $user->notifyNow(new VerificationCode($code, $purpose));
+        } catch (\Throwable $e) {
+            report($e);
+            Cache::forget($this->key($user, $purpose) . ':sent'); // allow an immediate retry
+            return false;
+        }
+        return true;
     }
 
     /** Seconds before another code can be requested (0 = now). */

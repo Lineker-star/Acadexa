@@ -40,7 +40,7 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         'preferred_language', 'instructor_status', 'trial_started_at',
         'is_active', 'admin_permissions', 'banned_at', 'ban_reason',
         'two_factor_secret', 'two_factor_confirmed_at', 'email_notifications',
-        'google_id', 'has_password', 'two_factor_method',
+        'google_id', 'has_password', 'two_factor_method', 'email_news',
     ];
 
     protected $hidden = ['password', 'remember_token', 'two_factor_secret', 'google_id'];
@@ -62,6 +62,7 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
             'is_active'               => 'boolean',
             'email_notifications'     => 'boolean',
             'has_password'            => 'boolean',
+            'email_news'              => 'boolean',
             'admin_permissions'       => 'array',
             'two_factor_secret'       => 'encrypted',
         ];
@@ -169,6 +170,12 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         }
         $permissions = $this->admin_permissions;
         return empty($permissions) || in_array($permission, $permissions, true);
+    }
+
+    /** News of the platform by e-mail (announcements, new courses, reminders): separate opt-out. */
+    public function wantsNewsEmail(): bool
+    {
+        return (bool) $this->email_news;
     }
 
     public function wantsEmail(): bool

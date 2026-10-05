@@ -17,6 +17,10 @@
             <input class="form-check-input" type="checkbox" role="switch" id="emailNotif" name="email_notifications" value="1" @checked(auth()->user()->email_notifications) onchange="this.form.submit()">
             <label class="form-check-label" for="emailNotif">{{ __('lms.email_notifications') }}</label>
         </div>
+        <div class="form-check form-switch mb-0">
+            <input class="form-check-input" type="checkbox" role="switch" id="emailNews" name="email_news" value="1" @checked(auth()->user()->email_news) onchange="this.form.submit()">
+            <label class="form-check-label" for="emailNews">{{ __('learn.email_news') }}</label>
+        </div>
         <noscript><button class="btn btn-sm btn-light">{{ __('lms.save') }}</button></noscript>
     </form>
 

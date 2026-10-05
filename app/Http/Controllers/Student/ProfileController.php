@@ -50,6 +50,7 @@ class ProfileController extends Controller
             'avatar'             => ['nullable', 'image', 'max:2048', 'mimes:jpeg,png,jpg,gif,webp'],
             'remove_avatar'      => ['nullable', 'boolean'],
             'email_notifications' => ['nullable', 'boolean'],
+            'email_news'         => ['nullable', 'boolean'],
         ]);
 
         if ($request->hasFile('avatar') || $request->boolean('remove_avatar')) {
@@ -67,6 +68,7 @@ class ProfileController extends Controller
         }
         unset($data['remove_avatar']);
         $data['email_notifications'] = $request->boolean('email_notifications');
+        $data['email_news'] = $request->boolean('email_news');
 
         $user->update($data);
 
@@ -92,6 +94,7 @@ class ProfileController extends Controller
         }
 
         $user->forceFill(['password' => Hash::make($request->password), 'has_password' => true])->save();
+        $user->notify(new \App\Notifications\PasswordChanged());
 
         return redirect()->to(route('student.profile.edit') . '#security')->with('success', __('learn.password_saved'));
     }
@@ -122,7 +125,9 @@ class ProfileController extends Controller
         if ($wait > 0) {
             return back()->withErrors(['email_code' => __('learn.code_wait', ['seconds' => $wait])])->withFragment('security');
         }
-        $this->codes->send($user, 'setup');
+        if (! $this->codes->send($user, 'setup')) {
+            return back()->withErrors(['email_code' => __('learn.code_send_failed')])->withFragment('security');
+        }
 
         return redirect()->to(route('student.profile.edit') . '#security')
             ->with('success', __('learn.code_sent_to', ['email' => $user->email]))->with('email_code_sent', true);

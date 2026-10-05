@@ -108,6 +108,10 @@ Route::get('/page/{slug}', [CmsPageController::class, 'show'])->name('cms.page')
 
 require __DIR__.'/auth.php';
 
+// One-click unsubscribe from the e-mails (signed link in every message, works without signing in)
+Route::get('/email/unsubscribe/{user}/{type}', [\App\Http\Controllers\EmailPreferenceController::class, 'unsubscribe'])
+    ->middleware('signed')->whereIn('type', ['activity', 'news'])->name('email.unsubscribe');
+
 // Sign in with Google, and the second step (e-mail confirmation code / two-factor code)
 Route::middleware('guest')->group(function () {
     Route::get('/auth/google', [\App\Http\Controllers\Auth\GoogleController::class, 'redirect'])->name('auth.google');
@@ -332,6 +336,7 @@ Route::prefix('acadexa-control')->name('admin.')->group(function () {
         // Settings
         Route::get('/settings', [AdminSetting::class, 'index'])->name('settings.index');
         Route::post('/settings', [AdminSetting::class, 'update'])->name('settings.update');
+        Route::post('/settings/test-mail', [AdminSetting::class, 'testMail'])->middleware('throttle:5,1')->name('settings.test-mail');
 
         // Activity Logs
         Route::get('/activity-logs', [AdminActivityLog::class, 'index'])->name('activity-logs.index');

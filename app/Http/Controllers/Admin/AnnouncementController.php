@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
 use App\Models\AnnouncementTranslation;
+use App\Models\User;
+use App\Notifications\AnnouncementPublished;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class AnnouncementController extends Controller
 {
@@ -32,6 +35,12 @@ class AnnouncementController extends Controller
             'is_active'  => true,
         ]);
         $this->saveTranslations($announcement, $data['translations']);
+
+        if ($request->boolean('notify', true)) {
+            $count = $this->notifyAudience($announcement);
+            return redirect()->route('admin.announcements.index')
+                ->with('success', trans_choice('learn.announcement_sent', $count, ['count' => $count]));
+        }
 
         return redirect()->route('admin.announcements.index')->with('success', __('Announcement created.'));
     }
@@ -63,10 +72,30 @@ class AnnouncementController extends Controller
         return redirect()->route('admin.announcements.index')->with('success', __('Announcement deleted.'));
     }
 
+    /**
+     * Bell notification + e-mail (according to each user's preferences) to the audience:
+     * everyone, students only or instructors only. Sent by the queue, in each reader's language.
+     */
+    private function notifyAudience(Announcement $announcement): int
+    {
+        $announcement->load('translations');
+        $count = 0;
+        User::where('is_active', true)->whereNull('banned_at')
+            ->when($announcement->audience === 'students', fn ($q) => $q->where('role', 'student'))
+            ->when($announcement->audience === 'instructors', fn ($q) => $q->where('role', 'instructor'))
+            ->where('id', '!=', auth()->id())
+            ->chunkById(500, function ($users) use ($announcement, &$count) {
+                Notification::send($users, new AnnouncementPublished($announcement));
+                $count += $users->count();
+            });
+        return $count;
+    }
+
     private function rules(): array
     {
         return [
             'audience'               => ['required', 'in:all,students,instructors'],
+            'notify'                 => ['nullable', 'boolean'],
             'translations'           => ['required', 'array'],
             'translations.en.title'  => ['required', 'string', 'max:255'],
             'translations.en.body'   => ['required', 'string', 'max:10000'],

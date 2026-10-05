@@ -8,7 +8,7 @@ class Enrollment extends Model
 {
     protected $fillable = [
         'user_id', 'course_id', 'enrolled_at', 'completed_at',
-        'progress_percent', 'last_lesson_id', 'reassess_reminded_at',
+        'progress_percent', 'last_lesson_id', 'reassess_reminded_at', 'inactivity_reminded_at',
     ];
 
     protected function casts(): array
@@ -17,6 +17,7 @@ class Enrollment extends Model
             'enrolled_at'      => 'datetime',
             'completed_at'     => 'datetime',
             'reassess_reminded_at' => 'datetime',
+            'inactivity_reminded_at' => 'datetime',
             'progress_percent' => 'decimal:2',
         ];
     }

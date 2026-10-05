@@ -317,6 +317,19 @@ Un site web ne peut pas techniquement interdire une capture d'écran ou un enreg
 
 Pour un blocage réel des enregistrements : vidéos chiffrées **DRM** (service payant : VdoCipher, Mux…) ou **application Android** (emballage de la PWA avec l'option `FLAG_SECURE`).
 
+### E-mails (Brevo)
+
+Tous les e-mails passent par l'**API Brevo** (pas de SMTP) dès que la clé est définie :
+```
+BREVO_API_KEY=xkeysib-...
+MAIL_FROM_ADDRESS=noreply@votre-domaine.com     (expéditeur validé dans Brevo)
+MAIL_FROM_NAME=ACADEXA
+```
+- **Envoyés immédiatement** : codes d'inscription et de connexion (2FA), e-mail de test (Admin → Paramètres → E-mails).
+- **Envoyés par la file d'attente** (service `php artisan schedule:work` obligatoire) : bienvenue, inscription à un cours, nouvel inscrit (formateur), devoirs, messages, réponses, annonces de cours, certificat, **actualités de la plateforme** (Admin → Annonces), **nouveau cours publié**, rappels (fin d'essai, inactivité après 7 jours, réévaluation), alerte de changement de mot de passe.
+- **Préférences** (profil ou page Notifications) : e-mails d'activité et e-mails d'actualités, séparément ; lien « Se désinscrire » dans chaque message. Les e-mails de sécurité sont toujours envoyés.
+- Modèle des e-mails : `resources/views/vendor/mail/html` (thème `acadexa.css`).
+
 ### Connexion avec Google et vérification en deux étapes
 
 - **Inscription** : un code à 6 chiffres est envoyé par e-mail pour confirmer l'adresse avant l'ouverture du compte (réglable dans Admin → Paramètres). **Un envoi d'e-mails fonctionnel (`MAIL_*`) est donc indispensable en production.**

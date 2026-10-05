@@ -48,6 +48,11 @@ class CourseController extends Controller
             'enrolled_at' => now(),
         ]);
 
+        $user->notify(new \App\Notifications\EnrollmentConfirmed($enrollment));
+        if ($course->instructor && $course->instructor_id !== $user->id) {
+            $course->instructor->notify(new \App\Notifications\NewStudentEnrolled($enrollment));
+        }
+
         return redirect()->route('student.courses.player', $enrollment)
             ->with('success', __('messages.enrolled_success'));
     }
@@ -95,6 +100,7 @@ class CourseController extends Controller
         if ($currentLesson) {
             $currentLesson->load(['translations', 'resources', 'quiz.questions.options', 'comments.user']);
             $enrollment->update(['last_lesson_id' => $currentLesson->id]);
+            $enrollment->touch(); // last activity, used by the inactivity reminder
             $lessonQuiz = $currentLesson->studentQuiz();
 
             $context += [

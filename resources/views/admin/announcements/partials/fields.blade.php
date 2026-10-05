@@ -16,3 +16,11 @@
         @endforeach
     </select>
 </div>
+@unless($announcement)
+<div class="form-check form-switch mb-4">
+    <input type="hidden" name="notify" value="0">
+    <input class="form-check-input" type="checkbox" role="switch" name="notify" value="1" id="notifyAudience" @checked(old('notify', '1') === '1')>
+    <label class="form-check-label" for="notifyAudience">{{ __('learn.announcement_notify') }}</label>
+    <div class="form-text">{{ __('learn.announcement_notify_help') }}</div>
+</div>
+@endunless

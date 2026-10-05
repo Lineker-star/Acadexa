@@ -77,7 +77,9 @@ class TwoFactorChallengeController extends Controller
         if ($wait > 0) {
             return back()->withErrors(['code' => __('learn.code_wait', ['seconds' => $wait])]);
         }
-        $this->codes->send($state['user'], $state['purpose']);
+        if (! $this->codes->send($state['user'], $state['purpose'])) {
+            return back()->withErrors(['code' => __('learn.code_send_failed')]);
+        }
 
         return back()->with('success', __('learn.code_resent'));
     }

@@ -88,8 +88,8 @@ class LoginFlow
             'method'   => $method,
             'remember' => $remember,
         ]);
-        if ($method === 'email' && $this->codes->waitBeforeResend($user, $purpose) === 0) {
-            $this->codes->send($user, $purpose);
+        if ($method === 'email' && $this->codes->waitBeforeResend($user, $purpose) === 0 && ! $this->codes->send($user, $purpose)) {
+            return redirect()->route('two-factor.challenge')->withErrors(['code' => __('learn.code_send_failed')]);
         }
 
         return redirect()->route('two-factor.challenge');

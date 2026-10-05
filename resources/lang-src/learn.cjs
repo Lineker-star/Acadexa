@@ -1079,3 +1079,7 @@ for (const locale of Object.keys(module.exports)) {
     Object.assign(module.exports[locale], rest);
     Object.assign(module.exports[locale].js, js);
 }
+
+// E-mail notifications (Brevo), preferences and unsubscribe.
+const mail = require('./learn-mail.cjs');
+for (const locale of Object.keys(module.exports)) Object.assign(module.exports[locale], mail[locale]);

@@ -74,6 +74,11 @@
                             <input class="form-check-input" type="checkbox" name="email_notifications" value="1" id="emailNotif" @checked($user->email_notifications)>
                             <label class="form-check-label small" for="emailNotif">{{ __('learn.email_notifications') }}</label>
                         </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="email_news" value="1" id="emailNews" @checked($user->email_news)>
+                            <label class="form-check-label small" for="emailNews">{{ __('learn.email_news') }}</label>
+                        </div>
+                        <div class="form-text">{{ __('learn.email_security_note') }}</div>
                     </div>
                 </div>
 
