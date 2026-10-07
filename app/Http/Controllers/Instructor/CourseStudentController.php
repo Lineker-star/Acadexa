@@ -60,7 +60,13 @@ class CourseStudentController extends Controller
 
         $profile = app(KnowledgeService::class)->profile($enrollment);
 
-        return view('instructor.students.show', compact('course', 'enrollment', 'completed', 'bestScores', 'submissions', 'profile'));
+        // What the student wrote in the module exercises (open questions), latest hand-in per exercise.
+        $course->load('modules.exam.questions');
+        $exerciseAnswers = QuizAttempt::where('user_id', $enrollment->user_id)
+            ->whereIn('quiz_id', $course->modules->pluck('exam.id')->filter())
+            ->where('mode', \App\Models\Quiz::MODE_STANDARD)->orderBy('id')->get()->keyBy('quiz_id');
+
+        return view('instructor.students.show', compact('course', 'enrollment', 'completed', 'bestScores', 'submissions', 'profile', 'exerciseAnswers'));
     }
 
     /**

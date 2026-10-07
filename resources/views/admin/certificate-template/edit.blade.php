@@ -14,7 +14,7 @@
                     <div class="col-md-6">
                         <label class="form-label fw-bold">{{ __('Institution Name') }}</label>
                         <input type="text" name="cert_institution" class="form-control"
-                               value="{{ $settings['cert_institution'] ?? 'ZTF University Institute' }}">
+                               value="{{ $settings['cert_institution'] ?? 'Institut de Formation Professionnelle ZTF' }}">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">{{ __('Sub-heading') }}</label>
@@ -29,7 +29,7 @@
                     <div class="col-md-6">
                         <label class="form-label fw-bold">{{ __('Signature Title') }}</label>
                         <input type="text" name="cert_sig_title" class="form-control"
-                               value="{{ $settings['cert_sig_title'] ?? 'Director, ZTF University Institute' }}">
+                               value="{{ $settings['cert_sig_title'] ?? 'Directeur, Institut de Formation Professionnelle ZTF' }}">
                     </div>
                     <div class="col-12">
                         <label class="form-label fw-bold">{{ __('Certificate Description Text') }}</label>
@@ -60,7 +60,7 @@
         <div class="bg-white rounded-xl shadow-brand p-4">
             <h6 class="fw-bold mb-3">{{ __('Preview Certificate') }}</h6>
             <div class="text-center p-3 rounded border" style="background:{{ $settings['cert_bg_color'] ?? '#0A2A5E' }};color:white;font-size:.75rem;">
-                <div style="font-size:.9rem;font-weight:bold;">{{ $settings['cert_institution'] ?? 'ZTF University Institute' }}</div>
+                <div style="font-size:.9rem;font-weight:bold;">{{ $settings['cert_institution'] ?? 'Institut de Formation Professionnelle ZTF' }}</div>
                 <div class="mt-1 mb-2" style="font-size:.7rem;opacity:.8;">{{ $settings['cert_subheading'] ?? 'ACADEXA LMS' }}</div>
                 <div style="font-size:.7rem;letter-spacing:2px;opacity:.6;">{{ __('CERTIFICATE OF COMPLETION') }}</div>
                 <div class="my-2" style="font-size:1rem;font-weight:bold;">{{ __('Student Name') }}</div>

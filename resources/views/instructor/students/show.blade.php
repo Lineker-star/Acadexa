@@ -92,8 +92,24 @@
                 <li class="d-flex align-items-center gap-3 px-3 py-2 small" style="background:#F8FAFF">
                     <x-icon :name="$examScore && $examScore->passed ? 'check-circle-fill' : 'circle'" :class="$examScore && $examScore->passed ? 'text-success' : 'text-muted'" />
                     <span class="flex-grow-1 fw-semibold"><x-icon name="clipboard-check" class="me-1 text-primary" />{{ __('learn.module_exercise') }}</span>
-                    @if($examScore)<span class="badge bg-light text-dark border">{{ __('lms.best_score') }} {{ (float) $examScore->best }} % ({{ $examScore->attempts }}×)</span>@endif
+                    @php $handIn = $exerciseAnswers[$module->exam->id] ?? null; $openExam = $module->exam->questions->contains(fn ($q) => $q->isOpen()); @endphp
+                    @if($openExam && $handIn)<span class="badge bg-success">{{ __('learn.exercise_handed_in') }} · {{ $handIn->attempted_at?->isoFormat('L') }}</span>
+                    @elseif($examScore)<span class="badge bg-light text-dark border">{{ __('lms.best_score') }} {{ (float) $examScore->best }} % ({{ $examScore->attempts }}×)</span>@endif
                 </li>
+                @if($openExam && $handIn)
+                <li class="px-3 py-2 small border-top">
+                    <details>
+                        <summary class="fw-semibold">{{ __('learn.student_answers') }}</summary>
+                        @foreach($module->exam->questions as $question)
+                            <div class="mt-3">
+                                <div class="fw-semibold">{{ $loop->iteration }}. {{ $question->question }}</div>
+                                <div class="border rounded bg-light p-2 my-1" style="white-space:pre-wrap">{{ is_array($handIn->answers[$question->id] ?? null) ? '' : ($handIn->answers[$question->id] ?? '—') }}</div>
+                                <div class="model-answer"><div class="small fw-semibold text-success mb-1">{{ __('learn.model_answer') }}</div>{!! nl2br(e($question->model_answer)) !!}</div>
+                            </div>
+                        @endforeach
+                    </details>
+                </li>
+                @endif
             @endif
         </ul>
     </div>

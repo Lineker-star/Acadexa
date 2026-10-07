@@ -258,21 +258,22 @@ Toute l'interface est traduite dans les 6 langues ; l'arabe s'affiche de droite 
 
 ### Évaluations et suivi des connaissances
 
-- **Après chaque leçon** (vidéo/texte) : un quiz d’au moins **10 questions** ; la leçon n’est validée qu’avec **7/10 (70 %)** minimum. Le formateur peut être plus exigeant, jamais moins.
-- **Après chaque module** : un exercice complet d’au moins 10 questions (70 %), qui débloque la suite dans un cours séquentiel.
-- **Après le cours** : une évaluation finale d’au moins 20 questions (70 %), nécessaire pour le certificat.
+- **Après chaque leçon** (vidéo/texte) : un QCM d’au moins **10 questions**, corrigé automatiquement et **noté sur 10** (1 point par question) ; la leçon n’est validée qu’avec **7/10** minimum. Le formateur indique la ou les bonnes réponses de chaque question (et, s’il le souhaite, une explication) ; dès que l’étudiant a répondu, sa note et la correction lui sont renvoyées. Le formateur peut être plus exigeant, jamais moins.
+- **Après chaque module** : un exercice d’au moins **5 questions à réponse rédigée**. Le formateur écrit, dans l’ordre, chaque question et sa **réponse détaillée** (une par une ou par import en texte). L’étudiant répond par écrit à toutes les questions ; à la remise, les réponses détaillées s’affichent à côté des siennes. L’exercice n’est pas noté automatiquement : il est validé dès qu’il est remis, et le formateur lit les réponses dans la fiche de l’étudiant.
+- **Après le cours** : une évaluation finale (QCM, au moins 20 questions) **notée sur 100** ; à partir de **70/100** le cours est réussi et le certificat est délivré.
 - **Progression / régression** : l’évaluation finale sert aussi de *test de positionnement* (avant d’étudier, une seule fois, sans correction affichée) et de *réévaluation* (après réussite, au plus une fois tous les 7 jours ; rappel automatique au bout de 30 jours). La comparaison des scores donne le niveau de départ, le niveau actuel et la tendance ; chaque question peut être rattachée à un module pour mesurer la maîtrise par module.
 - **Formateur** : onglet *Évaluations* du cours (plan complet), éditeur de questions avec import en texte, page *Suivi des connaissances* par cours, fiche de chaque étudiant (courbe), encart sur le tableau de bord et notification en cas de régression.
 - **Étudiant** : page *Mes résultats* pour chaque cours.
 - Un cours ne peut être soumis à validation que si tout le parcours d’évaluation est complet. Les cours déjà publiés sans quiz continuent de fonctionner comme avant.
 - Réglages : `config/lms.php` → `assessment` (`LMS_RETAKE_COOLDOWN_DAYS`, `LMS_REASSESS_AFTER_DAYS`).
+- **Certificat (PDF A4 paysage)** : aux couleurs de la plateforme (bleu marine et orange) — logo en haut, nom de l’étudiant en écriture cursive (police *Great Vibes*, `resources/fonts`, licence OFL), cours, note finale sur 100, date, sceau et signature, puis en bas l’institut auquel la plateforme appartient. Le nom de l’institut, le signataire et le logo se règlent dans Admin → Modèle de certificat. Quand le modèle change (`CertificateService::TEMPLATE_VERSION`), les certificats déjà délivrés sont régénérés au prochain téléchargement ; leur code reste le même.
 
 ### Bibliothèque et lecture hors ligne
 
 - Le formateur ajoute des **livres** (PDF, audio, vidéo — onglet *Livres* du cours, `LMS_BOOK_MAX_MB`).
 - L’étudiant les ajoute à **Ma bibliothèque** : la liste est enregistrée **dans son compte**, pas dans les fichiers de l’appareil. Sur chaque appareil où il se connecte, l’application en garde une copie privée (effacée à la déconnexion) et la position de lecture est synchronisée.
 - PDF, audio, vidéo et images (livres et ressources des leçons) s’ouvrent dans le **lecteur intégré**, en ligne comme hors ligne (`/offline`).
-- Hors ligne, les quiz de leçon et exercices de module donnent un résultat provisoire ; la correction du serveur à la reconnexion fait foi. L’évaluation finale se passe en ligne.
+- Hors ligne, les quiz de leçon donnent un résultat provisoire ; la correction du serveur à la reconnexion fait foi. Les exercices rédigés et l’évaluation finale se passent en ligne.
 
 **Déploiement de cette version :** `php artisan migrate --force` (1 migration additive), `npm install && npm run build`, et la tâche cron existante (elle lance aussi `acadexa:reassessment-reminders`). Les traductions du groupe `learn` sont générées par `node scripts/write-group.cjs learn resources/lang-src/learn.cjs`.
 

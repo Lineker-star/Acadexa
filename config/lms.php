@@ -32,7 +32,8 @@ return [
     */
     'assessment' => [
         'pass_percent'  => 70,                                        // 7/10 — instructors may only raise it
-        'min_questions' => ['lesson' => 10, 'module' => 10, 'course' => 20],
+        // Lesson quiz and final evaluation: multiple-choice questions. Module exercise: open questions with a detailed answer.
+        'min_questions' => ['lesson' => 10, 'module' => 5, 'course' => 20],
         'retake_cooldown_days' => (int) env('LMS_RETAKE_COOLDOWN_DAYS', 7),
         'reassess_after_days'  => (int) env('LMS_REASSESS_AFTER_DAYS', 30),
         // Change (in points) between two evaluations that counts as progression / regression.

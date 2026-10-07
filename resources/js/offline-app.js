@@ -324,6 +324,7 @@ function renderCompleteControl(lesson, done) {
 }
 
 function renderQuiz(quiz) {
+    if (quiz.open) return `<div class="alert alert-info">${icon('wifi', 'me-1')}${t('exercise_online_only')}</div>`;
     if (quiz.timed) return `<div class="alert alert-info">${icon('stopwatch', 'me-1')}${t('timed_quiz_needs_network')}</div>`;
     return `
         <form id="offQuiz" class="border rounded-xl p-3 bg-light">

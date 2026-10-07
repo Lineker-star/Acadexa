@@ -772,8 +772,27 @@ function initMultiUpload() {
     }, true);
 }
 
+// ─── Module exercise: open question + detailed answer ─────────────────────────
+function initOpenQuestionModal() {
+    const modal = document.getElementById('openQuestionModal');
+    if (!modal) return;
+    const form = document.getElementById('openQuestionForm');
+    modal.addEventListener('show.bs.modal', event => {
+        const trigger = event.relatedTarget;
+        form.reset();
+        const editing = Boolean(trigger?.dataset.question);
+        const q = editing ? JSON.parse(trigger.dataset.question) : {};
+        form.action = editing ? trigger.dataset.action : form.dataset.createAction;
+        form.querySelector('[name=_method]').value = editing ? 'PUT' : 'POST';
+        form.querySelector('[name=question]').value = q.question || '';
+        form.querySelector('[name=model_answer]').value = q.model_answer || '';
+    });
+    modal.addEventListener('shown.bs.modal', () => form.querySelector('[name=question]').focus());
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initCurriculum();
+    initOpenQuestionModal();
     initStructure();
     initMultiUpload();
     initIntroVideo();

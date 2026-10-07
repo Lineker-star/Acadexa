@@ -348,7 +348,9 @@ function initQuiz() {
     const collect = () => {
         const answers = {};
         form.querySelectorAll('.quiz-question').forEach(fs => {
-            answers[fs.dataset.question] = [...fs.querySelectorAll('input:checked')].map(i => Number(i.value));
+            const open = fs.querySelector('[data-open-answer]');
+            // Open question: the written answer; multiple choice: the ticked options.
+            answers[fs.dataset.question] = open ? open.value.trim() : [...fs.querySelectorAll('input:checked')].map(i => Number(i.value));
         });
         return answers;
     };
@@ -406,6 +408,7 @@ function initQuiz() {
         try {
             const { ok, data } = await post(container.dataset.attemptUrl, { answers, mode });
             if (!ok) {
+                (data.unanswered || []).forEach(id => form.querySelector(`[data-question="${id}"] [data-open-answer]`)?.classList.add('is-invalid'));
                 result.innerHTML = `<span class="text-danger">${data.message || t('error')}</span>`;
                 submitted = false;
                 submitBtn.disabled = false;
@@ -414,7 +417,7 @@ function initQuiz() {
             }
             showResult(data);
         } catch (err) {
-            if (isNetworkError(err) && !timeLimit && mode === 'standard') {
+            if (isNetworkError(err) && !timeLimit && mode === 'standard' && !form.querySelector('[data-open-answer]')) {
                 await enqueue({ type: 'quiz', quiz_id: Number(container.dataset.quizId), answers, user_id: userId });
                 result.innerHTML = `<span class="text-primary">${icon('cloud-slash', 'me-1')}${t('quiz_saved_offline')}</span>`;
                 form.querySelectorAll('input').forEach(i => { i.disabled = true; });
@@ -428,12 +431,19 @@ function initQuiz() {
     });
 
     function showResult(data) {
-        form.querySelectorAll('input').forEach(i => { i.disabled = true; });
+        form.querySelectorAll('input, textarea').forEach(i => { i.disabled = true; });
         submitBtn.hidden = true;
 
         Object.entries(data.review || {}).forEach(([questionId, review]) => {
             const fs = form.querySelector(`[data-question="${questionId}"]`);
             if (!fs) return;
+            if (review.open) {
+                // Open question: no automatic mark, the detailed answer is shown for comparison.
+                const note = fs.querySelector('.review-note');
+                note.hidden = false;
+                note.innerHTML = `<div class="model-answer mt-2"><div class="small fw-semibold text-success mb-1">${icon('check2-square', 'me-1')}${t('model_answer')}</div>${escapeHtml(review.model_answer || '').replace(/\n/g, '<br>')}</div>`;
+                return;
+            }
             fs.classList.add('quiz-question-review', review.correct ? 'correct' : 'wrong');
             if (review.answer) {
                 fs.querySelectorAll('.quiz-option').forEach(label => {
@@ -453,8 +463,11 @@ function initQuiz() {
 
         const retry = !data.passed && data.attempts_left !== 0 && mode === 'standard'
             ? ` <button type="button" class="btn btn-sm btn-outline-primary ms-2" onclick="location.reload()">${t('retry')}</button>` : '';
-        result.innerHTML = `<span class="${data.passed ? 'text-success' : 'text-danger'}">
-            ${t('score_line', { score: data.score, correct: data.correct, total: data.total })} — ${data.message}</span>${retry}`;
+        // Lesson quiz: mark out of 10 (1 point per question); final evaluation: out of 100; open exercise: no mark.
+        const scoreText = data.open ? ''
+            : (data.grade ? t('grade_line', { grade: data.grade.value, out_of: data.grade.out_of, correct: data.correct, total: data.total })
+                : t('score_line', { score: data.score, correct: data.correct, total: data.total })) + ' — ';
+        result.innerHTML = `<span class="${data.passed ? 'text-success' : 'text-danger'}">${scoreText}${data.message}</span>${retry}`;
         toast(data.message, data.passed || mode !== 'standard' ? 'success' : 'warning');
         if (data.knowledge) showKnowledge(data.knowledge);
 

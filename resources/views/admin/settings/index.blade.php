@@ -81,7 +81,7 @@
                     <div class="col-md-6">
                         <label class="form-label small fw-bold">{{ __('Signature Title') }}</label>
                         <input type="text" name="cert_sig_title" class="form-control"
-                               value="{{ $settings['cert_sig_title'] ?? 'Director, ZTF University Institute' }}">
+                               value="{{ $settings['cert_sig_title'] ?? 'Directeur, Institut de Formation Professionnelle ZTF' }}">
                     </div>
                 </div>
 

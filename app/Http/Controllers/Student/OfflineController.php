@@ -228,6 +228,10 @@ class OfflineController extends Controller
     private function quizPayload(Quiz $quiz, string $salt): array
     {
         $timed = (bool) $quiz->time_limit_minutes;
+        $open = $quiz->questions->contains(fn ($question) => $question->isOpen());
+        if ($open) {
+            return ['id' => $quiz->id, 'scope' => $quiz->scope, 'passing_score' => 0, 'timed' => false, 'open' => true, 'questions' => []];
+        }
         return [
             'id'            => $quiz->id,
             'scope'         => $quiz->scope,

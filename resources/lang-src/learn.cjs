@@ -1083,3 +1083,11 @@ for (const locale of Object.keys(module.exports)) {
 // E-mail notifications (Brevo), preferences and unsubscribe.
 const mail = require('./learn-mail.cjs');
 for (const locale of Object.keys(module.exports)) Object.assign(module.exports[locale], mail[locale]);
+
+// Marks out of 10 / 100, open-question exercises, certificate.
+const exam = require('./learn-exam.cjs');
+for (const locale of Object.keys(module.exports)) {
+    const { js, ...rest } = exam[locale];
+    Object.assign(module.exports[locale], rest);
+    Object.assign(module.exports[locale].js, js);
+}

@@ -206,3 +206,7 @@ html.content-shielded .wm-shield { display: flex; }
 .content-option { border: 1px solid #E5E7EB; border-radius: .75rem; padding: 1rem; margin-bottom: 1rem; }
 .upload-item { display: flex; align-items: center; gap: .6rem; padding: .5rem .6rem; border: 1px solid #E5E7EB; border-radius: .5rem; margin-bottom: .4rem; background: #fff; }
 .upload-item.is-error { border-color: #FCA5A5; background: #FEF2F2; }
+
+/* Open questions (module exercise): the instructor's detailed answer */
+.model-answer { background: #F0FDF4; border-left: 3px solid #16A34A; border-radius: .35rem; padding: .6rem .8rem; font-size: .9rem; white-space: normal; }
+.quiz-open-answer { min-height: 7rem; }

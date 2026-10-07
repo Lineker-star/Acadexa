@@ -7,6 +7,8 @@
     $min = $quiz->minQuestions();
     $pass = config('lms.assessment.pass_percent');
     $isFinal = $quiz->isFinal();
+    $isOpen = $quiz->usesOpenQuestions();
+    $modalId = $isOpen ? '#openQuestionModal' : '#questionModal';
     $scopeHelp = [
         'lesson' => __('learn.scope_help_lesson', ['min' => $min, 'pass' => $pass]),
         'module' => __('learn.scope_help_module', ['min' => $min, 'pass' => $pass]),
@@ -46,7 +48,8 @@
         <div class="progress mt-2" style="height:6px"><div class="progress-bar {{ $count >= $min ? 'bg-success' : '' }}" style="width:{{ min(100, $count / max(1, $min) * 100) }}%"></div></div>
     </div>
 
-    {{-- Settings --}}
+    {{-- Settings (multiple-choice assessments only: an open exercise is not graded automatically) --}}
+    @unless($isOpen)
     <div class="bg-white rounded-xl shadow-brand p-4 mb-4">
         <h5 class="fw-bold mb-3">{{ __('lms.save_settings') }}</h5>
         <form method="POST" action="{{ route('instructor.quizzes.update', $quiz) }}">
@@ -86,6 +89,8 @@
         @endif
     </div>
 
+    @endunless
+
     {{-- Questions --}}
     <div class="bg-white rounded-xl shadow-brand p-4 mb-4" id="quiz">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
@@ -93,7 +98,7 @@
             @unless($locked)
             <div class="d-flex gap-2">
                 <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#importBox"><x-icon name="upload" class="me-1" />{{ __('learn.import_questions') }}</button>
-                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#questionModal"><x-icon name="plus-lg" class="me-1" />{{ __('lms.add_question') }}</button>
+                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="{{ $modalId }}"><x-icon name="plus-lg" class="me-1" />{{ __('lms.add_question') }}</button>
             </div>
             @endunless
         </div>
@@ -102,7 +107,7 @@
         <div class="collapse {{ $errors->has('questions_text') ? 'show' : '' }} mb-3" id="importBox">
             <form method="POST" action="{{ route('instructor.questions.import', $quiz) }}" class="border rounded p-3 bg-light">
                 @csrf
-                <label class="form-label small fw-semibold" for="questionsText">{{ __('learn.import_help') }}</label>
+                <label class="form-label small fw-semibold" for="questionsText">{{ $isOpen ? __('learn.import_open_help') : __('learn.import_help') }}</label>
                 <div class="row g-3">
                     <div class="col-md-7">
                         <textarea name="questions_text" id="questionsText" rows="10" class="form-control form-control-sm font-monospace @error('questions_text') is-invalid @enderror">{{ old('questions_text') }}</textarea>
@@ -110,7 +115,7 @@
                     </div>
                     <div class="col-md-5">
                         <div class="small text-muted mb-1">{{ __('learn.import_example') }}</div>
-<pre class="small bg-white border rounded p-2 mb-0">{{ __('learn.import_sample') }}</pre>
+<pre class="small bg-white border rounded p-2 mb-0" style="white-space:pre-wrap">{{ $isOpen ? __('learn.import_open_sample') : __('learn.import_sample') }}</pre>
                     </div>
                 </div>
                 <button class="btn btn-sm btn-primary mt-2"><x-icon name="upload" class="me-1" />{{ __('learn.import_questions') }}</button>
@@ -118,6 +123,9 @@
         </div>
         @endunless
 
+        @if($errors->has('model_answer') || $errors->has('question'))
+            <div class="alert alert-danger small py-2">{{ $errors->first('model_answer') ?: $errors->first('question') }}</div>
+        @endif
         <div id="questionList" data-reorder-url="{{ $locked ? '' : route('instructor.questions.reorder', $quiz) }}">
             @forelse($quiz->questions as $question)
                 <div class="question-card" data-question-id="{{ $question->id }}">
@@ -126,7 +134,7 @@
                         <div class="flex-grow-1">
                             <div class="fw-semibold">{{ $loop->iteration }}. {{ $question->question }}</div>
                             <div class="small text-muted">
-                                {{ $question->type === 'multiple' ? __('lms.multiple_answers') : __('lms.single_answer') }}
+                                {{ $question->isOpen() ? __('learn.open_question') : ($question->type === 'multiple' ? __('lms.multiple_answers') : __('lms.single_answer')) }}
                                 @if($isFinal && $question->module) · <x-icon name="collection" class="me-1" />{{ $question->module->title() }} @endif
                             </div>
                         </div>
@@ -137,10 +145,11 @@
                                 'type'        => $question->type,
                                 'module_id'   => $question->module_id,
                                 'explanation' => $question->explanation,
+                                'model_answer' => $question->model_answer,
                                 'options'     => $question->options->map(fn ($o) => ['text' => $o->option_text, 'correct' => $o->is_correct])->all(),
                             ];
                         @endphp
-                        <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#questionModal"
+                        <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="{{ $modalId }}"
                                 data-action="{{ route('instructor.questions.update', $question) }}"
                                 data-question="{{ json_encode($questionData) }}" aria-label="{{ __('lms.edit') }}">
                             <x-icon name="pencil" /></button>
@@ -150,6 +159,9 @@
                         </form>
                         @endunless
                     </div>
+                    @if($question->isOpen())
+                        <div class="model-answer ms-4"><div class="small fw-semibold text-success mb-1"><x-icon name="check2-square" class="me-1" />{{ __('learn.model_answer') }}</div>{!! nl2br(e($question->model_answer)) !!}</div>
+                    @endif
                     <ul class="q-options list-unstyled mb-0">
                         @foreach($question->options as $option)
                             <li class="{{ $option->is_correct ? 'is-correct' : '' }}"><x-icon :name="$option->is_correct ? 'bi-check-circle-fill' : 'bi-circle'" class="me-1" />{{ $option->option_text }}</li>
@@ -172,6 +184,34 @@
 </div>
 </div>
 
+@if($isOpen)
+{{-- Open question + detailed answer (module exercise) --}}
+<div class="modal fade" id="openQuestionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <form method="POST" class="modal-content" id="openQuestionForm" data-create-action="{{ route('instructor.questions.store', $quiz) }}">
+            @csrf
+            <input type="hidden" name="_method" value="POST">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ __('learn.open_question') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('lms.close') }}"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">{{ __('lms.question') }} *</label>
+                    <textarea name="question" class="form-control" rows="3" maxlength="2000" required></textarea>
+                </div>
+                <label class="form-label fw-semibold">{{ __('learn.model_answer') }} *</label>
+                <textarea name="model_answer" class="form-control" rows="9" minlength="10" maxlength="20000" required placeholder="{{ __('learn.model_answer_placeholder') }}"></textarea>
+                <div class="form-text">{{ __('learn.model_answer_help') }}</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('lms.cancel') }}</button>
+                <button class="btn btn-primary">{{ __('lms.save') }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+@else
 <div class="modal fade" id="questionModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <form method="POST" class="modal-content" id="questionForm" data-create-action="{{ route('instructor.questions.store', $quiz) }}">
@@ -222,6 +262,7 @@
         </form>
     </div>
 </div>
+@endif
 @endsection
 
 @push('scripts')

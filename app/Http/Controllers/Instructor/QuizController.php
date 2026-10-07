@@ -51,6 +51,7 @@ class QuizController extends Controller
                 'question'    => $data['question'],
                 'type'        => $data['type'],
                 'explanation' => $data['explanation'] ?? null,
+                'model_answer' => $data['model_answer'] ?? null,
                 'order'       => (int) $quiz->questions()->max('order') + 1,
             ]);
             $this->syncOptions($question, $data);
@@ -71,6 +72,7 @@ class QuizController extends Controller
                 'type'        => $data['type'],
                 'module_id'   => $data['module_id'] ?? null,
                 'explanation' => $data['explanation'] ?? null,
+                'model_answer' => $data['model_answer'] ?? null,
             ]);
             $question->options()->delete();
             $this->syncOptions($question, $data);
@@ -115,6 +117,10 @@ class QuizController extends Controller
         $this->authorizeQuiz($quiz);
         $text = $request->validate(['questions_text' => ['required', 'string', 'max:200000']])['questions_text'];
 
+        if ($quiz->usesOpenQuestions()) {
+            return $this->importOpen($quiz, $text);
+        }
+
         [$questions, $errors] = self::parseQuestions($text);
         if ($errors) {
             throw ValidationException::withMessages(['questions_text' => $errors]);
@@ -131,6 +137,46 @@ class QuizController extends Controller
                     'order'       => ++$order,
                 ]);
                 $this->syncOptions($question, ['options' => $q['options'], 'correct' => $q['correct']]);
+            }
+        });
+
+        return $this->back($quiz, trans_choice('learn.questions_imported', count($questions), ['count' => count($questions)]));
+    }
+
+    /**
+     * Module exercise: one block per question, blank line between blocks —
+     *   the question on the first line,
+     *   then the detailed answer on the following lines (a leading ">" is optional).
+     */
+    private function importOpen(Quiz $quiz, string $text)
+    {
+        $blocks = preg_split('/\R\s*\R/u', trim(str_replace("\r\n", "\n", $text)));
+        $questions = [];
+        $errors = [];
+        foreach ($blocks as $n => $block) {
+            $lines = array_values(array_filter(array_map('trim', preg_split('/\R/u', $block)), 'strlen'));
+            if (! $lines) {
+                continue;
+            }
+            $question = preg_replace('/^(\d+[\.\)]|Q\s*:)\s*/iu', '', array_shift($lines));
+            $answer = trim(implode("\n", array_map(fn ($line) => preg_replace('/^>\s*/u', '', $line), $lines)));
+            if ($answer === '') {
+                $errors[] = __('learn.import_open_error', ['number' => $n + 1, 'question' => \Illuminate\Support\Str::limit($question, 60)]);
+                continue;
+            }
+            $questions[] = ['question' => mb_substr($question, 0, 2000), 'answer' => mb_substr($answer, 0, 20000)];
+        }
+        if ($errors || ! $questions) {
+            throw ValidationException::withMessages(['questions_text' => $errors ?: [__('learn.import_empty')]]);
+        }
+
+        DB::transaction(function () use ($quiz, $questions) {
+            $order = (int) $quiz->questions()->max('order');
+            foreach ($questions as $q) {
+                QuizQuestion::create([
+                    'quiz_id' => $quiz->id, 'question' => $q['question'], 'type' => QuizQuestion::TYPE_OPEN,
+                    'model_answer' => $q['answer'], 'order' => ++$order,
+                ]);
             }
         });
 
@@ -184,6 +230,16 @@ class QuizController extends Controller
      */
     private function validateQuestion(Request $request, Quiz $quiz): array
     {
+        // Module exercise: an open question and the detailed answer shown to students after they reply.
+        if ($quiz->usesOpenQuestions()) {
+            $data = $request->validate([
+                'question'     => ['required', 'string', 'max:2000'],
+                'model_answer' => ['required', 'string', 'min:10', 'max:20000'],
+            ], [], ['model_answer' => __('learn.model_answer')]);
+
+            return $data + ['type' => QuizQuestion::TYPE_OPEN, 'options' => [], 'correct' => []];
+        }
+
         $data = $request->validate([
             'question'         => ['required', 'string', 'max:2000'],
             'type'             => ['required', 'in:single,multiple'],

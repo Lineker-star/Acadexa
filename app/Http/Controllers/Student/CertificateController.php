@@ -26,13 +26,8 @@ class CertificateController extends Controller
     {
         abort_if($certificate->user_id !== $request->user()->id, 403);
 
-        if (! $certificate->pdf_path || ! Storage::disk('public')->exists('certificates/' . $certificate->pdf_path)) {
-            $this->service->generatePdf($certificate);
-            $certificate->refresh();
-        }
-
         return Storage::disk('public')->download(
-            'certificates/' . $certificate->pdf_path,
+            'certificates/' . $this->service->currentPdf($certificate),
             'ACADEXA_Certificate_' . $certificate->certificate_code . '.pdf'
         );
     }

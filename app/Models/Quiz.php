@@ -123,6 +123,22 @@ class Quiz extends Model
         return max((int) $this->passing_score, (int) config('lms.assessment.pass_percent'));
     }
 
+    /** Module exercises are made of open questions with a detailed answer (no multiple choice). */
+    public function usesOpenQuestions(): bool
+    {
+        return $this->scope === self::SCOPE_MODULE;
+    }
+
+    /** What the grade is expressed on: 10 for a lesson quiz (1 point per question), 100 for the final evaluation. */
+    public function gradeOutOf(): ?int
+    {
+        return match ($this->scope) {
+            self::SCOPE_LESSON => 10,
+            self::SCOPE_COURSE => 100,
+            default            => null,
+        };
+    }
+
     public function isFinal(): bool
     {
         return $this->scope === self::SCOPE_COURSE;

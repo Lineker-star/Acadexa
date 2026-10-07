@@ -49,7 +49,6 @@ class QuizController extends Controller
     {
         $data = $request->validate([
             'answers'    => ['present', 'array'],
-            'answers.*'  => ['array'],
             'offline_at' => ['nullable', 'date'],
             'mode'       => ['nullable', 'in:standard,diagnostic,retake'],
         ]);
@@ -76,10 +75,27 @@ class QuizController extends Controller
         $correct = 0;
         $review = [];
         $perModule = [];
-        // A placement test must not reveal the answers of the final evaluation.
-        $reveal = $quiz->show_correct_answers && $mode !== Quiz::MODE_DIAGNOSTIC;
+        // Lesson quizzes and module exercises always give the answers back after submission; the final
+        // evaluation follows its setting, and a placement test never reveals them.
+        $reveal = $quiz->scope !== Quiz::SCOPE_COURSE || ($quiz->show_correct_answers && $mode !== Quiz::MODE_DIAGNOSTIC);
+
+        // Open questions (module exercise): every one must be answered before the corrections are shown.
+        $open = $questions->filter->isOpen();
+        $unanswered = $open->filter(fn ($q) => mb_strlen(trim((string) (is_array($answers[$q->id] ?? null) ? '' : ($answers[$q->id] ?? '')))) < 2);
+        if ($unanswered->isNotEmpty() && ! $timedOut) {
+            return response()->json([
+                'message'    => trans_choice('learn.exercise_unanswered', $unanswered->count(), ['count' => $unanswered->count()]),
+                'unanswered' => $unanswered->pluck('id')->values(),
+            ], 422);
+        }
 
         foreach ($questions as $question) {
+            if ($question->isOpen()) {
+                // Not graded automatically: the student compares with the instructor's detailed answer.
+                $correct++;
+                $review[$question->id] = ['open' => true, 'correct' => true, 'model_answer' => $question->model_answer];
+                continue;
+            }
             $correctIds = $question->options->where('is_correct', true)->pluck('id')->map(fn ($id) => (int) $id)->sort()->values()->all();
             $submitted = collect((array) ($answers[$question->id] ?? []))->map(fn ($id) => (int) $id)->unique()->sort()->values()->all();
             $isRight = ! $timedOut && $correctIds === $submitted;
@@ -142,12 +158,16 @@ class QuizController extends Controller
             $timedOut                        => __('lms.quiz_timed_out'),
             $mode === Quiz::MODE_DIAGNOSTIC  => __('learn.diagnostic_done', ['score' => $score]),
             $mode === Quiz::MODE_RETAKE      => __('learn.retake_done', ['score' => $score]),
+            $passed && $open->isNotEmpty()   => __('learn.exercise_done'),
             $passed                          => __('messages.quiz_passed'),
             default                          => __('learn.quiz_failed_need', ['score' => $passingScore]),
         };
 
         return response()->json([
             'score'         => $score,
+            // Lesson quiz: mark out of 10 (1 point per question); final evaluation: out of 100.
+            'grade'         => $quiz->gradeOutOf() ? ['value' => round($score * $quiz->gradeOutOf() / 100, 1), 'out_of' => $quiz->gradeOutOf()] : null,
+            'open'          => $open->isNotEmpty(),
             'passed'        => $passed,
             'correct'       => $correct,
             'total'         => $total,
