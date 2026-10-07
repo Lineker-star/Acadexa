@@ -79,7 +79,7 @@ return [
     'upload_too_large' => 'Fichier trop volumineux (maximum :max Mo).', 'upload_bad_extension' => 'Format non accepté. Utilisez MP4, WebM ou MOV.',
     'upload_not_video' => 'Le fichier envoyé n’est pas une vidéo valide.', 'upload_missing_chunk' => 'Un morceau du fichier est manquant (n° :index). Relancez l’envoi.',
     'youtube_url' => 'Lien de la vidéo YouTube', 'youtube_invalid' => 'Lien YouTube invalide.',
-    'youtube_help' => 'La vidéo est lue directement dans ACADEXA, sans quitter la plateforme. Astuce : sur YouTube, choisissez la visibilité « Non répertoriée ».',
+    'youtube_help' => 'La vidéo est lue directement dans ACADEXXA, sans quitter la plateforme. Astuce : sur YouTube, choisissez la visibilité « Non répertoriée ».',
     'vimeo_url' => 'Lien Vimeo', 'vimeo_invalid' => 'Lien Vimeo invalide.',
     'external_url' => 'Lien direct vers un fichier vidéo', 'external_url_help' => 'URL d’un fichier .mp4 hébergé ailleurs.',
     'assignment_instructions' => 'Consignes du devoir', 'grading' => 'Notation', 'max_score' => 'Note maximale', 'pass_score' => 'Note de réussite',
@@ -167,14 +167,14 @@ return [
     // Notifications
     'mark_all_read' => 'Tout marquer comme lu', 'notifications_all_read' => 'Toutes les notifications sont lues.',
     'email_notifications' => 'Recevoir aussi les notifications par e-mail', 'preferences_saved' => 'Préférences enregistrées.',
-    'mail_greeting' => 'Bonjour :name,', 'mail_salutation' => 'L’équipe ACADEXA — Institut Universitaire ZTF', 'notif_open' => 'Ouvrir',
+    'mail_greeting' => 'Bonjour :name,', 'mail_salutation' => 'L’équipe ACADEXXA — Institut Universitaire ZTF', 'notif_open' => 'Ouvrir',
     'notif_feedback' => 'Commentaire : :feedback',
     'notif_certificate_subject' => 'Votre certificat est prêt', 'notif_certificate_line' => 'Félicitations ! Vous avez terminé « :course ».',
     'notif_certificate_code' => 'Code de vérification : :code',
     'notif_course_approved_subject' => 'Votre cours est publié', 'notif_course_approved_line' => 'Votre cours « :course » a été validé et est maintenant en ligne.',
     'notif_course_rejected_subject' => 'Votre cours doit être revu', 'notif_course_rejected_line' => 'Votre cours « :course » n’a pas été validé. Consultez les remarques puis soumettez-le à nouveau.',
     'notif_course_submitted_subject' => 'Cours à valider', 'notif_course_submitted_line' => ':instructor a soumis « :course » pour validation.',
-    'notif_application_approved_subject' => 'Candidature acceptée', 'notif_application_approved_line' => 'Vous êtes désormais formateur sur ACADEXA. Créez votre premier cours !',
+    'notif_application_approved_subject' => 'Candidature acceptée', 'notif_application_approved_line' => 'Vous êtes désormais formateur sur ACADEXXA. Créez votre premier cours !',
     'notif_application_rejected_subject' => 'Candidature formateur', 'notif_application_rejected_line' => 'Votre candidature n’a pas été retenue pour le moment.',
     'notif_assignment_submitted_subject' => 'Nouveau devoir à corriger', 'notif_assignment_submitted_line' => ':student a remis le devoir « :lesson ».',
     'notif_assignment_graded_subject' => 'Votre devoir est corrigé', 'notif_assignment_graded_line' => 'Devoir « :lesson » : :score / :max.',
@@ -203,7 +203,7 @@ return [
     'application_status_pending' => 'En attente', 'application_status_approved' => 'Acceptée', 'application_status_rejected' => 'Refusée',
     'audience_all' => 'Tout le monde', 'audience_students' => 'Étudiants', 'audience_instructors' => 'Formateurs',
 
-    // Textes utilisés par le JavaScript (window.ACADEXA_I18N)
+    // Textes utilisés par le JavaScript (window.ACADEXXA_I18N)
     'js' => [
         'byte_units' => ['o', 'Ko', 'Mo', 'Go'],
         'seconds_short' => ':count s', 'minutes_short' => ':count min', 'hours_minutes_short' => ':hours h :minutes',

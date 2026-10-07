@@ -23,7 +23,7 @@
 
             <div class="mb-3">
                 <div class="d-flex justify-content-between">
-                    <label class="form-label small fw-bold">{{ __('auth.password') }}</label>
+                    <label class="form-label small fw-bold">{{ __('auth.password_label') }}</label>
                     @if(Route::has('password.request'))
                         <a href="{{ route('password.request') }}" class="small text-muted">{{ __('auth.forgot_password') }}</a>
                     @endif

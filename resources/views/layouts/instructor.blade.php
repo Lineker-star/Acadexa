@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @include('partials.pwa-head')
-    <title>@yield('title', __('Instructor')) — {{ $siteSettings['site_name'] ?? 'ACADEXA' }}</title>
+    <title>@yield('title', __('Instructor')) — {{ $siteSettings['site_name'] ?? 'ACADEXXA' }}</title>
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     @include('partials.bootstrap-css')
     @vite(['resources/css/app.css'])
@@ -16,7 +16,7 @@
 
     <aside class="sidebar" id="mainSidebar">
         <div class="sidebar-brand">
-            <span>ACADEXA<em>.</em></span>
+            <span>ACADEXXA<em>.</em></span>
             <div style="font-size:.75rem;color:rgba(255,255,255,.5);margin-top:.2rem;">{{ __('Instructor Portal') }}</div>
         </div>
         <nav class="sidebar-nav mt-2">

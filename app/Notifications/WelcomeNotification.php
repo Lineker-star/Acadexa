@@ -8,7 +8,7 @@ class WelcomeNotification extends LmsNotification
 {
     protected function subject(object $notifiable): string
     {
-        return __('lms.notif_welcome_subject', ['site' => Setting::get('site_name', 'ACADEXA')]);
+        return __('lms.notif_welcome_subject', ['site' => Setting::get('site_name', 'ACADEXXA')]);
     }
 
     protected function line(object $notifiable): string

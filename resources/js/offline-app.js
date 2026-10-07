@@ -8,7 +8,7 @@ import { enqueue, flush, pendingCount } from './offline/outbox';
 import { formatBytes, listDownloaded, getDownloaded } from './offline/downloader';
 import { getLibrary, isCached, syncLibrary } from './offline/library';
 
-const i18n = window.ACADEXA_I18N || {};
+const i18n = window.ACADEXXA_I18N || {};
 const t = (key, vars = {}) => Object.entries(vars).reduce((s, [k, v]) => s.replaceAll(`:${k}`, v), i18n[key] || key);
 const app = document.getElementById('offlineApp');
 
@@ -36,7 +36,7 @@ async function renderConnectivity() {
 }
 window.addEventListener('online', async () => { await flush(); renderConnectivity(); });
 window.addEventListener('offline', renderConnectivity);
-window.addEventListener('acadexa:synced', event => { applyServerGrades(event.detail); renderConnectivity(); });
+window.addEventListener('acadexxa:synced', event => { applyServerGrades(event.detail); renderConnectivity(); });
 
 // ─── Course path (same rules as the server, see ProgressService) ──────────────
 function steps(course) {
@@ -480,7 +480,7 @@ document.addEventListener('click', e => {
     if (e.target.closest('[data-scroll-quiz]')) { e.preventDefault(); document.getElementById('lessonQuiz')?.scrollIntoView({ behavior: 'smooth' }); }
 });
 window.addEventListener('hashchange', route);
-window.addEventListener('acadexa:library-synced', () => { if (!location.hash) renderHome(); });
+window.addEventListener('acadexxa:library-synced', () => { if (!location.hash) renderHome(); });
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {

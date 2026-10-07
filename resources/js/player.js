@@ -4,7 +4,7 @@
 import { icon } from './icons';
 import { enqueue } from './offline/outbox';
 
-const i18n = window.ACADEXA_I18N || {};
+const i18n = window.ACADEXXA_I18N || {};
 const t = (key, vars = {}) => Object.entries(vars).reduce((s, [k, v]) => s.replaceAll(`:${k}`, v), i18n[key] || key);
 const csrf = () => document.querySelector('meta[name="csrf-token"]').content;
 const toast = (msg, type = 'info') => window.showToast?.(msg, type);
@@ -176,10 +176,10 @@ function initHtml5Video(tracker) {
 
     // Remember the preferred speed across lessons.
     try {
-        const rate = parseFloat(localStorage.getItem('acadexa.rate'));
+        const rate = parseFloat(localStorage.getItem('acadexxa.rate'));
         if (rate) video.playbackRate = rate;
     } catch (e) { /* storage blocked */ }
-    video.addEventListener('ratechange', () => { try { localStorage.setItem('acadexa.rate', video.playbackRate); } catch (e) { /* ignore */ } });
+    video.addEventListener('ratechange', () => { try { localStorage.setItem('acadexxa.rate', video.playbackRate); } catch (e) { /* ignore */ } });
 
     video.addEventListener('loadedmetadata', () => {
         if (config.resumeAt && config.resumeAt < video.duration - 10) {
@@ -506,7 +506,7 @@ function escapeHtml(str) {
 function initDiagnosticBanner() {
     const banner = document.querySelector('[data-diagnostic-banner]');
     if (!banner) return;
-    const key = 'acadexa.diag.' + banner.dataset.diagnosticBanner;
+    const key = 'acadexxa.diag.' + banner.dataset.diagnosticBanner;
     try { if (localStorage.getItem(key)) { banner.remove(); return; } } catch (e) { /* storage blocked */ }
     banner.querySelector('[data-dismiss-diagnostic]')?.addEventListener('click', () => {
         try { localStorage.setItem(key, '1'); } catch (e) { /* ignore */ }

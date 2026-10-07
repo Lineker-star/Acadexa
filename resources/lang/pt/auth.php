@@ -29,7 +29,7 @@ return [
     'admin_only' => 'Esta área é reservada aos administradores.',
     'welcome_back' => 'Bem-vindo de volta',
     'sign_in_to_continue' => 'Entre para continuar a aprender',
-    'join_acadexa' => 'Junte-se à ACADEXA',
+    'join_acadexxa' => 'Junte-se à ACADEXXA',
     'create_account' => 'Crie a sua conta gratuita',
     'full_name' => 'Nome completo',
     'have_account' => 'Já tem uma conta?',

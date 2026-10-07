@@ -70,7 +70,7 @@ return [
         'bi-building', 'bi-tools', 'bi-calculator', 'bi-eyedropper', 'bi-dribbble', 'bi-folder',
     ],
 
-    // Home page image. Admins can replace it in Settings; the default is an original ACADEXA illustration.
+    // Home page image. Admins can replace it in Settings; the default is an original ACADEXXA illustration.
     'hero' => [
         'default_image' => '/images/hero.svg',
     ],

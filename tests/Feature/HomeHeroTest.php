@@ -6,7 +6,7 @@ use App\Models\Setting;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-/** Home page image: default ACADEXA illustration, replaceable in Admin → Settings. */
+/** Home page image: default ACADEXXA illustration, replaceable in Admin → Settings. */
 class HomeHeroTest extends LmsTestCase
 {
     public function test_default_illustration_exists(): void

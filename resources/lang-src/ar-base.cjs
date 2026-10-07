@@ -17,7 +17,7 @@ module.exports = {
         register_as: 'أنشئ حسابك المجاني', admin_login: 'دخول المشرفين',
         admin_only: 'هذه المنطقة مخصصة للمشرفين فقط.',
         welcome_back: 'مرحبًا بعودتك', sign_in_to_continue: 'سجّل الدخول لمتابعة التعلم',
-        join_acadexa: 'انضم إلى أكاديكسا', create_account: 'أنشئ حسابك المجاني', full_name: 'الاسم الكامل',
+        join_acadexxa: 'انضم إلى أكاديكسا', create_account: 'أنشئ حسابك المجاني', full_name: 'الاسم الكامل',
         have_account: 'لديك حساب بالفعل؟', register_here: 'سجّل الدخول هنا',
     },
     dashboard: {
@@ -72,7 +72,7 @@ module.exports = {
         welcome: 'مرحبًا بك في أكاديكسا', learn_grow: 'تعلّم وتطوّر وحقّق أهدافك',
         hero_subtitle: 'انضم إلى آلاف المتعلمين في معهد ZTF الجامعي. احصل على دورات عالمية المستوى وشهادات، وطوّر مسيرتك المهنية.',
         get_started: 'ابدأ مجانًا', browse_courses: 'تصفح الدورات', featured_courses: 'دورات مميزة',
-        latest_courses: 'أحدث الدورات', view_all: 'عرض الكل', categories: 'الفئات', why_acadexa: 'لماذا تختار أكاديكسا؟',
+        latest_courses: 'أحدث الدورات', view_all: 'عرض الكل', categories: 'الفئات', why_acadexxa: 'لماذا تختار أكاديكسا؟',
         enroll_now: 'سجّل الآن', start_learning: 'ابدأ التعلم', continue_learning: 'تابع التعلم',
         free: 'مجاني', all_levels: 'جميع المستويات', beginner: 'مبتدئ', intermediate: 'متوسط', advanced: 'متقدم',
         students: 'طالب', courses: 'دورة', instructors: 'مدرب', certificates_issued: 'شهادة صادرة',

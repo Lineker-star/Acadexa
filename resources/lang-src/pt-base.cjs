@@ -17,7 +17,7 @@ module.exports = {
         register_as: 'Crie a sua conta gratuita', admin_login: 'Acesso de administrador',
         admin_only: 'Esta área é reservada aos administradores.',
         welcome_back: 'Bem-vindo de volta', sign_in_to_continue: 'Entre para continuar a aprender',
-        join_acadexa: 'Junte-se à ACADEXA', create_account: 'Crie a sua conta gratuita', full_name: 'Nome completo',
+        join_acadexxa: 'Junte-se à ACADEXXA', create_account: 'Crie a sua conta gratuita', full_name: 'Nome completo',
         have_account: 'Já tem uma conta?', register_here: 'Entre aqui',
     },
     dashboard: {
@@ -69,10 +69,10 @@ module.exports = {
         no_notifications: 'Sem novas notificações', start_free: 'Começar grátis',
     },
     messages: {
-        welcome: 'Bem-vindo à ACADEXA', learn_grow: 'Aprenda, cresça e alcance os seus objetivos',
+        welcome: 'Bem-vindo à ACADEXXA', learn_grow: 'Aprenda, cresça e alcance os seus objetivos',
         hero_subtitle: 'Junte-se a milhares de estudantes do Instituto Universitário ZTF. Aceda a cursos de excelência, obtenha certificados e avance na sua carreira.',
         get_started: 'Começar grátis', browse_courses: 'Explorar cursos', featured_courses: 'Cursos em destaque',
-        latest_courses: 'Cursos recentes', view_all: 'Ver tudo', categories: 'Categorias', why_acadexa: 'Por que escolher a ACADEXA?',
+        latest_courses: 'Cursos recentes', view_all: 'Ver tudo', categories: 'Categorias', why_acadexxa: 'Por que escolher a ACADEXXA?',
         enroll_now: 'Inscrever-se agora', start_learning: 'Começar a aprender', continue_learning: 'Continuar a aprender',
         free: 'Grátis', all_levels: 'Todos os níveis', beginner: 'Iniciante', intermediate: 'Intermediário', advanced: 'Avançado',
         students: 'estudantes', courses: 'cursos', instructors: 'instrutores', certificates_issued: 'certificados emitidos',

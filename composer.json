@@ -1,6 +1,6 @@
 {
-    "name": "acadexa/lms",
-    "description": "ACADEXA Learning Management System — ZTF University Institute, Bertoua, Cameroon",
+    "name": "acadexxa/lms",
+    "description": "ACADEXXA Learning Management System — ZTF University Institute, Bertoua, Cameroon",
     "keywords": ["laravel", "lms", "elearning"],
     "license": "MIT",
     "require": {

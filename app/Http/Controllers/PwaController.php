@@ -16,7 +16,7 @@ class PwaController extends Controller
 
     public function manifest()
     {
-        $name = Setting::get('site_name', 'ACADEXA');
+        $name = Setting::get('site_name', 'ACADEXXA');
 
         return response()->json([
             'id'               => '/',

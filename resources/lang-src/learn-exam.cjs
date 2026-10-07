@@ -27,7 +27,7 @@ module.exports = {
         cert_for_course: 'for having successfully completed the course',
         cert_final_score: 'Final evaluation: :score/100',
         cert_issued_on: 'Awarded on',
-        cert_part_of: 'ACADEXA is the online learning platform of the :institution',
+        cert_part_of: 'ACADEXXA is the online learning platform of the :institution',
         js: {
             model_answer: 'Detailed answer',
             grade_line: 'Mark: :grade/:out_of (:correct right answers out of :total)',
@@ -60,7 +60,7 @@ module.exports = {
         cert_for_course: 'pour avoir suivi et réussi le cours',
         cert_final_score: 'Évaluation finale : :score/100',
         cert_issued_on: 'Délivré le',
-        cert_part_of: 'ACADEXA est la plateforme de formation en ligne de l’:institution',
+        cert_part_of: 'ACADEXXA est la plateforme de formation en ligne de l’:institution',
         js: {
             model_answer: 'Réponse détaillée',
             grade_line: 'Note : :grade/:out_of (:correct bonnes réponses sur :total)',
@@ -93,7 +93,7 @@ module.exports = {
         cert_for_course: 'por haber completado con éxito el curso',
         cert_final_score: 'Evaluación final: :score/100',
         cert_issued_on: 'Otorgado el',
-        cert_part_of: 'ACADEXA es la plataforma de formación en línea del :institution',
+        cert_part_of: 'ACADEXXA es la plataforma de formación en línea del :institution',
         js: {
             model_answer: 'Respuesta detallada',
             grade_line: 'Nota: :grade/:out_of (:correct respuestas correctas de :total)',
@@ -126,7 +126,7 @@ module.exports = {
         cert_for_course: 'por ter concluído com êxito o curso',
         cert_final_score: 'Avaliação final: :score/100',
         cert_issued_on: 'Atribuído em',
-        cert_part_of: 'A ACADEXA é a plataforma de formação online do :institution',
+        cert_part_of: 'A ACADEXXA é a plataforma de formação online do :institution',
         js: {
             model_answer: 'Resposta detalhada',
             grade_line: 'Nota: :grade/:out_of (:correct respostas certas em :total)',
@@ -159,7 +159,7 @@ module.exports = {
         cert_for_course: '以表彰其顺利完成课程',
         cert_final_score: '期末评估：:score/100',
         cert_issued_on: '颁发日期',
-        cert_part_of: 'ACADEXA 是 :institution 的在线学习平台',
+        cert_part_of: 'ACADEXXA 是 :institution 的在线学习平台',
         js: {
             model_answer: '详细答案',
             grade_line: '得分：:grade/:out_of（:total 题中答对 :correct 题）',
@@ -192,7 +192,7 @@ module.exports = {
         cert_for_course: 'لإتمامه بنجاح دورة',
         cert_final_score: 'التقييم النهائي: :score/100',
         cert_issued_on: 'تاريخ المنح',
-        cert_part_of: 'ACADEXA هي منصة التعلّم الإلكتروني التابعة لـ :institution',
+        cert_part_of: 'ACADEXXA هي منصة التعلّم الإلكتروني التابعة لـ :institution',
         js: {
             model_answer: 'الإجابة المفصّلة',
             grade_line: 'الدرجة: :grade/:out_of (الإجابات الصحيحة: :correct من :total)',

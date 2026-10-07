@@ -5,7 +5,7 @@ namespace App\Support;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Storage;
 
-/** Home page image: the photo uploaded in Admin → Settings, otherwise the default ACADEXA illustration. */
+/** Home page image: the photo uploaded in Admin → Settings, otherwise the default ACADEXXA illustration. */
 class Branding
 {
     public static function heroUrl(): string

@@ -29,7 +29,7 @@ return [
     'admin_only' => 'هذه المنطقة مخصصة للمشرفين فقط.',
     'welcome_back' => 'مرحبًا بعودتك',
     'sign_in_to_continue' => 'سجّل الدخول لمتابعة التعلم',
-    'join_acadexa' => 'انضم إلى أكاديكسا',
+    'join_acadexxa' => 'انضم إلى أكاديكسا',
     'create_account' => 'أنشئ حسابك المجاني',
     'full_name' => 'الاسم الكامل',
     'have_account' => 'لديك حساب بالفعل؟',

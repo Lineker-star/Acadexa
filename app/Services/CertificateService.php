@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Storage;
 class CertificateService
 {
     /**
-     * Version of the PDF design. Raise it when the template changes: the certificates issued
-     * before are then rebuilt the next time they are downloaded.
+     * Version of the PDF design. Raise it when the template or the logo changes: the certificates
+     * issued before are then rebuilt the next time they are downloaded.
      */
-    public const TEMPLATE_VERSION = 2;
+    public const TEMPLATE_VERSION = 3;
 
     public function issue(Enrollment $enrollment): Certificate
     {

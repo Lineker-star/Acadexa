@@ -7,7 +7,7 @@ const path = require('path');
 const BASE = path.join(__dirname, '..');
 const ROOT = path.join(BASE, 'resources', 'views');
 // Text that does not depend on the language (brand names, units, acronyms).
-const ALLOW = [/^ACADE?X+A\.?$/i, /^ZTF(-UI)?$/, /^FCFA$/, /^PDF$/, /^CSV$/, /^2FA$/, /^OK$/, /^ACADE$/, /^XA$/,
+const ALLOW = [/^ACADE?X+A\.?$/i, /^ZTF(-UI)?$/, /^FCFA$/, /^PDF$/, /^CSV$/, /^2FA$/, /^OK$/, /^ACADE$/, /^XXA$/,
     /^(www\.)?[a-z0-9-]+(\.[a-z0-9-]+)+$/i, // domain names
     /^\/[a-z0-9\/-]*$/i,                   // URL paths
 ];

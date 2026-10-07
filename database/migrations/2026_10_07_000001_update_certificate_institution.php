@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 /**
- * ACADEXA belongs to the "Institut de Formation Professionnelle ZTF": the certificate shows that
+ * ACADEXXA belongs to the "Institut de Formation Professionnelle ZTF": the certificate shows that
  * name. Only the untouched default values are replaced; anything typed by the admin is kept.
  */
 return new class extends Migration

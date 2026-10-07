@@ -25,7 +25,7 @@ export async function pendingCount() {
 
 function requestBackgroundSync() {
     if ('serviceWorker' in navigator && 'SyncManager' in window) {
-        navigator.serviceWorker.ready.then(reg => reg.sync.register('acadexa-sync')).catch(() => {});
+        navigator.serviceWorker.ready.then(reg => reg.sync.register('acadexxa-sync')).catch(() => {});
     }
 }
 
@@ -96,6 +96,6 @@ async function doFlush() {
         }
     }
 
-    window.dispatchEvent(new CustomEvent('acadexa:synced', { detail: { sent, failed, results: allResults } }));
+    window.dispatchEvent(new CustomEvent('acadexxa:synced', { detail: { sent, failed, results: allResults } }));
     return { sent, failed, results: allResults };
 }

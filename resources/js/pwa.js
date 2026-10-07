@@ -1,4 +1,4 @@
-// ACADEXA — Progressive Web App glue, loaded on every page.
+// ACADEXXA — Progressive Web App glue, loaded on every page.
 //  - registers the service worker (/sw.js)
 //  - "Install the app" button
 //  - online/offline banner + automatic replay of offline actions
@@ -14,7 +14,7 @@ import { db } from './offline/db';
 import { syncLibrary } from './offline/library';
 import { forgetWatermark } from './content-protection';
 
-const i18n = window.ACADEXA_I18N || {};
+const i18n = window.ACADEXXA_I18N || {};
 const t = (key, vars = {}) => Object.entries(vars).reduce(
     (s, [k, v]) => s.replaceAll(`:${k}`, v), i18n[key] || key,
 );
@@ -218,9 +218,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!currentUserId || !isSupported() || !navigator.onLine || !document.body.dataset.library) return;
     if (navigator.connection?.saveData) return; // the student asked the browser to save data
     try {
-        const last = Number(sessionStorage.getItem('acadexa.librarySync') || 0);
+        const last = Number(sessionStorage.getItem('acadexxa.librarySync') || 0);
         if (Date.now() - last < 10 * 60 * 1000) return;
-        sessionStorage.setItem('acadexa.librarySync', String(Date.now()));
+        sessionStorage.setItem('acadexxa.librarySync', String(Date.now()));
     } catch (e) { /* storage blocked: sync anyway */ }
     syncLibrary().catch(() => {});
 });

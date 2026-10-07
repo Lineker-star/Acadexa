@@ -10,7 +10,7 @@
 // Instructors and admins preview their own courses: no masking for them.
 const STAFF = document.body?.dataset.staff === '1';
 
-const i18n = window.ACADEXA_I18N || {};
+const i18n = window.ACADEXXA_I18N || {};
 const t = key => i18n[key] || key;
 
 /** Removes the name an earlier version kept on the device for its watermark. */

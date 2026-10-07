@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="robots" content="noindex">
-    <title>{{ __('lms.offline_courses') }} — {{ $siteSettings['site_name'] ?? 'ACADEXA' }}</title>
+    <title>{{ __('lms.offline_courses') }} — {{ $siteSettings['site_name'] ?? 'ACADEXXA' }}</title>
     @include('partials.pwa-head')
     <link rel="icon" type="image/png" href="{{ route('pwa.icon', 'icon-192.png') }}">
     @include('partials.bootstrap-css')

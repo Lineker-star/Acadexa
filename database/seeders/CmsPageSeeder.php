@@ -13,49 +13,49 @@ class CmsPageSeeder extends Seeder
      */
     public const PAGES = [
         'about' => [
-            'en' => ['title' => 'About ACADEXA', 'content' => '<h2>About ZTF University Institute</h2>
+            'en' => ['title' => 'About ACADEXXA', 'content' => '<h2>About ZTF University Institute</h2>
 <p>ZTF University Institute (ZTF-UI), located in Koumé – Bertoua, East Region, Cameroon, is an institution of higher learning dedicated to excellence in education, research and community development.</p>
 <h3>Our mission</h3>
 <p>To provide accessible, high-quality education that empowers students to become leaders, innovators and contributors to Africa\'s sustainable development.</p>
-<h3>About ACADEXA</h3>
-<p>ACADEXA is the official learning platform of ZTF-UI. It extends our teaching beyond the campus: students, professionals and lifelong learners can follow our courses, earn certificates and develop their skills, online or offline.</p>
-<h3>Why choose ACADEXA?</h3>
+<h3>About ACADEXXA</h3>
+<p>ACADEXXA is the official learning platform of ZTF-UI. It extends our teaching beyond the campus: students, professionals and lifelong learners can follow our courses, earn certificates and develop their skills, online or offline.</p>
+<h3>Why choose ACADEXXA?</h3>
 <ul><li>Instructors from ZTF-UI and industry</li><li>Courses in 6 languages</li><li>Verifiable certificates</li><li>Flexible, self-paced learning</li><li>Available on every device, even without a connection</li></ul>
 <p>Website: <a href="https://www.ztfuniversity.com">www.ztfuniversity.com</a></p>'],
-            'fr' => ['title' => 'À propos d\'ACADEXA', 'content' => '<h2>À propos de l\'Institut Universitaire ZTF</h2>
+            'fr' => ['title' => 'À propos d\'ACADEXXA', 'content' => '<h2>À propos de l\'Institut Universitaire ZTF</h2>
 <p>L\'Institut Universitaire ZTF (IU-ZTF), situé à Koumé – Bertoua, dans la Région de l\'Est du Cameroun, est un établissement d\'enseignement supérieur engagé pour l\'excellence dans l\'éducation, la recherche et le développement communautaire.</p>
 <h3>Notre mission</h3>
 <p>Offrir une éducation accessible et de qualité qui permet aux étudiants de devenir des leaders, des innovateurs et des acteurs du développement durable de l\'Afrique.</p>
-<h3>À propos d\'ACADEXA</h3>
-<p>ACADEXA est la plateforme d\'apprentissage officielle de l\'IU-ZTF. Elle prolonge notre enseignement au-delà du campus : étudiants, professionnels et apprenants de tous âges peuvent suivre nos cours, obtenir des certificats et développer leurs compétences, en ligne comme hors ligne.</p>
-<h3>Pourquoi choisir ACADEXA ?</h3>
+<h3>À propos d\'ACADEXXA</h3>
+<p>ACADEXXA est la plateforme d\'apprentissage officielle de l\'IU-ZTF. Elle prolonge notre enseignement au-delà du campus : étudiants, professionnels et apprenants de tous âges peuvent suivre nos cours, obtenir des certificats et développer leurs compétences, en ligne comme hors ligne.</p>
+<h3>Pourquoi choisir ACADEXXA ?</h3>
 <ul><li>Des formateurs de l\'IU-ZTF et du monde professionnel</li><li>Des cours en 6 langues</li><li>Des certificats vérifiables</li><li>Un apprentissage flexible, à votre rythme</li><li>Disponible sur tous les appareils, même sans connexion</li></ul>
 <p>Site web : <a href="https://www.ztfuniversity.com">www.ztfuniversity.com</a></p>'],
-            'es' => ['title' => 'Acerca de ACADEXA', 'content' => '<h2>Acerca del Instituto Universitario ZTF</h2>
+            'es' => ['title' => 'Acerca de ACADEXXA', 'content' => '<h2>Acerca del Instituto Universitario ZTF</h2>
 <p>El Instituto Universitario ZTF (IU-ZTF), situado en Koumé – Bertoua, Región del Este de Camerún, es una institución de educación superior comprometida con la excelencia en la enseñanza, la investigación y el desarrollo comunitario.</p>
 <h3>Nuestra misión</h3>
 <p>Ofrecer una educación accesible y de calidad que permita a los estudiantes convertirse en líderes, innovadores y actores del desarrollo sostenible de África.</p>
-<h3>Acerca de ACADEXA</h3>
-<p>ACADEXA es la plataforma de aprendizaje oficial del IU-ZTF. Extiende nuestra enseñanza más allá del campus: estudiantes, profesionales y personas de todas las edades pueden seguir nuestros cursos, obtener certificados y desarrollar sus competencias, en línea o sin conexión.</p>
-<h3>¿Por qué elegir ACADEXA?</h3>
+<h3>Acerca de ACADEXXA</h3>
+<p>ACADEXXA es la plataforma de aprendizaje oficial del IU-ZTF. Extiende nuestra enseñanza más allá del campus: estudiantes, profesionales y personas de todas las edades pueden seguir nuestros cursos, obtener certificados y desarrollar sus competencias, en línea o sin conexión.</p>
+<h3>¿Por qué elegir ACADEXXA?</h3>
 <ul><li>Instructores del IU-ZTF y del mundo profesional</li><li>Cursos en 6 idiomas</li><li>Certificados verificables</li><li>Aprendizaje flexible, a tu ritmo</li><li>Disponible en todos los dispositivos, incluso sin conexión</li></ul>
 <p>Sitio web: <a href="https://www.ztfuniversity.com">www.ztfuniversity.com</a></p>'],
-            'pt' => ['title' => 'Sobre a ACADEXA', 'content' => '<h2>Sobre o Instituto Universitário ZTF</h2>
+            'pt' => ['title' => 'Sobre a ACADEXXA', 'content' => '<h2>Sobre o Instituto Universitário ZTF</h2>
 <p>O Instituto Universitário ZTF (IU-ZTF), localizado em Koumé – Bertoua, Região Leste dos Camarões, é uma instituição de ensino superior dedicada à excelência no ensino, na pesquisa e no desenvolvimento comunitário.</p>
 <h3>Nossa missão</h3>
 <p>Oferecer uma educação acessível e de qualidade que permita aos estudantes tornarem-se líderes, inovadores e agentes do desenvolvimento sustentável da África.</p>
-<h3>Sobre a ACADEXA</h3>
-<p>A ACADEXA é a plataforma de aprendizagem oficial do IU-ZTF. Ela leva o nosso ensino além do campus: estudantes, profissionais e pessoas de todas as idades podem seguir os nossos cursos, obter certificados e desenvolver competências, online ou offline.</p>
-<h3>Por que escolher a ACADEXA?</h3>
+<h3>Sobre a ACADEXXA</h3>
+<p>A ACADEXXA é a plataforma de aprendizagem oficial do IU-ZTF. Ela leva o nosso ensino além do campus: estudantes, profissionais e pessoas de todas as idades podem seguir os nossos cursos, obter certificados e desenvolver competências, online ou offline.</p>
+<h3>Por que escolher a ACADEXXA?</h3>
 <ul><li>Instrutores do IU-ZTF e do mercado</li><li>Cursos em 6 idiomas</li><li>Certificados verificáveis</li><li>Aprendizagem flexível, no seu ritmo</li><li>Disponível em todos os dispositivos, mesmo sem conexão</li></ul>
 <p>Site: <a href="https://www.ztfuniversity.com">www.ztfuniversity.com</a></p>'],
-            'zh' => ['title' => '关于 ACADEXA', 'content' => '<h2>关于 ZTF 大学学院</h2>
+            'zh' => ['title' => '关于 ACADEXXA', 'content' => '<h2>关于 ZTF 大学学院</h2>
 <p>ZTF 大学学院（ZTF-UI）位于喀麦隆东部大区贝尔图阿的库梅，是一所致力于卓越教学、科研和社区发展的高等教育机构。</p>
 <h3>我们的使命</h3>
 <p>提供普及而优质的教育，使学生成为推动非洲可持续发展的领导者、创新者和贡献者。</p>
-<h3>关于 ACADEXA</h3>
-<p>ACADEXA 是 ZTF-UI 的官方学习平台，将我们的教学延伸到校园之外：学生、职场人士和终身学习者都可以在线或离线学习我们的课程、获得证书并提升技能。</p>
-<h3>为什么选择 ACADEXA？</h3>
+<h3>关于 ACADEXXA</h3>
+<p>ACADEXXA 是 ZTF-UI 的官方学习平台，将我们的教学延伸到校园之外：学生、职场人士和终身学习者都可以在线或离线学习我们的课程、获得证书并提升技能。</p>
+<h3>为什么选择 ACADEXXA？</h3>
 <ul><li>来自 ZTF-UI 和行业的讲师</li><li>6 种语言的课程</li><li>可验证的证书</li><li>灵活、按自己节奏学习</li><li>适用于所有设备，即使没有网络</li></ul>
 <p>网站：<a href="https://www.ztfuniversity.com">www.ztfuniversity.com</a></p>'],
             'ar' => ['title' => 'عن أكاديكسا', 'content' => '<h2>عن معهد ZTF الجامعي</h2>
@@ -153,7 +153,7 @@ class CmsPageSeeder extends Seeder
         'terms' => [
             'en' => ['title' => 'Terms of Service', 'content' => '<h2>Terms of Service</h2>
 <h3>1. Acceptance</h3>
-<p>By using ACADEXA, you agree to these terms and to the applicable laws and regulations.</p>
+<p>By using ACADEXXA, you agree to these terms and to the applicable laws and regulations.</p>
 <h3>2. Accounts</h3>
 <p>You are responsible for keeping your login details confidential and must tell us immediately about any unauthorised use of your account.</p>
 <h3>3. Course content</h3>
@@ -166,7 +166,7 @@ class CmsPageSeeder extends Seeder
 <p>Questions about these terms: <a href="mailto:info@ztfuniversity.com">info@ztfuniversity.com</a></p>'],
             'fr' => ['title' => 'Conditions d\'utilisation', 'content' => '<h2>Conditions d\'utilisation</h2>
 <h3>1. Acceptation</h3>
-<p>En utilisant ACADEXA, vous acceptez les présentes conditions ainsi que les lois et règlements applicables.</p>
+<p>En utilisant ACADEXXA, vous acceptez les présentes conditions ainsi que les lois et règlements applicables.</p>
 <h3>2. Comptes</h3>
 <p>Vous êtes responsable de la confidentialité de vos identifiants et devez nous signaler immédiatement toute utilisation non autorisée de votre compte.</p>
 <h3>3. Contenus des cours</h3>
@@ -179,7 +179,7 @@ class CmsPageSeeder extends Seeder
 <p>Questions sur ces conditions : <a href="mailto:info@ztfuniversity.com">info@ztfuniversity.com</a></p>'],
             'es' => ['title' => 'Términos del servicio', 'content' => '<h2>Términos del servicio</h2>
 <h3>1. Aceptación</h3>
-<p>Al usar ACADEXA, aceptas estos términos y las leyes y normas aplicables.</p>
+<p>Al usar ACADEXXA, aceptas estos términos y las leyes y normas aplicables.</p>
 <h3>2. Cuentas</h3>
 <p>Eres responsable de mantener la confidencialidad de tus credenciales y debes informarnos de inmediato de cualquier uso no autorizado de tu cuenta.</p>
 <h3>3. Contenido de los cursos</h3>
@@ -192,7 +192,7 @@ class CmsPageSeeder extends Seeder
 <p>Preguntas sobre estos términos: <a href="mailto:info@ztfuniversity.com">info@ztfuniversity.com</a></p>'],
             'pt' => ['title' => 'Termos de serviço', 'content' => '<h2>Termos de serviço</h2>
 <h3>1. Aceitação</h3>
-<p>Ao usar a ACADEXA, você aceita estes termos e as leis e regulamentos aplicáveis.</p>
+<p>Ao usar a ACADEXXA, você aceita estes termos e as leis e regulamentos aplicáveis.</p>
 <h3>2. Contas</h3>
 <p>Você é responsável por manter a confidencialidade das suas credenciais e deve nos informar imediatamente sobre qualquer uso não autorizado da sua conta.</p>
 <h3>3. Conteúdo dos cursos</h3>
@@ -205,7 +205,7 @@ class CmsPageSeeder extends Seeder
 <p>Dúvidas sobre estes termos: <a href="mailto:info@ztfuniversity.com">info@ztfuniversity.com</a></p>'],
             'zh' => ['title' => '服务条款', 'content' => '<h2>服务条款</h2>
 <h3>1. 接受条款</h3>
-<p>使用 ACADEXA 即表示您同意本条款以及适用的法律法规。</p>
+<p>使用 ACADEXXA 即表示您同意本条款以及适用的法律法规。</p>
 <h3>2. 账户</h3>
 <p>您有责任对登录信息保密，如发现账户被未经授权使用，须立即通知我们。</p>
 <h3>3. 课程内容</h3>

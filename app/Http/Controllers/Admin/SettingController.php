@@ -23,7 +23,7 @@ class SettingController extends Controller
         $data = $request->validate(['to' => ['required', 'email']]);
 
         try {
-            \Illuminate\Support\Facades\Mail::raw(__('learn.mail_test_body', ['site' => Setting::get('site_name', 'ACADEXA')]), function ($message) use ($data) {
+            \Illuminate\Support\Facades\Mail::raw(__('learn.mail_test_body', ['site' => Setting::get('site_name', 'ACADEXXA')]), function ($message) use ($data) {
                 $message->to($data['to'])->subject(__('learn.mail_test_subject'));
             });
         } catch (\Throwable $e) {

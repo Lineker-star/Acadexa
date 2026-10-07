@@ -293,21 +293,21 @@ img { max-width: 100%; height: auto; }
 .category-card .name { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: .95rem; }
 
 /* ─── Footer ────────────────────────────────────────────────────────────────── */
-.acadexa-footer {
+.acadexxa-footer {
     background: var(--primary);
     color: rgba(255,255,255,.8);
     padding: 4rem 0 2rem;
 }
-.acadexa-footer h5 {
+.acadexxa-footer h5 {
     color: var(--white);
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
     margin-bottom: 1.2rem;
 }
-.acadexa-footer a { color: rgba(255,255,255,.75); transition: color .2s; }
-.acadexa-footer a:hover { color: var(--secondary); }
-.acadexa-footer .footer-brand { font-size: 1.6rem; font-family: 'Poppins', sans-serif; font-weight: 800; color: var(--white); }
-.acadexa-footer .footer-brand span { color: var(--secondary); }
+.acadexxa-footer a { color: rgba(255,255,255,.75); transition: color .2s; }
+.acadexxa-footer a:hover { color: var(--secondary); }
+.acadexxa-footer .footer-brand { font-size: 1.6rem; font-family: 'Poppins', sans-serif; font-weight: 800; color: var(--white); }
+.acadexxa-footer .footer-brand span { color: var(--secondary); }
 .footer-divider { border-color: rgba(255,255,255,.15); margin: 2rem 0 1rem; }
 .footer-bottom { font-size: .85rem; color: rgba(255,255,255,.6); text-align: center; }
 

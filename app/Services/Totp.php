@@ -47,7 +47,7 @@ class Totp
         return false;
     }
 
-    public function uri(string $secret, string $account, string $issuer = 'ACADEXA'): string
+    public function uri(string $secret, string $account, string $issuer = 'ACADEXXA'): string
     {
         return 'otpauth://totp/' . rawurlencode($issuer . ':' . $account)
             . '?secret=' . $secret . '&issuer=' . rawurlencode($issuer)

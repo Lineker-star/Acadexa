@@ -1,4 +1,4 @@
-// ACADEXA — Main JavaScript
+// ACADEXXA — Main JavaScript
 
 import './bootstrap';
 import './pwa';

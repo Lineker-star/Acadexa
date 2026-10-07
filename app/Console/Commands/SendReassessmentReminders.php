@@ -13,7 +13,7 @@ use Illuminate\Console\Command;
  */
 class SendReassessmentReminders extends Command
 {
-    protected $signature = 'acadexa:reassessment-reminders';
+    protected $signature = 'acadexxa:reassessment-reminders';
     protected $description = 'Invite students to re-evaluate their knowledge of completed courses';
 
     public function handle(): int

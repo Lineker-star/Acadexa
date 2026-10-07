@@ -1,6 +1,6 @@
 <?php
 return [
-    'welcome' => 'Welcome to ACADEXA',
+    'welcome' => 'Welcome to ACADEXXA',
     'learn_grow' => 'Learn, Grow, and Achieve Your Goals',
     'hero_subtitle' => 'Join thousands of learners at ZTF University Institute. Access world-class courses, earn certificates, and advance your career.',
     'get_started' => 'Get Started Free',
@@ -9,7 +9,7 @@ return [
     'latest_courses' => 'Latest Courses',
     'view_all' => 'View All',
     'categories' => 'Categories',
-    'why_acadexa' => 'Why Choose ACADEXA?',
+    'why_acadexxa' => 'Why Choose ACADEXXA?',
     'enroll_now' => 'Enroll Now',
     'start_learning' => 'Start Learning',
     'continue_learning' => 'Continue Learning',

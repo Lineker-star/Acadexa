@@ -3,7 +3,7 @@
         <div class="row g-4">
             <!-- Brand -->
             <div class="col-md-4">
-                <div class="footer-brand mb-3">ACADE<span>XA</span></div>
+                <div class="footer-brand mb-3">ACADE<span>XXA</span></div>
                 <p style="font-size:.9rem;line-height:1.7;max-width:280px;">
                     {{ __('Empowering World Innovators and Leaders for Global Impact — Now Online.') }}<br>
                     {{ __('Operated by ZTF University Institute, Bertoua, East Region, Cameroon.') }}
@@ -36,7 +36,7 @@
                     <li><a href="{{ route('cms.page', 'faq') }}">{{ __('FAQ') }}</a></li>
                     <li><a href="{{ route('cms.page', 'terms') }}">{{ __('Terms of Service') }}</a></li>
                     <li><a href="{{ route('cms.page', 'privacy') }}">{{ __('Privacy Policy') }}</a></li>
-                    <li><a href="{{ route('certificate.verify', 'ACADEXA-XXXX-XXXX-' . date('Y')) }}">{{ __('Verify Certificate') }}</a></li>
+                    <li><a href="{{ route('certificate.verify', 'ACADEXXA-XXXX-XXXX-' . date('Y')) }}">{{ __('Verify Certificate') }}</a></li>
                     <li><a href="{{ route('sitemap') }}">{{ __('Sitemap') }}</a></li>
                 </ul>
             </div>
@@ -60,7 +60,7 @@
         <hr class="footer-divider">
 
         <div class="footer-bottom">
-            &copy; {{ date('Y') }} {{ __(':site — ZTF University Institute. All rights reserved.', ['site' => $siteSettings['site_name'] ?? 'ACADEXA']) }}
+            &copy; {{ date('Y') }} {{ __(':site — ZTF University Institute. All rights reserved.', ['site' => $siteSettings['site_name'] ?? 'ACADEXXA']) }}
         </div>
     </div>
 </footer>

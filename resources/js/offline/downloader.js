@@ -2,6 +2,7 @@
 // videos and resources go to the Cache Storage used by the service worker.
 import { db, deleteEverything } from './db';
 
+// Same name as in the service worker (resources/views/pwa/sw.blade.php), former spelling kept on purpose.
 export const MEDIA_CACHE = 'acadexa-media-v1';
 
 export function isSupported() {
@@ -108,7 +109,7 @@ export async function downloadCourse(enrollmentId, onProgress = () => {}, signal
 
         const headers = new Headers({
             'Content-Type': res.headers.get('Content-Type') || 'application/octet-stream',
-            'X-Acadexa-Offline': '1',
+            'X-Acadexxa-Offline': '1',
         });
         const length = res.headers.get('Content-Length');
         if (length) headers.set('Content-Length', length);
@@ -151,7 +152,7 @@ export async function removeAll() {
 }
 
 export function formatBytes(bytes) {
-    const units = (window.ACADEXA_I18N || {}).byte_units || ['B', 'KB', 'MB', 'GB'];
+    const units = (window.ACADEXXA_I18N || {}).byte_units || ['B', 'KB', 'MB', 'GB'];
     let i = 0;
     let v = bytes || 0;
     while (v >= 1024 && i < units.length - 1) { v /= 1024; i++; }

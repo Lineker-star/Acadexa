@@ -13,7 +13,7 @@
         <div class="bg-white rounded-xl shadow-brand p-5 text-center">
             <div style="font-size:4rem;"><x-icon name="check-circle-fill" /></div>
             <h3 class="mt-3 text-success">{{ __('Certificate Verified!') }}</h3>
-            <p class="text-muted">{{ __('This is a valid ACADEXA certificate.') }}</p>
+            <p class="text-muted">{{ __('This is a valid ACADEXXA certificate.') }}</p>
 
             <hr class="my-4">
             <div class="row text-start">
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <hr class="my-4">
-            <p class="text-muted small">{!! __('Issued by :site — ZTF University Institute, Bertoua, Cameroon', ['site' => '<strong>' . e($siteSettings['site_name'] ?? 'ACADEXA') . '</strong>']) !!}</p>
+            <p class="text-muted small">{!! __('Issued by :site — ZTF University Institute, Bertoua, Cameroon', ['site' => '<strong>' . e($siteSettings['site_name'] ?? 'ACADEXXA') . '</strong>']) !!}</p>
         </div>
         @else
         <div class="bg-white rounded-xl shadow-brand p-5 text-center">
@@ -50,7 +50,7 @@
         <div class="bg-white rounded-xl shadow-brand p-4 mt-4">
             <h6 class="mb-3">{{ __('Verify Another Certificate') }}</h6>
             <form action="" method="GET" class="d-flex gap-2">
-                <input type="text" name="code" class="form-control" placeholder="{{ __('Enter certificate code (e.g., ACADEXA-ABCD-EFGH-2025)') }}">
+                <input type="text" name="code" class="form-control" placeholder="{{ __('Enter certificate code (e.g., ACADEXXA-ABCD-EFGH-2025)') }}">
                 <button class="btn btn-primary" onclick="this.form.action='/verify-certificate/'+this.form.code.value;return true;">
                     {{ __('Verify') }}
                 </button>

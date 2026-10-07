@@ -110,7 +110,7 @@ class AssessmentGradingTest extends LmsTestCase
             ->assertJson(['passed' => true, 'grade' => ['value' => 70, 'out_of' => 100]])
             ->assertJsonPath('progress.certificate_issued', true);
 
-        // The certificate presents ACADEXA as part of the institute.
+        // The certificate presents ACADEXXA as part of the institute.
         $certificate = $student->certificates()->with(['user', 'course.translations', 'course.finalExam'])->first();
         app()->setLocale('fr');
         $html = view('certificates.pdf', ['certificate' => $certificate, 'sig_name' => 'X', 'sig_title' => 'Y'])->render();

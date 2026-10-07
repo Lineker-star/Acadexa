@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
     {
         // Super Admin
         User::create([
-            'name'              => 'ACADEXA Admin',
+            'name'              => 'ACADEXXA Admin',
             'email'             => 'admin@acadexa.com',
             'password'          => Hash::make('ACADEXA@2026'),
             'role'              => 'super_admin',

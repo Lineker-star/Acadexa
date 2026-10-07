@@ -4,7 +4,7 @@
 //   <button data-open-media="/media/books/3" data-media-kind="pdf" data-media-title="…" data-book-id="3" data-position="12">
 import { icon } from './icons';
 
-const i18n = window.ACADEXA_I18N || {};
+const i18n = window.ACADEXXA_I18N || {};
 const t = (key, vars = {}) => Object.entries(vars).reduce((s, [k, v]) => s.replaceAll(`:${k}`, v), i18n[key] || key);
 const esc = str => String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -202,7 +202,7 @@ document.addEventListener('click', e => {
         startAt: Number(btn.dataset.position || 0),
         onPosition: bookId ? (position, progress) => {
             btn.dataset.position = position;
-            window.dispatchEvent(new CustomEvent('acadexa:reading', { detail: { bookId: Number(bookId), position, progress } }));
+            window.dispatchEvent(new CustomEvent('acadexxa:reading', { detail: { bookId: Number(bookId), position, progress } }));
         } : undefined,
     });
 });

@@ -4,7 +4,7 @@ import { icon } from './icons';
 import { isCached, syncLibrary } from './offline/library';
 import { formatBytes, isSupported } from './offline/downloader';
 
-const i18n = window.ACADEXA_I18N || {};
+const i18n = window.ACADEXXA_I18N || {};
 const t = (key, vars = {}) => Object.entries(vars).reduce((s, [k, v]) => s.replaceAll(`:${k}`, v), i18n[key] || key);
 
 async function refreshStates() {
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     await refreshStates();
     if (!navigator.onLine) return;
-    window.addEventListener('acadexa:library-item-ready', refreshStates);
+    window.addEventListener('acadexxa:library-item-ready', refreshStates);
     try {
         await syncLibrary(({ bookId, loaded, total }) => {
             const card = document.querySelector(`[data-library-book="${bookId}"] [data-role=offline-state]`);

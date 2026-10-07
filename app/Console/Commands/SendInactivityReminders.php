@@ -12,7 +12,7 @@ use Illuminate\Console\Command;
  */
 class SendInactivityReminders extends Command
 {
-    protected $signature = 'acadexa:inactivity-reminders';
+    protected $signature = 'acadexxa:inactivity-reminders';
     protected $description = 'Remind students of the courses they have not opened recently';
 
     public function handle(): int

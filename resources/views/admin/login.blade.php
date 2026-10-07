@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ __('Admin Login — ACADEXA') }}</title>
+    <title>{{ __('Admin Login — ACADEXXA') }}</title>
     @include('partials.bootstrap-css')
     @vite(['resources/css/app.css'])
 </head>
@@ -11,7 +11,7 @@
     <div style="width:100%;max-width:420px;padding:1rem;">
         <div class="text-center mb-4">
             <h1 style="font-family:'Poppins',sans-serif;font-size:2rem;font-weight:800;color:#fff;">
-                ACADE<span style="color:var(--secondary);">XA</span>
+                ACADE<span style="color:var(--secondary);">XXA</span>
             </h1>
             <p style="color:rgba(255,255,255,.7);">{{ __('Control Panel — Admin Access') }}</p>
         </div>

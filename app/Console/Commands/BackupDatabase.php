@@ -9,23 +9,23 @@ use Illuminate\Support\Facades\Schema;
 
 /**
  * Portable SQL backup (pure PHP, no mysqldump needed — shared hosting friendly).
- * Writes storage/app/backups/acadexa-YYYYmmdd-His.sql.gz and keeps the latest N files.
+ * Writes storage/app/backups/acadexxa-YYYYmmdd-His.sql.gz and keeps the latest N files.
  * Restore: gunzip then import the .sql file with phpMyAdmin or `mysql`.
  */
 class BackupDatabase extends Command
 {
-    protected $signature = 'acadexa:backup {--keep=14 : Number of backups to keep}';
+    protected $signature = 'acadexxa:backup {--keep=14 : Number of backups to keep}';
     protected $description = 'Back up the database to storage/app/backups';
 
     public function handle(): int
     {
         $dir = storage_path('app/backups');
         File::ensureDirectoryExists($dir);
-        $file = $dir . '/acadexa-' . now()->format('Ymd-His') . '.sql.gz';
+        $file = $dir . '/acadexxa-' . now()->format('Ymd-His') . '.sql.gz';
         $gz = gzopen($file, 'wb6');
 
         $driver = DB::connection()->getDriverName();
-        gzwrite($gz, "-- ACADEXA backup " . now()->toDateTimeString() . " ({$driver})\nSET FOREIGN_KEY_CHECKS=0;\n\n");
+        gzwrite($gz, "-- ACADEXXA backup " . now()->toDateTimeString() . " ({$driver})\nSET FOREIGN_KEY_CHECKS=0;\n\n");
 
         foreach ($this->tables() as $table) {
             if ($driver === 'mysql') {
@@ -82,7 +82,8 @@ class BackupDatabase extends Command
 
     private function prune(string $dir, int $keep): void
     {
-        $files = glob($dir . '/acadexa-*.sql.gz') ?: [];
+        // Backups made under the former spelling ("acadexa-") sort last: they are the first to go.
+        $files = array_merge(glob($dir . '/acadexxa-*.sql.gz') ?: [], glob($dir . '/acadexa-*.sql.gz') ?: []);
         rsort($files);
         foreach (array_slice($files, max(1, $keep)) as $old) {
             @unlink($old);

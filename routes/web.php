@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\CourseController as PublicCourseController;
@@ -260,7 +261,14 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'verified'
 
 // ─── Admin Routes ─────────────────────────────────────────────────────────────
 
-Route::prefix('acadexa-control')->name('admin.')->group(function () {
+// The panel was first reachable under /acadexa-control (former spelling): old bookmarks keep working.
+Route::get('acadexa-control/{path?}', function (Request $request, ?string $path = null) {
+    $query = $request->getQueryString();
+
+    return redirect('/acadexxa-control' . ($path ? "/{$path}" : '') . ($query ? "?{$query}" : ''), 301);
+})->where('path', '.*');
+
+Route::prefix('acadexxa-control')->name('admin.')->group(function () {
 
     // Admin auth (separate from Breeze)
     Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login')->middleware('guest');

@@ -11,7 +11,7 @@ return [
     'latest_courses' => 'أحدث الدورات',
     'view_all' => 'عرض الكل',
     'categories' => 'الفئات',
-    'why_acadexa' => 'لماذا تختار أكاديكسا؟',
+    'why_acadexxa' => 'لماذا تختار أكاديكسا؟',
     'enroll_now' => 'سجّل الآن',
     'start_learning' => 'ابدأ التعلم',
     'continue_learning' => 'تابع التعلم',

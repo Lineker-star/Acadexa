@@ -29,7 +29,7 @@ return [
     'admin_only' => '此区域仅限管理员访问。',
     'welcome_back' => '欢迎回来',
     'sign_in_to_continue' => '登录后继续学习',
-    'join_acadexa' => '加入 ACADEXA',
+    'join_acadexxa' => '加入 ACADEXXA',
     'create_account' => '创建免费账号',
     'full_name' => '姓名',
     'have_account' => '已有账号？',

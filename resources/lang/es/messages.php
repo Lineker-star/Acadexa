@@ -2,7 +2,7 @@
 
 // Generated from the translation sources — keep keys identical to resources/lang/en/messages.php.
 return [
-    'welcome' => 'Bienvenido a ACADEXA',
+    'welcome' => 'Bienvenido a ACADEXXA',
     'learn_grow' => 'Aprende, crece y alcanza tus metas',
     'hero_subtitle' => 'Únete a miles de estudiantes del Instituto Universitario ZTF. Accede a cursos de primer nivel, obtén certificados y avanza en tu carrera.',
     'get_started' => 'Empieza gratis',
@@ -11,7 +11,7 @@ return [
     'latest_courses' => 'Cursos recientes',
     'view_all' => 'Ver todo',
     'categories' => 'Categorías',
-    'why_acadexa' => '¿Por qué elegir ACADEXA?',
+    'why_acadexxa' => '¿Por qué elegir ACADEXXA?',
     'enroll_now' => 'Inscribirse ahora',
     'start_learning' => 'Empezar a aprender',
     'continue_learning' => 'Seguir aprendiendo',

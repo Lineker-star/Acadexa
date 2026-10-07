@@ -80,7 +80,7 @@ return [
     'upload_too_large' => 'File too large (maximum :max MB).', 'upload_bad_extension' => 'Format not accepted. Use MP4, WebM or MOV.',
     'upload_not_video' => 'The uploaded file is not a valid video.', 'upload_missing_chunk' => 'A part of the file is missing (#:index). Please upload again.',
     'youtube_url' => 'YouTube video link', 'youtube_invalid' => 'Invalid YouTube link.',
-    'youtube_help' => 'The video plays directly inside ACADEXA, without leaving the platform. Tip: on YouTube, set the visibility to “Unlisted”.',
+    'youtube_help' => 'The video plays directly inside ACADEXXA, without leaving the platform. Tip: on YouTube, set the visibility to “Unlisted”.',
     'vimeo_url' => 'Vimeo link', 'vimeo_invalid' => 'Invalid Vimeo link.',
     'external_url' => 'Direct link to a video file', 'external_url_help' => 'URL of an .mp4 file hosted elsewhere.',
     'assignment_instructions' => 'Assignment instructions', 'grading' => 'Grading', 'max_score' => 'Maximum score', 'pass_score' => 'Pass mark',
@@ -168,14 +168,14 @@ return [
     // Notifications
     'mark_all_read' => 'Mark all as read', 'notifications_all_read' => 'All notifications marked as read.',
     'email_notifications' => 'Also receive notifications by e-mail', 'preferences_saved' => 'Preferences saved.',
-    'mail_greeting' => 'Hello :name,', 'mail_salutation' => 'The ACADEXA team — ZTF University Institute', 'notif_open' => 'Open',
+    'mail_greeting' => 'Hello :name,', 'mail_salutation' => 'The ACADEXXA team — ZTF University Institute', 'notif_open' => 'Open',
     'notif_feedback' => 'Feedback: :feedback',
     'notif_certificate_subject' => 'Your certificate is ready', 'notif_certificate_line' => 'Congratulations! You completed “:course”.',
     'notif_certificate_code' => 'Verification code: :code',
     'notif_course_approved_subject' => 'Your course is published', 'notif_course_approved_line' => 'Your course “:course” has been approved and is now live.',
     'notif_course_rejected_subject' => 'Your course needs changes', 'notif_course_rejected_line' => 'Your course “:course” was not approved. Read the feedback and submit it again.',
     'notif_course_submitted_subject' => 'Course to review', 'notif_course_submitted_line' => ':instructor submitted “:course” for review.',
-    'notif_application_approved_subject' => 'Application approved', 'notif_application_approved_line' => 'You are now an instructor on ACADEXA. Create your first course!',
+    'notif_application_approved_subject' => 'Application approved', 'notif_application_approved_line' => 'You are now an instructor on ACADEXXA. Create your first course!',
     'notif_application_rejected_subject' => 'Instructor application', 'notif_application_rejected_line' => 'Your application was not accepted at this time.',
     'notif_assignment_submitted_subject' => 'New assignment to grade', 'notif_assignment_submitted_line' => ':student submitted the assignment “:lesson”.',
     'notif_assignment_graded_subject' => 'Your assignment is graded', 'notif_assignment_graded_line' => 'Assignment “:lesson”: :score / :max.',
@@ -204,7 +204,7 @@ return [
     'application_status_pending' => 'Pending', 'application_status_approved' => 'Approved', 'application_status_rejected' => 'Rejected',
     'audience_all' => 'Everyone', 'audience_students' => 'Students', 'audience_instructors' => 'Instructors',
 
-    // Strings used by JavaScript (window.ACADEXA_I18N)
+    // Strings used by JavaScript (window.ACADEXXA_I18N)
     'js' => [
         'byte_units' => ['B', 'KB', 'MB', 'GB'],
         'seconds_short' => ':count s', 'minutes_short' => ':count min', 'hours_minutes_short' => ':hours h :minutes min',

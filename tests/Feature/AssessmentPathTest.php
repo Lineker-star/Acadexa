@@ -165,11 +165,11 @@ class AssessmentPathTest extends LmsTestCase
         $enrollment->update(['completed_at' => now(), 'progress_percent' => 100]);
         QuizAttempt::create(['user_id' => $student->id, 'quiz_id' => $final->id, 'mode' => 'standard', 'score' => 80, 'passed' => true, 'attempted_at' => now()]);
 
-        $this->artisan('acadexa:reassessment-reminders')->assertSuccessful();
+        $this->artisan('acadexxa:reassessment-reminders')->assertSuccessful();
         Notification::assertNothingSent();
 
         $this->travel(config('lms.assessment.reassess_after_days') + 1)->days();
-        $this->artisan('acadexa:reassessment-reminders')->assertSuccessful();
+        $this->artisan('acadexxa:reassessment-reminders')->assertSuccessful();
         Notification::assertSentTo($student, ReassessmentReminder::class);
     }
 

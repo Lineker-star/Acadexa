@@ -3,7 +3,7 @@
 import { icon } from './icons';
 
 const csrf = () => document.querySelector('meta[name="csrf-token"]').content;
-const i18n = window.ACADEXA_I18N || {};
+const i18n = window.ACADEXXA_I18N || {};
 const t = (key, vars = {}) => Object.entries(vars).reduce((s, [k, v]) => s.replaceAll(`:${k}`, v), i18n[key] || key);
 const toast = (msg, type = 'info') => (window.showToast ? window.showToast(msg, type) : console.log(msg));
 

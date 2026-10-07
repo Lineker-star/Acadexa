@@ -1,5 +1,5 @@
 -- ============================================================
--- ACADEXA Learning Management System — Complete Database
+-- ACADEXXA Learning Management System — Complete Database
 -- ZTF University Institute (ZTF-UI), Koumé–Bertoua, Cameroon
 -- Generated for: MySQL 8.0+
 -- ============================================================
@@ -510,7 +510,7 @@ CREATE TABLE IF NOT EXISTS `lesson_comments` (
 
 -- Settings
 INSERT INTO `settings` (`key`, `value`, `created_at`, `updated_at`) VALUES
-('site_name', 'ACADEXA', NOW(), NOW()),
+('site_name', 'ACADEXXA', NOW(), NOW()),
 ('site_description', 'The Official Learning Management System of ZTF University Institute', NOW(), NOW()),
 ('contact_email', 'info@ztfuniversity.com', NOW(), NOW()),
 ('contact_phone', '+237 222 000 000', NOW(), NOW()),
@@ -522,7 +522,7 @@ INSERT INTO `settings` (`key`, `value`, `created_at`, `updated_at`) VALUES
 ('linkedin_url', '', NOW(), NOW()),
 ('instagram_url', '', NOW(), NOW()),
 ('cert_institution', 'ZTF University Institute', NOW(), NOW()),
-('cert_subheading', 'ACADEXA Learning Management System', NOW(), NOW()),
+('cert_subheading', 'ACADEXXA Learning Management System', NOW(), NOW()),
 ('cert_sig_name', 'Prof. Emmanuel ZANG', NOW(), NOW()),
 ('cert_sig_title', 'Director, ZTF University Institute', NOW(), NOW()),
 ('cert_description', 'This is to certify that the above-named individual has successfully completed the course with distinction.', NOW(), NOW()),
@@ -532,7 +532,7 @@ INSERT INTO `settings` (`key`, `value`, `created_at`, `updated_at`) VALUES
 
 -- Users (passwords are bcrypt hash of 'ACADEXA@2026')
 INSERT INTO `users` (`name`, `email`, `email_verified_at`, `password`, `role`, `instructor_status`, `is_active`, `trial_started_at`, `country`, `created_at`, `updated_at`) VALUES
-('ACADEXA Admin', 'admin@acadexa.com', NOW(), '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'super_admin', NULL, 1, NULL, 'Cameroon', NOW(), NOW()),
+('ACADEXXA Admin', 'admin@acadexa.com', NOW(), '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'super_admin', NULL, 1, NULL, 'Cameroon', NOW(), NOW()),
 ('Site Manager', 'manager@acadexa.com', NOW(), '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', NULL, 1, NULL, 'Cameroon', NOW(), NOW()),
 ('Dr. Marie Nguembe', 'marie@acadexa.com', NOW(), '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'instructor', 'confirmed', 1, NULL, 'Cameroon', NOW(), NOW()),
 ('Prof. Jean-Paul Mbarga', 'jeanpaul@acadexa.com', NOW(), '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'instructor', 'confirmed', 1, NULL, 'Cameroon', NOW(), NOW()),
@@ -574,21 +574,21 @@ SELECT id, 'en', name, NOW(), NOW() FROM `categories`;
 
 -- CMS Pages
 INSERT INTO `cms_pages` (`slug`, `title`, `created_at`, `updated_at`) VALUES
-('about', 'About ACADEXA', NOW(), NOW()),
+('about', 'About ACADEXXA', NOW(), NOW()),
 ('privacy', 'Privacy Policy', NOW(), NOW()),
 ('terms', 'Terms of Service', NOW(), NOW());
 
 INSERT INTO `cms_page_translations` (`cms_page_id`, `locale`, `title`, `content`, `created_at`, `updated_at`) VALUES
-(1, 'en', 'About ACADEXA', '<h2>About ZTF University Institute</h2><p>ZTF University Institute (ZTF-UI), located in Koumé – Bertoua, East Region, Cameroon, is a leading institution of higher learning. ACADEXA is our official Learning Management System bringing world-class education to learners everywhere.</p><p>Visit us at: <a href="https://www.ztfuniversity.com">www.ztfuniversity.com</a></p>', NOW(), NOW()),
+(1, 'en', 'About ACADEXXA', '<h2>About ZTF University Institute</h2><p>ZTF University Institute (ZTF-UI), located in Koumé – Bertoua, East Region, Cameroon, is a leading institution of higher learning. ACADEXXA is our official Learning Management System bringing world-class education to learners everywhere.</p><p>Visit us at: <a href="https://www.ztfuniversity.com">www.ztfuniversity.com</a></p>', NOW(), NOW()),
 (2, 'en', 'Privacy Policy', '<h2>Privacy Policy</h2><p>We collect and use your information to provide our educational services. Your data is protected and never sold to third parties. Contact info@ztfuniversity.com with any concerns.</p>', NOW(), NOW()),
-(3, 'en', 'Terms of Service', '<h2>Terms of Service</h2><p>By using ACADEXA, you agree to use the platform for lawful educational purposes only. Course content is protected by copyright. Certificates represent course completion and are issued by ZTF University Institute.</p>', NOW(), NOW());
+(3, 'en', 'Terms of Service', '<h2>Terms of Service</h2><p>By using ACADEXXA, you agree to use the platform for lawful educational purposes only. Course content is protected by copyright. Certificates represent course completion and are issued by ZTF University Institute.</p>', NOW(), NOW());
 
 SET FOREIGN_KEY_CHECKS=1;
 
 -- ============================================================
 -- IMPORTANT NOTES FOR SETUP
 -- ============================================================
--- 1. Import this file into a database named 'acadexa'
+-- 1. Import this file into a database named 'acadexxa'
 -- 2. After import, run: composer install
 -- 3. Run: cp .env.example .env && php artisan key:generate
 -- 4. Run: php artisan migrate --seed  (this will add full seed data with correct passwords)

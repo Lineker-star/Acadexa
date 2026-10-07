@@ -71,12 +71,12 @@ async function doSync(onProgress) {
             const length = response.headers.get('Content-Length');
             if (length) headers.set('Content-Length', length);
             await cache.put(item.url, new Response(response.body.pipeThrough(counter), { status: 200, headers }));
-            window.dispatchEvent(new CustomEvent('acadexa:library-item-ready', { detail: { bookId: item.book_id } }));
+            window.dispatchEvent(new CustomEvent('acadexxa:library-item-ready', { detail: { bookId: item.book_id } }));
         } catch (e) {
             // Network lost or storage full: retried on the next sync.
         }
     }
-    window.dispatchEvent(new CustomEvent('acadexa:library-synced', { detail: data }));
+    window.dispatchEvent(new CustomEvent('acadexxa:library-synced', { detail: data }));
     return data;
 }
 
@@ -105,7 +105,7 @@ export async function savePosition(bookId, position, progress) {
 }
 
 let lastSaved = 0;
-window.addEventListener('acadexa:reading', event => {
+window.addEventListener('acadexxa:reading', event => {
     const { bookId, position, progress } = event.detail;
     // The reader reports often; the account only needs an update every few seconds.
     if (Date.now() - lastSaved < 4000) return;

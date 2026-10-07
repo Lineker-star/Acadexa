@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex">
-    <title>{{ __('security.2fa_title') }} — {{ $siteSettings['site_name'] ?? 'ACADEXA' }}</title>
+    <title>{{ __('security.2fa_title') }} — {{ $siteSettings['site_name'] ?? 'ACADEXXA' }}</title>
     @include('partials.bootstrap-css')
     @vite(['resources/css/app.css'])
 </head>

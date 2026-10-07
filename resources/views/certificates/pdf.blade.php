@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {{-- Certificate PDF (DomPDF, A4 landscape), in the colours of the platform (navy / orange).
-     Layout: ACADEXA logo at the top, title, learner's name in script, course, then date – seal –
-     signature, and at the bottom the institute ACADEXA belongs to. Texts come from the admin's
+     Layout: ACADEXXA logo at the top, title, learner's name in script, course, then date – seal –
+     signature, and at the bottom the institute ACADEXXA belongs to. Texts come from the admin's
      "Certificate template" settings; the decoration is an inline SVG (no image file needed). --}}
 @php
     $navy   = \App\Models\Setting::get('cert_bg_color', '#0A2A5E') ?: '#0A2A5E';
@@ -10,7 +10,7 @@
     $institution = \App\Models\Setting::get('cert_institution') ?: 'Institut de Formation Professionnelle ZTF';
     $description = \App\Models\Setting::get('cert_description');
 
-    // Logo: the one uploaded in the admin, otherwise the ACADEXA logo. DomPDF needs GD for PNG files:
+    // Logo: the one uploaded in the admin, otherwise the ACADEXXA logo. DomPDF needs GD for PNG files:
     // without it the name is written instead, so that issuing a certificate never fails.
     $logoPath = \App\Models\Setting::get('cert_logo');
     $logoFile = $logoPath && \Illuminate\Support\Facades\Storage::disk('public')->exists($logoPath) ? \Illuminate\Support\Facades\Storage::disk('public')->path($logoPath) : public_path('images/logo.png');
@@ -96,7 +96,7 @@
         @if($logo)
             <img src="{{ $logo }}" class="logo" alt="">
         @else
-            <div class="brand">ACADEXA</div>
+            <div class="brand">ACADEXXA</div>
         @endif
 
         <div class="title">{{ __('learn.cert_title') }}</div>

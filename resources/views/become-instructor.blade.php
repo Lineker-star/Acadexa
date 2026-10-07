@@ -19,7 +19,7 @@
 <section class="py-5 bg-light-gray">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="section-title">{!! __('Why teach on :brand?', ['brand' => '<span>' . e($siteSettings['site_name'] ?? 'ACADEXA') . '</span>']) !!}</h2>
+            <h2 class="section-title">{!! __('Why teach on :brand?', ['brand' => '<span>' . e($siteSettings['site_name'] ?? 'ACADEXXA') . '</span>']) !!}</h2>
             <div class="section-divider"></div>
         </div>
         <div class="row g-4">
@@ -94,7 +94,7 @@
                 <div class="mb-4">
                     <label class="form-label fw-bold">{{ __('Sample Content / Course Ideas') }}</label>
                     <textarea name="sample_content" class="form-control" rows="3"
-                              placeholder="{{ __('Describe the courses you\'d like to create on ACADEXA...') }}">{{ old('sample_content') }}</textarea>
+                              placeholder="{{ __('Describe the courses you\'d like to create on ACADEXXA...') }}">{{ old('sample_content') }}</textarea>
                 </div>
                 <button type="submit" class="btn btn-primary btn-lg w-100"
                         {{ !auth()->check() ? 'disabled' : '' }}>

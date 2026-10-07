@@ -2,7 +2,7 @@
     <div class="container">
         <!-- Brand -->
         <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('home') }}">
-        <img src="{{ asset('images/logo.png') }}" alt="ACADEXA" height="36">
+        <img src="{{ asset('images/logo.png') }}" alt="ACADEXXA" height="36">
         </a>
 
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">

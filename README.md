@@ -1,12 +1,12 @@
-# ACADEXA — Learning Management System
+# ACADEXXA — Learning Management System
 ### ZTF University Institute (ZTF-UI) | Koumé – Bertoua, East Region, Cameroon
 **www.ztfuniversity.com**
 
 ---
 
-## What is ACADEXA?
+## What is ACADEXXA?
 
-ACADEXA is the official online learning platform of ZTF University Institute. Students can enroll in courses, watch video lessons, take quizzes, and earn certificates — all from any device. Instructors can create and publish courses. Admins manage everything from a central dashboard.
+ACADEXXA is the official online learning platform of ZTF University Institute. Students can enroll in courses, watch video lessons, take quizzes, and earn certificates — all from any device. Instructors can create and publish courses. Admins manage everything from a central dashboard.
 
 ---
 
@@ -26,11 +26,11 @@ Follow these steps **exactly in order**. Each step builds on the previous one.
 
 ---
 
-### STEP 2 — Place the ACADEXA files
+### STEP 2 — Place the ACADEXXA files
 
 1. Open the folder `C:\xampp\htdocs\`
-2. You should see a folder called `acadexa` there already (this project)
-3. If not, copy the `acadexa` folder into `C:\xampp\htdocs\`
+2. You should see a folder called `acadexxa` there already (this project)
+3. If not, copy the `acadexxa` folder into `C:\xampp\htdocs\`
 
 ---
 
@@ -38,12 +38,12 @@ Follow these steps **exactly in order**. Each step builds on the previous one.
 
 1. Open your browser and go to: **http://localhost/phpmyadmin**
 2. Click **"New"** in the left sidebar
-3. Type the database name: **`acadexa`**
+3. Type the database name: **`acadexxa`**
 4. Set collation to: **`utf8mb4_unicode_ci`**
 5. Click **Create**
-6. Click on your new `acadexa` database in the left sidebar
+6. Click on your new `acadexxa` database in the left sidebar
 7. Click the **Import** tab at the top
-8. Click **"Choose File"** and select the file: `C:\xampp\htdocs\acadexa\database\acadexa.sql`
+8. Click **"Choose File"** and select the file: `C:\xampp\htdocs\acadexxa\database\acadexxa.sql`
 9. Click **Go** at the bottom — wait for the success message
 
 ---
@@ -56,7 +56,7 @@ Follow these steps **exactly in order**. Each step builds on the previous one.
 4. Type these commands one at a time, pressing Enter after each:
 
 ```
-cd C:\xampp\htdocs\acadexa
+cd C:\xampp\htdocs\acadexxa
 composer install
 ```
 
@@ -66,7 +66,7 @@ Wait for it to finish (this may take 2–5 minutes — it downloads all required
 
 ### STEP 5 — Set up the environment file
 
-In Command Prompt (still in the acadexa folder):
+In Command Prompt (still in the acadexxa folder):
 
 ```
 copy .env.example .env
@@ -91,7 +91,7 @@ This creates all database tables and adds:
 
 If this step gives errors about the database, open `.env` in Notepad and verify:
 ```
-DB_DATABASE=acadexa
+DB_DATABASE=acadexxa
 DB_USERNAME=root
 DB_PASSWORD=
 ```
@@ -132,7 +132,7 @@ php artisan serve
 
 Open your browser and go to: **http://localhost:8000**
 
-You should see the ACADEXA homepage!
+You should see the ACADEXXA homepage!
 
 ---
 
@@ -145,7 +145,7 @@ You should see the ACADEXA homepage!
 | Instructor | jeanpaul@acadexa.com | ACADEXA@2026 |
 | Student | student@acadexa.com | ACADEXA@2026 |
 
-**Admin Panel URL:** http://localhost:8000/acadexa-control/login
+**Admin Panel URL:** http://localhost:8000/acadexxa-control/login
 
 ---
 
@@ -155,7 +155,7 @@ You should see the ACADEXA homepage!
 |------|-----|
 | Homepage | http://localhost:8000 |
 | All Courses | http://localhost:8000/courses |
-| Admin Panel | http://localhost:8000/acadexa-control/login |
+| Admin Panel | http://localhost:8000/acadexxa-control/login |
 | Student Registration | http://localhost:8000/register |
 | Become an Instructor | http://localhost:8000/become-an-instructor |
 | Contact Page | http://localhost:8000/contact |
@@ -196,7 +196,7 @@ You should see the ACADEXA homepage!
 ## Certificate System
 
 - Certificates are **automatically generated** when a student completes 100% of a course
-- Each certificate has a unique verification code (format: `ACADEXA-XXXX-XXXX-YYYY`)
+- Each certificate has a unique verification code (format: `ACADEXXA-XXXX-XXXX-YYYY`)
 - Anyone can verify a certificate at: `/verify-certificate/{code}`
 - Certificates are generated as PDF files using DomPDF
 - Certificate template can be customized in Admin → Certificate Template
@@ -205,7 +205,7 @@ You should see the ACADEXA homepage!
 
 ## Setting Up for Production (Live Website)
 
-When you're ready to put ACADEXA live on the internet:
+When you're ready to put ACADEXXA live on the internet:
 
 1. **Upload files** to your web hosting (look for `public_html` or `www` folder)
    - Upload all files EXCEPT the `public` folder contents go into `public_html`
@@ -275,7 +275,7 @@ Toute l'interface est traduite dans les 6 langues ; l'arabe s'affiche de droite 
 - PDF, audio, vidéo et images (livres et ressources des leçons) s’ouvrent dans le **lecteur intégré**, en ligne comme hors ligne (`/offline`).
 - Hors ligne, les quiz de leçon donnent un résultat provisoire ; la correction du serveur à la reconnexion fait foi. Les exercices rédigés et l’évaluation finale se passent en ligne.
 
-**Déploiement de cette version :** `php artisan migrate --force` (1 migration additive), `npm install && npm run build`, et la tâche cron existante (elle lance aussi `acadexa:reassessment-reminders`). Les traductions du groupe `learn` sont générées par `node scripts/write-group.cjs learn resources/lang-src/learn.cjs`.
+**Déploiement de cette version :** `php artisan migrate --force` (1 migration additive), `npm install && npm run build`, et la tâche cron existante (elle lance aussi `acadexxa:reassessment-reminders`). Les traductions du groupe `learn` sont générées par `node scripts/write-group.cjs learn resources/lang-src/learn.cjs`.
 
 ### Icônes
 
@@ -302,7 +302,7 @@ Aucun emoji : toutes les icônes sont des **SVG** (jeu Bootstrap Icons) regroup�
    PHP_INI_SCAN_DIR=:/app/deploy/php
    MAIL_...                       (SMTP)
    ```
-   `PHP_INI_SCAN_DIR` charge `deploy/php/acadexa.ini` (taille des fichiers envoyés).
+   `PHP_INI_SCAN_DIR` charge `deploy/php/acadexxa.ini` (taille des fichiers envoyés).
 3. **Volume** monté sur `/app/storage/app` (vidéos, livres, ressources, certificats — sinon perdus à chaque déploiement).
 4. **Pre-deploy command** : `composer deploy` (migrations, seeders si la base est vide, lien de stockage, caches — voir `composer.json`)
 5. 2ᵉ service (même dépôt, mêmes variables, sans domaine) avec la commande de démarrage `php artisan schedule:work` : e-mails, rappels, nettoyage.
@@ -312,7 +312,7 @@ Vidéos : **20 Mo maximum** par leçon (`LMS_VIDEO_MAX_MB`), envoyées par morce
 
 ### Protection des contenus de cours
 
-Un site web ne peut pas techniquement interdire une capture d'écran ou un enregistrement de l'écran (c'est le système du téléphone ou de l'ordinateur qui les fait). ACADEXA applique donc les mesures suivantes, sans filigrane (`resources/js/content-protection.js`) :
+Un site web ne peut pas techniquement interdire une capture d'écran ou un enregistrement de l'écran (c'est le système du téléphone ou de l'ordinateur qui les fait). ACADEXXA applique donc les mesures suivantes, sans filigrane (`resources/js/content-protection.js`) :
 - **contenu flouté** dès que la fenêtre perd le focus (outils de capture, changement d'application) et à l'appui sur *Impr. écran* (presse-papiers vidé) ;
 - clic droit, copier, sélection, glisser, impression, téléchargement et « image dans l'image » bloqués sur les contenus.
 
@@ -324,12 +324,12 @@ Tous les e-mails passent par l'**API Brevo** (pas de SMTP) dès que la clé est 
 ```
 BREVO_API_KEY=xkeysib-...
 MAIL_FROM_ADDRESS=noreply@votre-domaine.com     (expéditeur validé dans Brevo)
-MAIL_FROM_NAME=ACADEXA
+MAIL_FROM_NAME=ACADEXXA
 ```
 - **Envoyés immédiatement** : codes d'inscription et de connexion (2FA), e-mail de test (Admin → Paramètres → E-mails).
 - **Envoyés par la file d'attente** (service `php artisan schedule:work` obligatoire) : bienvenue, inscription à un cours, nouvel inscrit (formateur), devoirs, messages, réponses, annonces de cours, certificat, **actualités de la plateforme** (Admin → Annonces), **nouveau cours publié**, rappels (fin d'essai, inactivité après 7 jours, réévaluation), alerte de changement de mot de passe.
 - **Préférences** (profil ou page Notifications) : e-mails d'activité et e-mails d'actualités, séparément ; lien « Se désinscrire » dans chaque message. Les e-mails de sécurité sont toujours envoyés.
-- Modèle des e-mails : `resources/views/vendor/mail/html` (thème `acadexa.css`).
+- Modèle des e-mails : `resources/views/vendor/mail/html` (thème `acadexxa.css`).
 
 ### Connexion avec Google et vérification en deux étapes
 
@@ -337,6 +337,17 @@ MAIL_FROM_NAME=ACADEXA
 - **Connexion** : chaque utilisateur peut activer la vérification en deux étapes dans *Mon profil → Sécurité* — application d'authentification (Google Authenticator, Microsoft Authenticator, Authy) ou code par e-mail. Elle s'applique aussi après « Continuer avec Google ». Les administrateurs utilisent l'application (page *Sécurité* de l'administration).
 - **Google** : créer un identifiant OAuth « Application Web » dans Google Cloud Console (API et services → Identifiants), URI de redirection autorisée `https://<domaine>/auth/google/callback`, puis renseigner `GOOGLE_CLIENT_ID` et `GOOGLE_CLIENT_SECRET`. Le bouton n'apparaît qu'une fois ces variables définies. Un compte existant avec la même adresse est associé automatiquement ; sinon un compte étudiant est créé (mot de passe à choisir plus tard dans le profil).
 - **Profil** (lien dans le menu et le tableau de bord) : nom, photo, pays, langue, biographie, notifications, mot de passe, 2FA, compte Google associé.
+
+### Nom de la plateforme : ACADEXXA
+
+Le nom s'écrit **ACADEXXA** partout : interface (6 langues), e-mails, certificat, logo, application installée, adresse de l'administration (`/acadexxa-control`), commandes (`php artisan acadexxa:…`). L'ancienne orthographe « ACADEXA » ne subsiste que là où la changer casserait quelque chose qui existe déjà :
+
+- **Comptes de démonstration** : adresses `…@acadexa.com` et mot de passe `ACADEXA@2026` — ce sont les identifiants des comptes déjà créés dans les bases existantes.
+- **Certificats déjà délivrés** : leur code `ACADEXA-XXXX-XXXX-AAAA` reste valable et vérifiable ; les nouveaux codes commencent par `ACADEXXA-`. Le PDF est régénéré avec le nouveau nom au prochain téléchargement.
+- **Données hors ligne des appareils** : le cache des médias (`acadexa-media-v1`) et la base locale (`acadexa-offline`) gardent leur nom, sinon les étudiants perdraient leurs téléchargements et leurs réponses en attente d'envoi.
+- **Ancienne adresse de l'administration** : `/acadexa-control/…` redirige vers `/acadexxa-control/…`.
+
+Au déploiement, la migration `2026_10_07_000002_rename_platform_to_acadexxa` corrige le nom enregistré dans la base (nom du site, textes du certificat, pages, annonces, textes des cours) sans toucher aux adresses e-mail, aux liens ni aux codes de certificat. À faire à la main : `APP_NAME=ACADEXXA` et `MAIL_FROM_NAME=ACADEXXA` dans `.env` et dans les variables de l'hébergeur (nom de l'expéditeur et pied des e-mails). Le cookie de session porte le nom de l'application : après ce changement, chaque utilisateur se reconnecte une fois.
 
 ---
 
@@ -358,7 +369,7 @@ MAIL_FROM_NAME=ACADEXA
 **Solution:** Make sure MySQL is running in XAMPP Control Panel, and check your `.env` DB settings
 
 **Problem:** Admin login doesn't work
-**Solution:** Go to http://localhost:8000/acadexa-control/login (different from regular login)
+**Solution:** Go to http://localhost:8000/acadexxa-control/login (different from regular login)
 
 ---
 
@@ -396,5 +407,5 @@ For technical support, contact ZTF University Institute:
 
 ---
 
-*ACADEXA is built with Laravel 12, PHP 8.2+, MySQL 8, and Bootstrap 5.*
+*ACADEXXA is built with Laravel 12, PHP 8.2+, MySQL 8, and Bootstrap 5.*
 *Powered by ZTF University Institute.*

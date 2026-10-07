@@ -27,7 +27,7 @@ return [
     'admin_only' => 'This area is restricted to administrators only.',
     'welcome_back' => 'Welcome Back',
     'sign_in_to_continue' => 'Sign in to continue learning',
-    'join_acadexa' => 'Join ACADEXA',
+    'join_acadexxa' => 'Join ACADEXXA',
     'create_account' => 'Create your free account',
     'full_name' => 'Full Name',
     'have_account' => 'Already have an account?',

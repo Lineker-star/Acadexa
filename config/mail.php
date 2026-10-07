@@ -12,13 +12,13 @@ return [
     ],
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'noreply@acadexa.com'),
-        'name'    => env('MAIL_FROM_NAME', env('APP_NAME', 'ACADEXA')),
+        'address' => env('MAIL_FROM_ADDRESS', 'noreply@acadexxa.com'),
+        'name'    => env('MAIL_FROM_NAME', env('APP_NAME', 'ACADEXXA')),
     ],
 
-    // E-mail design: resources/views/vendor/mail/html/themes/acadexa.css
+    // E-mail design: resources/views/vendor/mail/html/themes/acadexxa.css
     'markdown' => [
-        'theme' => 'acadexa',
+        'theme' => 'acadexxa',
         'paths' => [resource_path('views/vendor/mail')],
     ],
 

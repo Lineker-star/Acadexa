@@ -29,5 +29,5 @@
               font-family="Segoe UI, Roboto, Helvetica, Arial, 'Noto Sans', 'Microsoft YaHei', sans-serif" font-size="76" font-weight="700" fill="#FFFFFF">{{ $line }}</text>
     @endforeach
     <text x="{{ $rtl ? 80 : 1200 }}" y="660" text-anchor="{{ $rtl ? 'start' : 'end' }}" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif"
-          font-size="26" font-weight="800" letter-spacing="4" fill="#FFFFFF" fill-opacity=".75">ACADEXA</text>
+          font-size="26" font-weight="800" letter-spacing="4" fill="#FFFFFF" fill-opacity=".75">ACADEXXA</text>
 </svg>

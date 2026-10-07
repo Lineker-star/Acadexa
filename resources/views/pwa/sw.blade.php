@@ -1,9 +1,12 @@
-/* ACADEXA service worker — version {{ $version }}
+/* ACADEXXA service worker — version {{ $version }}
  *
  * Caches:
- *   acadexa-shell-<version>  app shell (offline page, compiled CSS/JS, icons, CDN styles)
- *   acadexa-media-v1         course videos/resources and library books downloaded by the student
- *                            (never auto-filled; wiped on logout — the library itself lives in the account)
+ *   acadexxa-shell-<version>  app shell (offline page, compiled CSS/JS, icons, CDN styles)
+ *   acadexa-media-v1          course videos/resources and library books downloaded by the student
+ *                             (never auto-filled; wiped on logout — the library itself lives in the account)
+ *
+ * The platform was first spelled "ACADEXA". The media cache keeps that spelling on purpose: it
+ * already exists on students' devices, and another name would lose what they have downloaded.
  *
  * Strategy:
  *   - media URLs            cache first, with HTTP Range support for <video> seeking
@@ -11,7 +14,7 @@
  *   - static assets         stale-while-revalidate
  */
 const VERSION = @json($version);
-const SHELL_CACHE = 'acadexa-shell-' + VERSION;
+const SHELL_CACHE = 'acadexxa-shell-' + VERSION;
 const MEDIA_CACHE = 'acadexa-media-v1';
 const OFFLINE_URL = '/offline';
 
@@ -37,7 +40,9 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
     event.waitUntil((async () => {
         const keys = await caches.keys();
-        await Promise.all(keys.filter(k => k.startsWith('acadexa-shell-') && k !== SHELL_CACHE).map(k => caches.delete(k)));
+        // Shells of earlier versions, including those created under the former spelling.
+        const stale = k => (k.startsWith('acadexxa-shell-') || k.startsWith('acadexa-shell-')) && k !== SHELL_CACHE;
+        await Promise.all(keys.filter(stale).map(k => caches.delete(k)));
         if (self.registration.navigationPreload) {
             try { await self.registration.navigationPreload.enable(); } catch (e) { /* optional */ }
         }
@@ -94,7 +99,7 @@ async function serveNavigation(event) {
 function offlineFallback() {
     return new Response(
         '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
-        '<title>ACADEXA</title><body style="font-family:sans-serif;text-align:center;padding:3rem">' +
+        '<title>ACADEXXA</title><body style="font-family:sans-serif;text-align:center;padding:3rem">' +
         '<h1>Hors ligne / Offline</h1><p>Reconnectez-vous à Internet puis réessayez.<br>Reconnect to the Internet and try again.</p>',
         { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
     );
@@ -154,7 +159,8 @@ async function serveMedia(request, url) {
 
 // Background Sync: ask an open page to replay the offline queue.
 self.addEventListener('sync', event => {
-    if (event.tag === 'acadexa-sync') {
+    // 'acadexa-sync': a sync registered before the rename may still be waiting for the network.
+    if (event.tag === 'acadexxa-sync' || event.tag === 'acadexa-sync') {
         event.waitUntil(self.clients.matchAll({ type: 'window' }).then(clients => {
             clients.forEach(client => client.postMessage({ type: 'sync-now' }));
         }));

@@ -23,9 +23,9 @@ class PageSweepTest extends LmsTestCase
             foreach ([null => null, 'student' => $student, 'instructor' => $instructor, 'admin' => $admin] as $label => $user) {
                 foreach (Route::getRoutes() as $route) {
                     if (! in_array('GET', $route->methods()) || $route->parameterNames() || str_contains($route->uri(), '{')) continue;
-                    if (in_array($route->uri(), ['up', 'acadexa-control/two-factor', 'offline/session', 'sw.js', 'icons.svg', 'manifest.webmanifest'])) continue;
+                    if (in_array($route->uri(), ['up', 'acadexxa-control/two-factor', 'offline/session', 'sw.js', 'icons.svg', 'manifest.webmanifest'])) continue;
                     // The admin dashboard uses MySQL date functions (MONTH/YEAR).
-                    if ($route->uri() === 'acadexa-control' && \Illuminate\Support\Facades\DB::getDriverName() === 'sqlite') continue;
+                    if ($route->uri() === 'acadexxa-control' && \Illuminate\Support\Facades\DB::getDriverName() === 'sqlite') continue;
                     $this->app['auth']->forgetGuards();
                     $request = $this->withSession(['locale' => $locale]);
                     $response = $user ? $request->actingAs($user)->get('/' . ltrim($route->uri(), '/')) : $request->get('/' . ltrim($route->uri(), '/'));
@@ -63,7 +63,7 @@ class PageSweepTest extends LmsTestCase
         $this->withSession(['locale' => 'zh'])->get('/courses')->assertOk()->assertSee('课程');
         $this->withSession(['locale' => 'ar'])->get('/')->assertOk()
             ->assertSee('dir="rtl"', false)->assertSee('bootstrap.rtl.min.css', false)->assertSee('من نحن');
-        $this->withSession(['locale' => 'es'])->get('/page/about')->assertOk()->assertSee('Acerca de ACADEXA');
+        $this->withSession(['locale' => 'es'])->get('/page/about')->assertOk()->assertSee('Acerca de ACADEXXA');
         $this->withSession(['locale' => 'pt'])->get('/login')->assertOk()->assertSee('Entrar');
         $this->withSession(['locale' => 'fr'])->get('/')->assertOk()->assertSee('Débutant');
     }

@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 /** Warns students a few days before their free access ends (config lms.trial_reminder_days). */
 class SendTrialReminders extends Command
 {
-    protected $signature = 'acadexa:trial-reminders';
+    protected $signature = 'acadexxa:trial-reminders';
     protected $description = 'Notify students whose trial ends soon';
 
     public function handle(): int

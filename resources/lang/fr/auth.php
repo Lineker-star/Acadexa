@@ -27,7 +27,7 @@ return [
     'admin_only' => 'Cette zone est réservée aux administrateurs uniquement.',
     'welcome_back' => 'Bon Retour',
     'sign_in_to_continue' => 'Connectez-vous pour continuer à apprendre',
-    'join_acadexa' => 'Rejoindre ACADEXA',
+    'join_acadexxa' => 'Rejoindre ACADEXXA',
     'create_account' => 'Créer votre compte gratuit',
     'full_name' => 'Nom Complet',
     'have_account' => 'Vous avez déjà un compte ?',

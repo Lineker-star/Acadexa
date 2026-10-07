@@ -1,6 +1,6 @@
 <?php
 return [
-    'welcome' => 'Bienvenue sur ACADEXA',
+    'welcome' => 'Bienvenue sur ACADEXXA',
     'learn_grow' => 'Apprenez, Grandissez et Atteignez vos Objectifs',
     'hero_subtitle' => 'Rejoignez des milliers d\'apprenants à l\'Institut Universitaire ZTF. Accédez à des cours de classe mondiale, obtenez des certificats et avancez dans votre carrière.',
     'get_started' => 'Commencer Gratuitement',
@@ -9,7 +9,7 @@ return [
     'latest_courses' => 'Derniers Cours',
     'view_all' => 'Voir Tout',
     'categories' => 'Catégories',
-    'why_acadexa' => 'Pourquoi Choisir ACADEXA ?',
+    'why_acadexxa' => 'Pourquoi Choisir ACADEXXA ?',
     'enroll_now' => 'S\'inscrire Maintenant',
     'start_learning' => 'Commencer à Apprendre',
     'continue_learning' => 'Continuer l\'Apprentissage',

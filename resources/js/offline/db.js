@@ -4,6 +4,8 @@
 //   outbox   — actions made offline, replayed on reconnection, key = id
 //   meta     — small key/value pairs (current user id…)
 
+// Former spelling of the platform's name, kept on purpose: this database already exists on students'
+// devices (downloaded courses, answers waiting to be sent) and another name would start from an empty one.
 const DB_NAME = 'acadexa-offline';
 const DB_VERSION = 1;
 

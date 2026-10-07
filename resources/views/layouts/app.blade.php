@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @include('partials.pwa-head')
-    <title>@yield('title', __('Home')) — {{ $siteSettings['site_name'] ?? 'ACADEXA' }}</title>
-    <meta name="description" content="@yield('meta_description', __('ACADEXA — Empowering World Innovators and Leaders for Global Impact. Learn from top instructors at ZTF University Institute, Bertoua, Cameroon.'))">
+    <title>@yield('title', __('Home')) — {{ $siteSettings['site_name'] ?? 'ACADEXXA' }}</title>
+    <meta name="description" content="@yield('meta_description', __('ACADEXXA — Empowering World Innovators and Leaders for Global Impact. Learn from top instructors at ZTF University Institute, Bertoua, Cameroon.'))">
     <meta name="robots" content="@yield('robots', 'index, follow')">
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <!-- Bootstrap 5 -->

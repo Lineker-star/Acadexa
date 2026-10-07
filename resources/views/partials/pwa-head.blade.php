@@ -4,9 +4,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="{{ $siteSettings['site_name'] ?? 'ACADEXA' }}">
+<meta name="apple-mobile-web-app-title" content="{{ $siteSettings['site_name'] ?? 'ACADEXXA' }}">
 <link rel="apple-touch-icon" href="{{ route('pwa.icon', 'apple-touch-icon.png') }}">
 <script>
-    window.ACADEXA_I18N = @json(array_merge(trans('lms.js'), trans('learn.js')));
-    window.ACADEXA_ICONS = @json(\App\Support\Icons::url());
+    window.ACADEXXA_I18N = @json(array_merge(trans('lms.js'), trans('learn.js')));
+    window.ACADEXXA_ICONS = @json(\App\Support\Icons::url());
 </script>

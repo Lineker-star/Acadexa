@@ -10,7 +10,7 @@
                  width="100" height="100" alt="{{ $user->name }}">
             <div class="text-white">
                 <h2 class="fw-bold mb-1">{{ $user->name }}</h2>
-                <p class="mb-1 opacity-75">{{ __('Verified instructor at :site', ['site' => $siteSettings['site_name'] ?? 'ACADEXA']) }}</p>
+                <p class="mb-1 opacity-75">{{ __('Verified instructor at :site', ['site' => $siteSettings['site_name'] ?? 'ACADEXXA']) }}</p>
                 <div class="d-flex gap-3 text-white-50 small">
                     <span><x-icon name="collection-play" class="me-1" />{{ trans_choice(':count course|:count courses', $courses->total(), ['count' => $courses->total()]) }}</span>
                     <span><x-icon name="people" class="me-1" />{{ trans_choice(':count student|:count students', $totalStudents, ['count' => $totalStudents]) }}</span>

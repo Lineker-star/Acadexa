@@ -21,7 +21,7 @@ class EmailNotificationTest extends LmsTestCase
 {
     private function useBrevo(): void
     {
-        config(['mail.default' => 'brevo', 'services.brevo.key' => 'xkeysib-test', 'mail.from.address' => 'noreply@acadexa.test', 'mail.from.name' => 'ACADEXA']);
+        config(['mail.default' => 'brevo', 'services.brevo.key' => 'xkeysib-test', 'mail.from.address' => 'noreply@acadexxa.test', 'mail.from.name' => 'ACADEXXA']);
     }
 
     public function test_emails_are_sent_through_the_brevo_api(): void
@@ -34,7 +34,7 @@ class EmailNotificationTest extends LmsTestCase
         Http::assertSent(function (Request $request) {
             return $request->url() === 'https://api.brevo.com/v3/smtp/email'
                 && $request->hasHeader('api-key', 'xkeysib-test')
-                && $request['sender'] === ['email' => 'noreply@acadexa.test', 'name' => 'ACADEXA']
+                && $request['sender'] === ['email' => 'noreply@acadexxa.test', 'name' => 'ACADEXXA']
                 && $request['to'] === [['email' => 'awa@gmail.test', 'name' => 'Awa']]
                 && $request['subject'] === 'Essai' && $request['textContent'] === 'Bonjour';
         });
@@ -102,7 +102,7 @@ class EmailNotificationTest extends LmsTestCase
         $announcement = Announcement::create(['title' => 'News', 'body' => 'Body', 'audience' => 'all', 'created_by' => $student->id, 'is_active' => true]);
         $this->assertSame(['database', 'mail'], (new AnnouncementPublished($announcement))->via($student));
 
-        // The e-mail carries a signed unsubscribe link and the ACADEXA design.
+        // The e-mail carries a signed unsubscribe link and the ACADEXXA design.
         $html = (string) (new AnnouncementPublished($announcement))->toMail($student)->render();
         $this->assertStringContainsString('email/unsubscribe/' . $student->id . '/news', $html);
         $this->assertStringContainsString('#0A2A5E', $html);
@@ -155,15 +155,15 @@ class EmailNotificationTest extends LmsTestCase
         $course = $this->makeCourse($this->makeUser('instructor'), ['text' => 2]);
         $enrollment = $this->enroll($student, $course);
 
-        $this->artisan('acadexa:inactivity-reminders')->assertSuccessful();
+        $this->artisan('acadexxa:inactivity-reminders')->assertSuccessful();
         Notification::assertNothingSent(); // active today
 
         Enrollment::withoutTimestamps(fn () => $enrollment->forceFill(['updated_at' => now()->subDays(8)])->save());
-        $this->artisan('acadexa:inactivity-reminders')->assertSuccessful();
+        $this->artisan('acadexxa:inactivity-reminders')->assertSuccessful();
         Notification::assertSentToTimes($student, InactivityReminder::class, 1);
 
         // Not again the next day.
-        $this->artisan('acadexa:inactivity-reminders')->assertSuccessful();
+        $this->artisan('acadexxa:inactivity-reminders')->assertSuccessful();
         Notification::assertSentToTimes($student, InactivityReminder::class, 1);
     }
 }

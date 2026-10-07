@@ -84,7 +84,7 @@ class ReportController extends Controller
                 }
             });
             fclose($out);
-        }, "acadexa-{$type}-" . now()->format('Ymd') . '.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+        }, "acadexxa-{$type}-" . now()->format('Ymd') . '.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
     }
 
     /** Neutralises spreadsheet formulas in user-provided values (CSV injection). */

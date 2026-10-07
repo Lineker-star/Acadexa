@@ -58,7 +58,7 @@ class HomeController extends Controller
 
     public function robots()
     {
-        $content = "User-agent: *\nDisallow: /acadexa-control/\nDisallow: /dashboard\nDisallow: /my-courses\nAllow: /\nSitemap: " . url('/sitemap.xml');
+        $content = "User-agent: *\nDisallow: /acadexxa-control/\nDisallow: /dashboard\nDisallow: /my-courses\nAllow: /\nSitemap: " . url('/sitemap.xml');
         return response($content, 200)->header('Content-Type', 'text/plain');
     }
 }

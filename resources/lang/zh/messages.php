@@ -2,7 +2,7 @@
 
 // Generated from the translation sources — keep keys identical to resources/lang/en/messages.php.
 return [
-    'welcome' => '欢迎来到 ACADEXA',
+    'welcome' => '欢迎来到 ACADEXXA',
     'learn_grow' => '学习、成长、实现目标',
     'hero_subtitle' => '加入 ZTF 大学学院的众多学员。学习一流课程，获得证书，推动职业发展。',
     'get_started' => '免费开始',
@@ -11,7 +11,7 @@ return [
     'latest_courses' => '最新课程',
     'view_all' => '查看全部',
     'categories' => '分类',
-    'why_acadexa' => '为什么选择 ACADEXA？',
+    'why_acadexxa' => '为什么选择 ACADEXXA？',
     'enroll_now' => '立即报名',
     'start_learning' => '开始学习',
     'continue_learning' => '继续学习',

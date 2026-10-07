@@ -27,7 +27,7 @@ class Certificate extends Model
     public static function generateCode(): string
     {
         do {
-            $code = 'ACADEXA-' . strtoupper(Str::random(4)) . '-' . strtoupper(Str::random(4)) . '-' . date('Y');
+            $code = 'ACADEXXA-' . strtoupper(Str::random(4)) . '-' . strtoupper(Str::random(4)) . '-' . date('Y');
         } while (self::where('certificate_code', $code)->exists());
 
         return $code;

@@ -17,7 +17,7 @@ module.exports = {
         register_as: '创建免费账号', admin_login: '管理员登录',
         admin_only: '此区域仅限管理员访问。',
         welcome_back: '欢迎回来', sign_in_to_continue: '登录后继续学习',
-        join_acadexa: '加入 ACADEXA', create_account: '创建免费账号', full_name: '姓名',
+        join_acadexxa: '加入 ACADEXXA', create_account: '创建免费账号', full_name: '姓名',
         have_account: '已有账号？', register_here: '在此登录',
     },
     dashboard: {
@@ -69,10 +69,10 @@ module.exports = {
         no_notifications: '没有新通知', start_free: '免费开始',
     },
     messages: {
-        welcome: '欢迎来到 ACADEXA', learn_grow: '学习、成长、实现目标',
+        welcome: '欢迎来到 ACADEXXA', learn_grow: '学习、成长、实现目标',
         hero_subtitle: '加入 ZTF 大学学院的众多学员。学习一流课程，获得证书，推动职业发展。',
         get_started: '免费开始', browse_courses: '浏览课程', featured_courses: '精选课程',
-        latest_courses: '最新课程', view_all: '查看全部', categories: '分类', why_acadexa: '为什么选择 ACADEXA？',
+        latest_courses: '最新课程', view_all: '查看全部', categories: '分类', why_acadexxa: '为什么选择 ACADEXXA？',
         enroll_now: '立即报名', start_learning: '开始学习', continue_learning: '继续学习',
         free: '免费', all_levels: '全部级别', beginner: '初级', intermediate: '中级', advanced: '高级',
         students: '名学员', courses: '门课程', instructors: '位讲师', certificates_issued: '份证书已颁发',
