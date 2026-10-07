@@ -113,17 +113,81 @@
     <div class="col-lg-4">
         <div class="bg-white rounded-xl shadow-brand p-4 mb-4">
             <h6 class="fw-bold mb-3"><x-icon name="envelope-paper" class="me-1" />{{ __('learn.mail_settings') }}</h6>
-            @php $mailer = config('mail.default'); $mailReady = $mailer === 'brevo' ? filled(config('services.brevo.key')) : ! in_array($mailer, ['log', 'array'], true); @endphp
             <dl class="small mb-3">
                 <dt class="fw-normal text-muted">{{ __('learn.mail_service') }}</dt>
-                <dd class="fw-semibold">{{ $mailer === 'brevo' ? 'Brevo (API)' : strtoupper($mailer) }}
-                    <span class="badge {{ $mailReady ? 'bg-success' : 'bg-warning text-dark' }}">{{ $mailReady ? __('learn.mail_ready') : __('learn.mail_not_ready') }}</span></dd>
+                <dd class="fw-semibold">{{ $mail['service'] }}
+                    <span class="badge {{ $mail['configured'] ? 'bg-success' : 'bg-warning text-dark' }}">{{ $mail['configured'] ? __('learn.mail_ready') : __('learn.mail_not_ready') }}</span></dd>
                 <dt class="fw-normal text-muted">{{ __('learn.mail_sender') }}</dt>
-                <dd class="fw-semibold text-break">{{ config('mail.from.name') }} &lt;{{ config('mail.from.address') }}&gt;</dd>
+                <dd class="fw-semibold text-break">{{ $mail['sender']['name'] }} &lt;{{ $mail['sender']['address'] }}&gt;</dd>
             </dl>
-            @unless($mailReady)
+            @unless($mail['configured'])
                 <div class="alert alert-warning small py-2">{{ __('learn.mail_not_ready_help') }}</div>
             @endunless
+
+            {{-- Brevo API key (stored encrypted, never printed back) and sender --}}
+            <form method="POST" action="{{ route('admin.settings.mail') }}" class="mb-3" autocomplete="off">
+                @csrf
+                <div class="mb-2">
+                    <label class="form-label small fw-bold" for="brevoKey">{{ __('learn.mail_key') }}</label>
+                    <input type="password" name="brevo_api_key" id="brevoKey" autocomplete="new-password" spellcheck="false"
+                           class="form-control form-control-sm @error('brevo_api_key') is-invalid @enderror">
+                    @error('brevo_api_key')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    <div class="form-text">
+                        @if($mail['key_source'] === 'admin')
+                            {{ __('learn.mail_key_saved', ['hint' => $mail['key_hint']]) }}
+                        @elseif($mail['key_source'] === 'server')
+                            {{ __('learn.mail_key_server') }}
+                        @else
+                            {{ __('learn.mail_key_help') }}
+                        @endif
+                    </div>
+                    @if($mail['key_source'] === 'admin')
+                        <div class="form-check mt-1">
+                            <input class="form-check-input" type="checkbox" name="remove_brevo_key" value="1" id="removeBrevoKey">
+                            <label class="form-check-label small" for="removeBrevoKey">{{ __('learn.mail_key_remove') }}</label>
+                        </div>
+                    @endif
+                </div>
+                <div class="mb-2">
+                    <label class="form-label small fw-bold" for="mailFromAddress">{{ __('learn.mail_from_address') }}</label>
+                    <input type="email" name="mail_from_address" id="mailFromAddress" maxlength="255"
+                           class="form-control form-control-sm @error('mail_from_address') is-invalid @enderror"
+                           value="{{ old('mail_from_address', $mail['from']['address']) }}">
+                    @error('mail_from_address')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    <div class="form-text">{{ __('learn.mail_from_address_help') }}</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold" for="mailFromName">{{ __('learn.mail_from_name') }}</label>
+                    <input type="text" name="mail_from_name" id="mailFromName" maxlength="100" class="form-control form-control-sm"
+                           value="{{ old('mail_from_name', $mail['from']['name']) }}">
+                </div>
+                <button class="btn btn-primary btn-sm"><x-icon name="save" class="me-1" />{{ __('lms.save') }}</button>
+            </form>
+
+            {{-- Notifications are queued: what is waiting, and what Brevo refused --}}
+            @if($mail['queue'])
+                <dl class="small mb-2">
+                    <dt class="fw-normal text-muted">{{ __('learn.mail_queue_pending') }}</dt>
+                    <dd class="fw-semibold">{{ $mail['queue']['pending'] }}</dd>
+                    @if($mail['queue']['failed'])
+                        <dt class="fw-normal text-muted">{{ __('learn.mail_queue_failed') }}</dt>
+                        <dd class="fw-semibold text-danger">{{ $mail['queue']['failed'] }}</dd>
+                    @endif
+                </dl>
+                @if($mail['queue']['pending'] && $mail['queue']['waiting_minutes'] >= 10)
+                    <div class="alert alert-warning small py-2">{{ __('learn.mail_queue_stuck', ['minutes' => $mail['queue']['waiting_minutes']]) }}</div>
+                @endif
+                @if($mail['queue']['failed'])
+                    @if($mail['queue']['last_error'])
+                        <div class="alert alert-danger small py-2 text-break">{{ __('learn.mail_queue_last_error', ['error' => $mail['queue']['last_error']]) }}</div>
+                    @endif
+                    <form method="POST" action="{{ route('admin.settings.retry-mail') }}" class="mb-3">
+                        @csrf
+                        <button class="btn btn-outline-secondary btn-sm"><x-icon name="arrow-repeat" class="me-1" />{{ __('learn.mail_queue_retry') }}</button>
+                    </form>
+                @endif
+            @endif
+
             <form method="POST" action="{{ route('admin.settings.test-mail') }}">
                 @csrf
                 <label class="form-label small" for="testMailTo">{{ __('learn.mail_test_to') }}</label>

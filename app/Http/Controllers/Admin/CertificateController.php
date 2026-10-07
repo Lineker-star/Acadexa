@@ -30,7 +30,7 @@ class CertificateController extends Controller
 
     public function template()
     {
-        $settings = Setting::pluck('value', 'key')->toArray();
+        $settings = Setting::where('key', 'like', 'cert%')->pluck('value', 'key')->toArray();
         return view('admin.certificate-template.edit', compact('settings'));
     }
 

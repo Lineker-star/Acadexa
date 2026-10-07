@@ -35,7 +35,7 @@ return [
     'platform' => 'Platform', 'allow_registration' => 'Registration open',
     'require_email_verification' => 'Require e-mail address verification',
     'maintenance_mode' => 'Maintenance mode (only admins can access the site)',
-    'email_verification_help' => 'Only enable e-mail verification after configuring outgoing mail (SMTP) in the .env file.',
+    'email_verification_help' => 'Only enable e-mail verification once e-mails are being sent: Brevo API key saved in the "E-mails" box of this page.',
     'registration_closed' => 'Registration is temporarily closed.',
 
     'reports' => 'Reports', 'total_students' => 'Students', 'active_30d' => 'Active (30 days)', 'total_enrollments' => 'Course enrollments',

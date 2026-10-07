@@ -32,7 +32,7 @@ module.exports = {
         platform: 'Plataforma', allow_registration: 'Registro abierto',
         require_email_verification: 'Exigir la verificación del correo electrónico',
         maintenance_mode: 'Modo mantenimiento (solo los administradores acceden al sitio)',
-        email_verification_help: 'Activa la verificación del correo solo después de configurar el envío de correos (SMTP) en el archivo .env.',
+        email_verification_help: 'Activa la verificación del correo solo cuando los correos ya se envíen: clave API de Brevo guardada en el recuadro «Correos» de esta página.',
         registration_closed: 'El registro está cerrado temporalmente.',
         reports: 'Informes', total_students: 'Estudiantes', active_30d: 'Activos (30 días)', total_enrollments: 'Inscripciones a cursos',
         completion_rate: 'Tasa de finalización', last_12_months: 'Últimos 12 meses', month: 'Mes',

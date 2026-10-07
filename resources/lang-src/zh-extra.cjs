@@ -32,7 +32,7 @@ module.exports = {
         platform: '平台', allow_registration: '开放注册',
         require_email_verification: '要求验证电子邮箱',
         maintenance_mode: '维护模式（仅管理员可访问网站）',
-        email_verification_help: '请先在 .env 文件中配置邮件发送（SMTP），再启用邮箱验证。',
+        email_verification_help: '请先在本页的“电子邮件”栏中保存 Brevo API 密钥，待邮件可以正常发送后，再启用邮箱验证。',
         registration_closed: '注册暂时关闭。',
         reports: '报表', total_students: '学员', active_30d: '活跃（30 天）', total_enrollments: '课程报名数',
         completion_rate: '完成率', last_12_months: '最近 12 个月', month: '月份',

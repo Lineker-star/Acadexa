@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Setting;
+use App\Support\Mailing;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,8 +14,12 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Every e-mail (notifications, two-factor codes…) can go through Brevo's HTTP API: MAIL_MAILER=brevo.
-        \Illuminate\Support\Facades\Mail::extend('brevo', fn () => new \App\Mail\BrevoTransport(config('services.brevo.key')));
+        // Every e-mail (notifications, two-factor codes…) goes through Brevo's HTTP API once an API key exists.
+        // Set up when the mailer is first needed, with the key and the sender saved in Admin → Settings.
+        $this->callAfterResolving('mail.manager', function ($manager) {
+            $manager->extend('brevo', fn () => new \App\Mail\BrevoTransport(Mailing::brevoKey()));
+            Mailing::apply();
+        });
 
         // Bootstrap 5 pagination markup (the UI uses Bootstrap); its labels are translated in lang/*.json.
         \Illuminate\Pagination\Paginator::useBootstrapFive();
@@ -41,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
         // Share settings globally to all views
         view()->composer('*', function ($view) {
             $settings = Cache::remember('site_settings', 3600, function () {
-                return Setting::pluck('value', 'key')->toArray();
+                return Setting::pluck('value', 'key')->except(Mailing::SECRET_SETTINGS)->toArray();
             });
             $view->with('siteSettings', $settings);
         });

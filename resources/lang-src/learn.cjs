@@ -1084,6 +1084,10 @@ for (const locale of Object.keys(module.exports)) {
 const mail = require('./learn-mail.cjs');
 for (const locale of Object.keys(module.exports)) Object.assign(module.exports[locale], mail[locale]);
 
+// Admin → Settings → E-mails: Brevo API key, sender, queue.
+const brevo = require('./learn-brevo.cjs');
+for (const locale of Object.keys(module.exports)) Object.assign(module.exports[locale], brevo[locale]);
+
 // Marks out of 10 / 100, open-question exercises, certificate.
 const exam = require('./learn-exam.cjs');
 for (const locale of Object.keys(module.exports)) {

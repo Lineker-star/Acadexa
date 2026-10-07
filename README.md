@@ -233,7 +233,7 @@ php artisan config:cache && php artisan route:cache && php artisan view:cache
 1. **Tâche cron (obligatoire)** — une seule ligne dans hPanel/cPanel, toutes les minutes :
    `* * * * * php /home/<compte>/<dossier>/artisan schedule:run >> /dev/null 2>&1`
    Elle envoie les e-mails en file d'attente, les rappels de fin d'essai, fait la **sauvegarde quotidienne** de la base (`storage/app/backups`, 14 jours gardés) et nettoie les uploads abandonnés.
-2. **E-mails** — renseigner `MAIL_*` dans `.env` (voir `.env.example`). Ensuite seulement, activer si souhaité « Exiger la vérification de l'adresse e-mail » dans Admin → Settings.
+2. **E-mails** — coller la clé API Brevo dans Admin → Paramètres → E-mails (voir « E-mails (Brevo) » plus bas). Ensuite seulement, activer si souhaité « Exiger la vérification de l'adresse e-mail ».
 3. **HTTPS obligatoire** pour l'installation de l'application et le mode hors ligne (service worker).
 4. **Vidéos** — stockées de façon privée dans `storage/app/private/videos` (jamais dans `public/`), servies uniquement aux inscrits. Prévoir l'espace disque. Taille max configurable (`LMS_VIDEO_MAX_MB`).
 5. **Sécurité admin** — chaque administrateur active sa double authentification dans *Sécurité du compte*. Changer les mots de passe de démonstration.
@@ -300,9 +300,8 @@ Aucun emoji : toutes les icônes sont des **SVG** (jeu Bootstrap Icons) regroup�
    SESSION_SECURE_COOKIE=true
    LOG_CHANNEL=stderr
    PHP_INI_SCAN_DIR=:/app/deploy/php
-   MAIL_...                       (SMTP)
    ```
-   `PHP_INI_SCAN_DIR` charge `deploy/php/acadexxa.ini` (taille des fichiers envoyés).
+   `PHP_INI_SCAN_DIR` charge `deploy/php/acadexxa.ini` (taille des fichiers envoyés). Aucune variable n'est nécessaire pour les e-mails : la clé Brevo se colle dans l'administration (voir « E-mails (Brevo) »).
 3. **Volume** monté sur `/app/storage/app` (vidéos, livres, ressources, certificats — sinon perdus à chaque déploiement).
 4. **Pre-deploy command** : `composer deploy` (migrations, seeders si la base est vide, lien de stockage, caches — voir `composer.json`)
 5. 2ᵉ service (même dépôt, mêmes variables, sans domaine) avec la commande de démarrage `php artisan schedule:work` : e-mails, rappels, nettoyage.
@@ -320,12 +319,15 @@ Pour un blocage réel des enregistrements : vidéos chiffrées **DRM** (service 
 
 ### E-mails (Brevo)
 
-Tous les e-mails passent par l'**API Brevo** (pas de SMTP) dès que la clé est définie :
-```
-BREVO_API_KEY=xkeysib-...
-MAIL_FROM_ADDRESS=noreply@votre-domaine.com     (expéditeur validé dans Brevo)
-MAIL_FROM_NAME=ACADEXXA
-```
+Tous les e-mails passent par l'**API Brevo** (pas de SMTP) dès qu'une clé API existe. Mise en route :
+
+1. Dans Brevo : **Expéditeurs, domaines et IP dédiées** → ajouter et valider l'adresse d'expédition ; **SMTP et API → Clés API → Générer une nouvelle clé API** (elle commence par `xkeysib-` — pas la clé SMTP `xsmtpsib-`). Si Brevo refuse ensuite la clé en signalant une adresse IP non reconnue, suivre le lien donné dans son message (**Sécurité → IP autorisées**) et y désactiver le blocage : les adresses de l'hébergeur changent.
+2. Dans la plateforme : **Admin → Paramètres → E-mails** → coller la clé, saisir l'adresse et le nom de l'expéditeur, enregistrer. La clé est vérifiée auprès de Brevo, puis conservée chiffrée dans la base : le site et le service planificateur l'utilisent tous les deux, sans variable ni redéploiement.
+3. **Envoyer un e-mail de test** depuis le même encadré : en cas de refus, la réponse de Brevo est affichée.
+
+La clé peut aussi être donnée par la variable `BREVO_API_KEY` (avec `MAIL_FROM_ADDRESS` et `MAIL_FROM_NAME`) ; une clé enregistrée dans l'administration la remplace. Dès qu'une clé existe, Brevo est utilisé quelle que soit la valeur de `MAIL_MAILER`. Sans clé, les e-mails sont seulement écrits dans les journaux et l'inscription se fait sans code de confirmation.
+
+- **Suivi** (même encadré) : nombre de notifications en attente, avertissement si elles attendent depuis plus de 10 minutes (le service planificateur ne tourne pas), envois refusés par Brevo avec la raison, et bouton pour les renvoyer une fois le problème corrigé.
 - **Envoyés immédiatement** : codes d'inscription et de connexion (2FA), e-mail de test (Admin → Paramètres → E-mails).
 - **Envoyés par la file d'attente** (service `php artisan schedule:work` obligatoire) : bienvenue, inscription à un cours, nouvel inscrit (formateur), devoirs, messages, réponses, annonces de cours, certificat, **actualités de la plateforme** (Admin → Annonces), **nouveau cours publié**, rappels (fin d'essai, inactivité après 7 jours, réévaluation), alerte de changement de mot de passe.
 - **Préférences** (profil ou page Notifications) : e-mails d'activité et e-mails d'actualités, séparément ; lien « Se désinscrire » dans chaque message. Les e-mails de sécurité sont toujours envoyés.
@@ -333,7 +335,7 @@ MAIL_FROM_NAME=ACADEXXA
 
 ### Connexion avec Google et vérification en deux étapes
 
-- **Inscription** : un code à 6 chiffres est envoyé par e-mail pour confirmer l'adresse avant l'ouverture du compte (réglable dans Admin → Paramètres). **Un envoi d'e-mails fonctionnel (`MAIL_*`) est donc indispensable en production.**
+- **Inscription** : un code à 6 chiffres est envoyé par e-mail pour confirmer l'adresse avant l'ouverture du compte (réglable dans Admin → Paramètres). Tant qu'aucune clé Brevo n'est enregistrée, le compte est ouvert sans code (il ne pourrait pas être reçu) ; l'adresse sera confirmée à la connexion suivante une fois les e-mails en service.
 - **Connexion** : chaque utilisateur peut activer la vérification en deux étapes dans *Mon profil → Sécurité* — application d'authentification (Google Authenticator, Microsoft Authenticator, Authy) ou code par e-mail. Elle s'applique aussi après « Continuer avec Google ». Les administrateurs utilisent l'application (page *Sécurité* de l'administration).
 - **Google** : créer un identifiant OAuth « Application Web » dans Google Cloud Console (API et services → Identifiants), URI de redirection autorisée `https://<domaine>/auth/google/callback`, puis renseigner `GOOGLE_CLIENT_ID` et `GOOGLE_CLIENT_SECRET`. Le bouton n'apparaît qu'une fois ces variables définies. Un compte existant avec la même adresse est associé automatiquement ; sinon un compte étudiant est créé (mot de passe à choisir plus tard dans le profil).
 - **Profil** (lien dans le menu et le tableau de bord) : nom, photo, pays, langue, biographie, notifications, mot de passe, 2FA, compte Google associé.
@@ -347,7 +349,7 @@ Le nom s'écrit **ACADEXXA** partout : interface (6 langues), e-mails, certifica
 - **Données hors ligne des appareils** : le cache des médias (`acadexa-media-v1`) et la base locale (`acadexa-offline`) gardent leur nom, sinon les étudiants perdraient leurs téléchargements et leurs réponses en attente d'envoi.
 - **Ancienne adresse de l'administration** : `/acadexa-control/…` redirige vers `/acadexxa-control/…`.
 
-Au déploiement, la migration `2026_10_07_000002_rename_platform_to_acadexxa` corrige le nom enregistré dans la base (nom du site, textes du certificat, pages, annonces, textes des cours) sans toucher aux adresses e-mail, aux liens ni aux codes de certificat. À faire à la main : `APP_NAME=ACADEXXA` et `MAIL_FROM_NAME=ACADEXXA` dans `.env` et dans les variables de l'hébergeur (nom de l'expéditeur et pied des e-mails). Le cookie de session porte le nom de l'application : après ce changement, chaque utilisateur se reconnecte une fois.
+Au déploiement, la migration `2026_10_07_000002_rename_platform_to_acadexxa` corrige le nom enregistré dans la base (nom du site, textes du certificat, pages, annonces, textes des cours) sans toucher aux adresses e-mail, aux liens ni aux codes de certificat. À faire à la main : `APP_NAME=ACADEXXA` dans `.env` et dans les variables de l'hébergeur (en-tête et pied des e-mails) ; le nom de l'expéditeur se règle dans Admin → Paramètres → E-mails (ou `MAIL_FROM_NAME`). Le cookie de session porte le nom de l'application : après ce changement, chaque utilisateur se reconnecte une fois.
 
 ---
 

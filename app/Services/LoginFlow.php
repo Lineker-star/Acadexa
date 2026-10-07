@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\ActivityLog;
 use App\Models\Setting;
 use App\Models\User;
+use App\Support\Mailing;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,10 +49,13 @@ class LoginFlow
         return $this->finish($request, $user, $remember);
     }
 
-    /** Registration step: confirm the e-mail address with a code (admin setting, on by default). */
+    /**
+     * Registration step: confirm the e-mail address with a code (admin setting, on by default).
+     * Skipped while no e-mail service is set up: the code could not reach anybody.
+     */
     public function needsEmailConfirmation(User $user): bool
     {
-        return ! $user->email_verified_at && Setting::get('registration_code', '1') === '1';
+        return ! $user->email_verified_at && Setting::get('registration_code', '1') === '1' && Mailing::configured();
     }
 
     public function finish(Request $request, User $user, bool $remember): RedirectResponse

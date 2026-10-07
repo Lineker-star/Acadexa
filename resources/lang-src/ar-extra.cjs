@@ -32,7 +32,7 @@ module.exports = {
         platform: 'المنصة', allow_registration: 'التسجيل مفتوح',
         require_email_verification: 'اشتراط تأكيد البريد الإلكتروني',
         maintenance_mode: 'وضع الصيانة (المشرفون فقط يمكنهم الوصول إلى الموقع)',
-        email_verification_help: 'لا تفعّل تأكيد البريد الإلكتروني إلا بعد إعداد إرسال البريد (SMTP) في ملف ‎.env.',
+        email_verification_help: 'لا تفعّل تأكيد البريد الإلكتروني إلا بعد أن يعمل إرسال البريد: مفتاح Brevo API محفوظ في خانة «البريد الإلكتروني» في هذه الصفحة.',
         registration_closed: 'التسجيل مغلق مؤقتًا.',
         reports: 'التقارير', total_students: 'الطلاب', active_30d: 'النشطون (30 يومًا)', total_enrollments: 'التسجيلات في الدورات',
         completion_rate: 'نسبة الإكمال', last_12_months: 'آخر 12 شهرًا', month: 'الشهر',

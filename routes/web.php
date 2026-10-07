@@ -344,7 +344,9 @@ Route::prefix('acadexxa-control')->name('admin.')->group(function () {
         // Settings
         Route::get('/settings', [AdminSetting::class, 'index'])->name('settings.index');
         Route::post('/settings', [AdminSetting::class, 'update'])->name('settings.update');
+        Route::post('/settings/mail', [AdminSetting::class, 'updateMail'])->middleware('throttle:10,1')->name('settings.mail');
         Route::post('/settings/test-mail', [AdminSetting::class, 'testMail'])->middleware('throttle:5,1')->name('settings.test-mail');
+        Route::post('/settings/retry-mail', [AdminSetting::class, 'retryMail'])->middleware('throttle:5,1')->name('settings.retry-mail');
 
         // Activity Logs
         Route::get('/activity-logs', [AdminActivityLog::class, 'index'])->name('activity-logs.index');

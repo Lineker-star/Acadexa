@@ -35,7 +35,7 @@ return [
     'platform' => 'Plateforme', 'allow_registration' => 'Inscriptions ouvertes',
     'require_email_verification' => 'Exiger la vérification de l’adresse e-mail',
     'maintenance_mode' => 'Mode maintenance (seuls les administrateurs accèdent au site)',
-    'email_verification_help' => 'N’activez la vérification d’e-mail qu’après avoir configuré l’envoi d’e-mails (SMTP) dans le fichier .env.',
+    'email_verification_help' => 'N’activez la vérification d’e-mail qu’une fois les e-mails en service : clé API Brevo enregistrée dans l’encadré « E-mails » de cette page.',
     'registration_closed' => 'Les inscriptions sont momentanément fermées.',
 
     'reports' => 'Rapports', 'total_students' => 'Étudiants', 'active_30d' => 'Actifs (30 jours)', 'total_enrollments' => 'Inscriptions aux cours',
